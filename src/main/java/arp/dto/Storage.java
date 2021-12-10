@@ -1,6 +1,9 @@
 package arp.dto;
 
+import java.util.List;
+
 public class Storage {
-    public Long capacity;
-    public Long cost;
+    public Double capacity;
+    public Double currentCapacity;
+    public List<Electrolyzer> electrolyzers;
 }

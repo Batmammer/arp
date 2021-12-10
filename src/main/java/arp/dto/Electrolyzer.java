@@ -1,7 +1,10 @@
 package arp.dto;
 
+import java.util.List;
+
 public class Electrolyzer {
-    public Long accumulatorSize;
-    public Long efficiency;
-    public Long cost;
+    public List<EnergySource> sources;
+    public Double accumulatorSize;
+    public Double accumulatorCurrentLevel;
+    public Double efficiency;
 }
