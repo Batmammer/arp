@@ -12,7 +12,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import static arp.service.Utils.HOURS_OF_YEAR;
 import static arp.service.Utils.getHoursOfSimulation;
 
 public class CalculateYearAlgorithm {
@@ -56,7 +55,6 @@ public class CalculateYearAlgorithm {
         return new YearResult(minHourHydrogenLevel, steps, sumHydrogenOverflow, sumPowerOverflow, warnings, errors);
     }
 
-
     private void finalValidation(double minHourHydrogenLevel, double sumHydrogenOverflow, double sumPowerOverflow) {
         if (minHourHydrogenLevel < 0) {
             warnings.add(new Warning("There biggest luck of hydrogen was: " + (-minHourHydrogenLevel)));
@@ -86,6 +84,4 @@ public class CalculateYearAlgorithm {
         firstStep.setOverflowPowerProduction(0);
         return firstStep;
     }
-
-
 }
