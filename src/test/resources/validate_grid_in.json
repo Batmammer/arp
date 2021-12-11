@@ -43,6 +43,7 @@
     ]
   },
   "constants": {
+    "hoursOfSimulation" : 1,
     "hydrogenTransportLoss": 0.0,
     "storageLoss": 0.0,
     "transmissionLoss": 0.0,
