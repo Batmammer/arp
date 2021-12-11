@@ -7,6 +7,8 @@ public class Electrolyzer {
 
     public Double accumulatorMaxSize;
     public Double efficiency;
+    public Double maxPower;
+    public Double minPower;
 
     /**
      * rzeczywista moc dostarczona przez wszyskie źródła energii

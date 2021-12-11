@@ -1,5 +1,10 @@
 package arp.service;
 
+import arp.dto.Electrolyzer;
+
+import java.util.HashMap;
+import java.util.Map;
+
 public class CalculateNextStepAlgorithm {
     private final Data data;
 
@@ -8,6 +13,36 @@ public class CalculateNextStepAlgorithm {
     }
 
     public Step calculate(Step step) {
-        return step;
+        int hour = step.hour + 1;
+        Step newStep = new Step();
+        newStep.hour = hour;
+        double hydrogenLevel = step.storageState.currentLevel;
+        Map<Electrolyzer, ElectrolyzerState> newElectrolyzerStates = new HashMap<>();
+        for (Map.Entry<Electrolyzer, ElectrolyzerState> entry : step.electorizersStates.entrySet()) {
+            ElectrolyzerState newElectrolyzerState = new ElectrolyzerState();
+            double newAccumulatorCurrentLevel = entry.getValue().accumulatorCurrentLevel + entry.getKey().summaryEnergyProduction[hour];
+            if (newAccumulatorCurrentLevel < entry.getKey().minPower) {
+                throw new IllegalStateException("Luck of power on Electrolyzer: " + hour + " power: " + newAccumulatorCurrentLevel);
+            }
+            double usedPower = Math.min(entry.getKey().maxPower, newAccumulatorCurrentLevel);
+            newAccumulatorCurrentLevel -= usedPower;
+            if (newAccumulatorCurrentLevel > entry.getKey().accumulatorMaxSize) {
+                newStep.overflowPowerProduction = newAccumulatorCurrentLevel - entry.getKey().accumulatorMaxSize;
+                newAccumulatorCurrentLevel = entry.getKey().accumulatorMaxSize;
+            }
+            newElectrolyzerState.accumulatorCurrentLevel = newAccumulatorCurrentLevel;
+            hydrogenLevel += usedPower * entry.getKey().efficiency;
+            newElectrolyzerStates.put(entry.getKey(), newElectrolyzerState);
+        }
+        newStep.electorizersStates = newElectrolyzerStates;
+        hydrogenLevel -= data.vehiclesConsumption[hour];
+        double overFlowProduction = 0;
+        if (hydrogenLevel > data.summaryStorage.maxCapacity) {
+            overFlowProduction = hydrogenLevel - data.summaryStorage.maxCapacity;
+            hydrogenLevel = data.summaryStorage.maxCapacity;
+        }
+        newStep.storageState = new StorageState(hydrogenLevel);
+        newStep.overflowHydrogenProduction = overFlowProduction;
+        return newStep;
     }
 }

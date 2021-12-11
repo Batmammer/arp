@@ -8,5 +8,7 @@ import java.util.Map;
 public class Step {
     public int hour;
     public Map<Electrolyzer, ElectrolyzerState> electorizersStates;
-    public Map<Storage, StorageState> storageStates;
+    public StorageState storageState;
+    public double overflowHydrogenProduction;
+    public double overflowPowerProduction;
 }
