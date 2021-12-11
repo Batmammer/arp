@@ -31,7 +31,7 @@ public class AbstractAlgorithmTest {
 
         Data data = new Data();
         data.setGridConstants(gridConstants);
-        data.setSummaryStorage(storage);
+        data.getStorages().add(storage);
         data.setVehiclesConsumption(consumption);
         return data;
     }

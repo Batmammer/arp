@@ -1,6 +1,7 @@
 package arp.service;
 
 import arp.dto.grid.Accumulator;
+import arp.dto.grid.Storage;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -9,7 +10,7 @@ import java.util.stream.Collectors;
 public class Step {
     public int hour;
     public Map<Accumulator, AcumulatorState> acumulatorsStates = new HashMap<>();
-    public Map<Long, StorageState> storageStates;
+    public Map<Storage, StorageState> storageStates;
     public double overflowHydrogenProduction;
     public double overflowPowerProduction;
 

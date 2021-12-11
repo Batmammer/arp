@@ -6,6 +6,7 @@ import arp.dto.grid.Storage;
 import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -16,7 +17,7 @@ import java.util.Map;
 public class Data {
     public GridConstants gridConstants;
     public GridCosts gridCosts;
-    public List<Storage> storages;
+    public List<Storage> storages = new ArrayList<>();
     public double[] vehiclesConsumption; // godzina w roku
 
     /**
