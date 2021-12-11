@@ -49,6 +49,7 @@ public class CalculateYearAlgorithm {
                         errors.add(new BusinessError(FailureReason.LUCK_OF_POWER_ON_ELECTROLIZER, "Luck of power on electrolizer: failure"));
                         break;
                 }
+                break;
             }
         }
         finalValidation(minHourHydrogenLevel, sumHydrogenOverflow, sumPowerOverflow);
