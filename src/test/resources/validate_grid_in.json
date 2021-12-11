@@ -1,0 +1,25 @@
+{
+  "grid": {
+    "vehicles": [],
+    "storages": [{
+      "id": 1,
+      "maxCapacity" : 0,
+      "electrolyzers": []
+    }]
+  },
+  "constants": {
+    "hydrogenTransportLoss": 0.0,
+    "storageLoss": 0.0,
+    "transmissionLoss": 0.0,
+    "electrolizerEfficiency": 0.0,
+    "pvDailyProduction": null,
+    "windDailyProduction": null
+  },
+  "costs": {
+    "pvCost" : 0,
+    "windCost" : 0,
+    "storagePowerCost" : 0,
+    "electrolyzerCost" : 0,
+    "storageHydrogenCost" : 0
+  }
+}
