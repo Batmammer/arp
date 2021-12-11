@@ -57,7 +57,7 @@ public class BroadFirstSearchAlgorithm {
     private State initialState() {
         CalculateYearAlgorithm calculateYearAlgorithm = new CalculateYearAlgorithm(data);
         YearResult yearResult = calculateYearAlgorithm.calculate();
-        return new State(data.getStorages(), yearResult.isGood(), yearResult.minHourHydrogenLevel, null, null, 0, 0);
+        return new State(data.getStorages(), yearResult.isGood(), yearResult.minHourHydrogenLevel, null, null, 0, 0, data);
     }
 
     private State getNextState(State state, ActionType actionType) {
@@ -65,16 +65,19 @@ public class BroadFirstSearchAlgorithm {
         double totalCost = state.totalCost;
         double actionCost = 0;
         Map<Long, double[]> newSummaryEnergyProduction = new HashMap<>();
-        for (Map.Entry<Long, double[]> entry : data.getSummaryEnergyProduction().entrySet()) {
+        for (Map.Entry<Long, double[]> entry : state.data.getSummaryEnergyProduction().entrySet()) {
             newSummaryEnergyProduction.put(entry.getKey(), Arrays.copyOf(entry.getValue(), entry.getValue().length));
         }
 
         for (Storage storage : nextStorages) {
             if (storage.getElectrolyzers().isEmpty()) {
                 storage.getElectrolyzers().add(createNewElectorlyzer(newSummaryEnergyProduction));
-                actionCost = data.getGridCosts().getElectrolyzerCost();
+                actionCost = state.data.getGridCosts().getElectrolyzerCost();
             } else {
                 Electrolyzer electrolyzer = storage.getElectrolyzers().get(0);
+//                if (!newSummaryEnergyProduction.containsKey(electrolyzer.getId())) {
+//                    newSummaryEnergyProduction.put(electrolyzer.getId(), createTableOfValue(0.0));
+//                }
                 switch (actionType) {
                     case WIND:
                         actionCost = addWind(electrolyzer, newSummaryEnergyProduction);
@@ -83,15 +86,15 @@ public class BroadFirstSearchAlgorithm {
                         actionCost = addPv(electrolyzer, newSummaryEnergyProduction);
                         break;
                     case ELECTROLIZER:
-                        actionCost = data.getGridCosts().getElectrolyzerCost();
+                        actionCost = state.data.getGridCosts().getElectrolyzerCost();
                         electrolyzer.setMaxPower(electrolyzer.getMaxPower() + 1.0);
                         break;
                     case STORAGE_POWER:
-                        actionCost = data.getGridCosts().getStoragePowerCost();
+                        actionCost = state.data.getGridCosts().getStoragePowerCost();
                         electrolyzer.getAccumulator().setAccumulatorMaxSize(electrolyzer.getAccumulator().getAccumulatorMaxSize() + 1.0);
                         break;
                     case STORAGE_HYDROGEN:
-                        actionCost = data.getGridCosts().getStorageHydrogenCost();
+                        actionCost = state.data.getGridCosts().getStorageHydrogenCost();
                         storage.setMaxCapacity(storage.getMaxCapacity() + 1.0);
                         break;
                 }
@@ -100,10 +103,10 @@ public class BroadFirstSearchAlgorithm {
 
 
         totalCost += actionCost;
-        Data newData = new Data(data.getGridConstants(), data.getGridCosts(), nextStorages, data.getVehiclesConsumption(), newSummaryEnergyProduction);
+        Data newData = new Data(state.data.getGridConstants(), state.data.getGridCosts(), nextStorages, state.data.getVehiclesConsumption(), newSummaryEnergyProduction);
         CalculateYearAlgorithm calculateYearAlgorithm = new CalculateYearAlgorithm(newData);
         YearResult yearResult = calculateYearAlgorithm.calculate();
-        State newState = new State(nextStorages, yearResult.isGood(), yearResult.minHourHydrogenLevel, state, actionType, actionCost, totalCost);
+        State newState = new State(nextStorages, yearResult.isGood(), yearResult.minHourHydrogenLevel, state, actionType, actionCost, totalCost, newData);
         System.out.println("\tADDING NEW STATE: " + yearResult.isGood() + ": " + yearResult + ": " + newState.toString());
         return newState;
     }
