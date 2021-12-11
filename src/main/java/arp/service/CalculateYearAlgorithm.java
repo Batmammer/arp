@@ -6,7 +6,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-import static arp.service.Consts.HOURS_OF_YEAR;
+import static arp.service.Utils.HOURS_OF_YEAR;
 
 public class CalculateYearAlgorithm {
     private final Data data;
@@ -30,6 +30,7 @@ public class CalculateYearAlgorithm {
             minHourHydrogenLevel = Math.min(minHourHydrogenLevel, newStep.storageState.currentLevel);
             sumHydrogenOverflow += newStep.overflowHydrogenProduction;
             sumPowerOverflow += newStep.overflowPowerProduction;
+            step = newStep;
         }
         return new YearResult(minHourHydrogenLevel, steps, sumHydrogenOverflow, sumPowerOverflow);
     }

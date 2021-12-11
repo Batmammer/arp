@@ -2,9 +2,7 @@ package arp.service;
 
 import arp.dto.Electrolyzer;
 
-import java.util.Arrays;
-
-import static arp.service.Consts.HOURS_OF_YEAR;
+import static arp.service.Utils.createTableOfValue;
 
 public class CalculateMaximumConsumption {
     private double epsilon = 0.01;
@@ -19,7 +17,7 @@ public class CalculateMaximumConsumption {
         double max = getMax();
 
         while (min < max - epsilon) {
-            double mid = (max - min) / 2;
+            double mid = (max + min) / 2;
 
             Data midData = cloneDataWithConsumption(mid);
             YearResult result = new CalculateYearAlgorithm(midData).calculate();
@@ -50,10 +48,6 @@ public class CalculateMaximumConsumption {
         return newData;
     }
 
-    private double[] createTableOfValue(double value) {
-        double[] table = new double[HOURS_OF_YEAR];
-        Arrays.fill(table, value);
-        return table;
-    }
+
 
 }
