@@ -52,9 +52,9 @@ public class Electrolyzer implements Cloneable {
         }
     }
 
-    public double getSummaryEnergyProduction(int day) {
-        if (summaryEnergyProduction != null && day < summaryEnergyProduction.length) {
-            return summaryEnergyProduction[day];
+    public double getSummaryEnergyProduction(int hour) {
+        if (summaryEnergyProduction != null && hour < summaryEnergyProduction.length) {
+            return summaryEnergyProduction[hour];
         } else {
             return 0d;
         }
@@ -66,12 +66,10 @@ public class Electrolyzer implements Cloneable {
         for (EnergySource source : getSources()) {
             double[] dailyProduction = source.getDailyProduction(data);
             for (int i = 0; i < size; i++) {
-                double v = source.getMaxPower() * dailyProduction[i];
-                summaryEnergyProduction[i] += v; // TODO: strata....
+                double v = source.getMaxPower() * dailyProduction[i % dailyProduction.length];
+                summaryEnergyProduction[i] += v * (1.0 - data.getGridConstants().getTransmissionLoss());
             }
-
         }
     }
-
 
 }
