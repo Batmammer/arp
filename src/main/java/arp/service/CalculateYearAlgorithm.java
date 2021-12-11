@@ -59,7 +59,7 @@ public class CalculateYearAlgorithm {
 
     private void finalValidation(double minHourHydrogenLevel, double sumHydrogenOverflow, double sumPowerOverflow, double totalHydrogenWasted) {
         if (minHourHydrogenLevel < 0) {
-            warnings.add(new Warning("During the year lowest hydrogen level during was: " + Utils.standardRound(-minHourHydrogenLevel)));
+            warnings.add(new Warning("During the year lowest hydrogen level during was: " + Utils.standardRound(minHourHydrogenLevel)));
         }
         if (minHourHydrogenLevel > 10) {
             warnings.add(new Warning("During the year there was at least: " + Utils.standardRound(minHourHydrogenLevel) + " kg of hydrogen in storage"));
