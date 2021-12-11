@@ -1,6 +1,7 @@
 package arp.controller;
 
 import arp.dto.InputGrid;
+import arp.dto.output.GridResult;
 import arp.service.GridService;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -14,8 +15,8 @@ public class GridController {
     }
 
     @GetMapping("/validate")
-    public String validateGrid(InputGrid inputGrid) {
+    public GridResult validateGrid(InputGrid inputGrid) {
         gridService.runSimulation(inputGrid);
-        return "ok";
+        return new GridResult();
     }
 }
