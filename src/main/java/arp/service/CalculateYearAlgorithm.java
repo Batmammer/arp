@@ -46,7 +46,7 @@ public class CalculateYearAlgorithm {
             } catch (BusinessException exception) {
                 switch (exception.type) {
                     case LUCK_OF_POWER_ON_ELECTROLIZER:
-                        errors.add(new BusinessError(FailureReason.LUCK_OF_POWER_ON_ELECTROLIZER));
+                        errors.add(new BusinessError(FailureReason.LUCK_OF_POWER_ON_ELECTROLIZER, "Luck of power on electrolizer: failure"));
                         break;
                 }
             }
