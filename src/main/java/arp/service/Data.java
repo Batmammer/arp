@@ -10,11 +10,12 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 @lombok.Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class Data {
+public class Data implements Cloneable {
     private GridConstants gridConstants;
     private GridCosts gridCosts;
     private List<Storage> storages = new ArrayList<>();
@@ -26,5 +27,20 @@ public class Data {
      */
     private Map<Long, double[]> summaryEnergyProduction = new HashMap<>(); // godzina w roku
 
+    @Override
+    public Data clone()  {
+        return clone(true);
+    }
 
+    public Data clone(boolean withStorages)  {
+        try {
+            Data data = (Data)super.clone();
+            if (withStorages) {
+                data.storages = storages.stream().map(s -> s.clone()).collect(Collectors.toList());
+            }
+            return data;
+        } catch (Exception ex) {
+            throw new RuntimeException(ex);
+        }
+    }
 }

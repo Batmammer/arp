@@ -53,11 +53,7 @@ public class CalculateMaximumConsumption {
     }
 
     private Data cloneDataWithConsumption(double consumption) {
-        Data newData = new Data();
-        newData.setGridCosts(data.getGridCosts());
-        newData.setGridConstants(data.getGridConstants());
-        newData.setStorages(data.getStorages());
-        newData.setSummaryEnergyProduction(data.getSummaryEnergyProduction());
+        Data newData = data.clone(false);
         newData.setVehiclesConsumption(createTableOfValue(consumption));
         return newData;
     }
