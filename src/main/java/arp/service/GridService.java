@@ -27,18 +27,18 @@ public class GridService {
     private CalculateYearAlgorithm calculateYearAlgorithm;
     private BroadFirstSearchAlgorithm broadFirstSearchAlgorithm;
     private CalculateMaximumConsumption calculateMaximumConsumption;
-    private static Double pvMultiplier[] = null;
-    private static Double windMultiplier[] = null;
+    private static double pvMultiplier[] = null;
+    private static double windMultiplier[] = null;
 
     public GridService() {
         if (pvMultiplier == null) {
             try {
                 Resource resource = new ClassPathResource("irradiance.txt");
                 String pvString = new String(Files.readAllBytes(resource.getFile().toPath()));
-                pvMultiplier = Arrays.stream(pvString.split(",")).map(s -> Double.valueOf(s)).toArray(Double[]::new);
+                pvMultiplier = Arrays.stream(pvString.split(",")).mapToDouble(s -> Double.valueOf(s)).toArray();
                 resource = new ClassPathResource("wind.txt");
                 String windString = new String(Files.readAllBytes(resource.getFile().toPath()));
-                windMultiplier = Arrays.stream(windString.split(",")).map(s -> Double.valueOf(s)).toArray(Double[]::new);
+                windMultiplier = Arrays.stream(windString.split(",")).mapToDouble(s -> Double.valueOf(s)).toArray();
             } catch (IOException e) {
                 e.printStackTrace();
             }
@@ -69,7 +69,9 @@ public class GridService {
                 gridInput.getCosts(),
                 gridInput.getGrid().getStorages(),
                 calculateYearlyConsumption(gridInput.getGrid().getVehicles(),
-                        gridInput.getConstants().getHydrogenTransportLoss())
+                        gridInput.getConstants().getHydrogenTransportLoss()),
+                pvMultiplier,
+                windMultiplier
         );
         recalculateElectrolyzers(gridInput.getGrid().getStorages(), data);
         return data;
