@@ -1,5 +1,7 @@
 package arp.search;
 
+import arp.dto.Electrolyzer;
+import arp.dto.EnergySource;
 import arp.dto.Storage;
 import arp.enums.EnergySourceType;
 import arp.exception.BusinessException;
@@ -60,31 +62,24 @@ public class BroadFirstSearchAlgorithm {
         double totalCost = state.totalCost;
         double actionCost = 0;
 
+        Electrolyzer electrolyzer = nextStorage.electrolyzers.get(0);
         switch (actionType) {
             case WIND:
-                actionCost = data.gridConstants.WIND_COST;
-                nextStorage.getElectrolyzers().get(0).sources.stream().filter(energy -> energy.getType().equals(EnergySourceType.WIND)).findFirst().get().maxPower += 1.0;
-                for (int hour = 0; hour < Utils.HOURS_OF_YEAR; ++hour) {
-                    nextStorage.electrolyzers.get(0).summaryEnergyProduction[hour] += 1.0;
-                }
+                actionCost = addWind(electrolyzer);
                 break;
             case PV:
-                actionCost = data.gridConstants.PV_COST;
-                nextStorage.getElectrolyzers().get(0).sources.stream().filter(energy -> energy.getType().equals(EnergySourceType.PV)).findFirst().get().maxPower += 1.0;
-                for (int hour = 0; hour < Utils.HOURS_OF_YEAR; ++hour) {
-                    nextStorage.electrolyzers.get(0).summaryEnergyProduction[hour] += 1.0;
-                }
+                actionCost = addPv(electrolyzer);
                 break;
             case ELECTROLIZER:
-                actionCost = data.gridConstants.ELECTROLIZER_COST;
-                nextStorage.electrolyzers.get(0).maxPower += 1.0;
+                actionCost = data.gridConstants.electrolizerCost;
+                electrolyzer.maxPower += 1.0;
                 break;
             case STORAGE_POWER:
-                actionCost = data.gridConstants.STORAGE_POWER_COST;
-                nextStorage.electrolyzers.get(0).accumulatorMaxSize += 1.0;
+                actionCost = data.gridConstants.storagePowerCost;
+                electrolyzer.accumulatorMaxSize += 1.0;
                 break;
             case STORAGE_HYDROGEN:
-                actionCost = data.gridConstants.STORAGE_HYDROGEN_COST;
+                actionCost = data.gridConstants.storageHydrogenCost;
                 nextStorage.maxCapacity += 1.0;
                 break;
         }
@@ -93,6 +88,49 @@ public class BroadFirstSearchAlgorithm {
         CalculateYearAlgorithm calculateYearAlgorithm = new CalculateYearAlgorithm(newData);
         YearResult yearResult = calculateYearAlgorithm.calculate();
         return new State(nextStorage, yearResult.isGood(), yearResult.minHourHydrogenLevel, state, actionType, actionCost, totalCost);
+    }
+
+    private double addPv(Electrolyzer electrolyzer) {
+        double actionCost = data.gridConstants.pvCost;
+
+        EnergySource energySource = getOrCreate(electrolyzer, EnergySourceType.PV);
+        energySource.maxPower += 1.0;
+
+        for (int hour = 0; hour < Utils.HOURS_OF_YEAR; ++hour) {
+            electrolyzer.summaryEnergyProduction[hour] += 1.0;
+        }
+        return actionCost;
+    }
+
+    private double addWind(Electrolyzer electrolyzer) {
+        double actionCost = data.gridConstants.windCost;
+
+        EnergySource energySource = getOrCreate(electrolyzer, EnergySourceType.WIND);
+        energySource.maxPower += 1.0;
+
+        for (int hour = 0; hour < Utils.HOURS_OF_YEAR; ++hour) {
+            electrolyzer.summaryEnergyProduction[hour] += 1.0;
+        }
+        return actionCost;
+    }
+
+    private EnergySource getOrCreate(Electrolyzer electrolyzer, EnergySourceType pv) {
+        EnergySource energySource = findEnergySource(electrolyzer, pv);
+        if (energySource == null) {
+            energySource = new EnergySource();
+            energySource.type = pv;
+            energySource.distance = 0.d;
+            energySource.maxPower = 0.d;
+            electrolyzer.sources.add(energySource);
+        }
+        return energySource;
+    }
+
+    private EnergySource findEnergySource(Electrolyzer electrolyzer, EnergySourceType x) {
+        return electrolyzer.sources.stream()
+                .filter(energy -> energy.type.equals(x))
+                .findFirst()
+                .orElse(null);
     }
 
 }

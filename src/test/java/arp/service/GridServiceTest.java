@@ -2,6 +2,7 @@ package arp.service;
 
 import arp.dto.*;
 import arp.enums.EnergySourceType;
+import org.assertj.core.util.Lists;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -55,16 +56,25 @@ class GridServiceTest {
     }
 
     private Electrolyzer getElectrolyzer() {
+        EnergySource energySource = new EnergySource();
+        energySource.type = EnergySourceType.WIND;
+        energySource.maxPower = 100d;
+        energySource.distance = 0d;
+
         Electrolyzer e = new Electrolyzer();
-        e.setMaxPower(10d);
-        e.setMinPower(1d);
-        e.setEfficiency(10);
-        e.setAccumulatorMaxSize(100d);
-        e.setSources(Collections.singletonList(new EnergySource(EnergySourceType.WIND, 100d, 0d)));
+        e.maxPower = 10d;
+        e.minPower = 1d;
+        e.efficiency = 10;
+        e.accumulatorMaxSize = 100d;
+        e.sources = Lists.newArrayList(energySource);
         return e;
     }
 
     private GridConstants getConstants() {
-        return new GridConstants(0.0, 0.0, 0.0);
+        GridConstants gridConstants = new GridConstants();
+        gridConstants.hydrogenTransportLoss = 0.d;
+        gridConstants.storageLoss = 0.d;
+        gridConstants.transmissionLoss = 0.d;
+        return gridConstants;
     }
 }

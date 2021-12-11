@@ -11,7 +11,7 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 public class Electrolyzer implements Cloneable {
-    public List<EnergySource> sources; // w algorytmie korzystamy tylko z summary
+    public List<EnergySource> sources = new ArrayList<>(); // w algorytmie korzystamy tylko z summary
 
     public int no;
     public double accumulatorMaxSize;

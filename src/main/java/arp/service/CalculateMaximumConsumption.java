@@ -23,7 +23,6 @@ public class CalculateMaximumConsumption {
 
         while (min < max - epsilon) {
             double mid = (max + min) / 2;
-            System.out.println("[" + min + ", " + max + " = " + mid + "]");
 
             result = calculate(mid);
 
