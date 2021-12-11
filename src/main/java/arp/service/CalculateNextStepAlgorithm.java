@@ -38,13 +38,23 @@ public class CalculateNextStepAlgorithm {
         }
         newStep.electorizersStates = newElectrolyzerStates;
         hydrogenLevel -= data.vehiclesConsumption[hour];
+
         double overFlowProduction = 0;
         if (hydrogenLevel > data.summaryStorage.maxCapacity) {
             overFlowProduction = hydrogenLevel - data.summaryStorage.maxCapacity;
             hydrogenLevel = data.summaryStorage.maxCapacity;
         }
-        newStep.storageState = new StorageState(hydrogenLevel);
         newStep.overflowHydrogenProduction = overFlowProduction;
+
+        double storageLuck = 0;
+        if (hydrogenLevel < 0) {
+            storageLuck = -hydrogenLevel;
+            hydrogenLevel = 0;
+        }
+        newStep.storageLuck = storageLuck;
+
+        newStep.storageState = new StorageState(hydrogenLevel);
+
         return newStep;
     }
 

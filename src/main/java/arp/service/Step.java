@@ -13,6 +13,7 @@ public class Step {
     public StorageState storageState;
     public double overflowHydrogenProduction;
     public double overflowPowerProduction;
+    public double storageLuck;
 
     @Override
     public String toString() {
