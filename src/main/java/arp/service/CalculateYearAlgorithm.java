@@ -58,16 +58,16 @@ public class CalculateYearAlgorithm {
 
     private void finalValidation(double minHourHydrogenLevel, double sumHydrogenOverflow, double sumPowerOverflow) {
         if (minHourHydrogenLevel < 0) {
-            warnings.add(new Warning("There biggest luck of hydrogen was: " + (-minHourHydrogenLevel)));
+            warnings.add(new Warning("There biggest luck of hydrogen was: " + Utils.standardRound(-minHourHydrogenLevel)));
         }
         if (minHourHydrogenLevel > 10) {
-            warnings.add(new Warning("For whole year there was at least: " + minHourHydrogenLevel + " kg of hydroxen in storage"));
+            warnings.add(new Warning("For whole year there was at least: " + Utils.standardRound(minHourHydrogenLevel) + " kg of hydroxen in storage"));
         }
         if (sumHydrogenOverflow > 0) {
-            warnings.add(new Warning("In whole year we lost: " + sumHydrogenOverflow + " kg of hydroxen because luck of storage"));
+            warnings.add(new Warning("In whole year we lost: " + Utils.standardRound(sumHydrogenOverflow) + " kg of hydroxen because luck of storage"));
         }
         if (sumPowerOverflow > 0) {
-            warnings.add(new Warning("In whole year we lost: " + sumPowerOverflow + " MWh because luck on accumulator size"));
+            warnings.add(new Warning("In whole year we lost: " + Utils.standardRound(sumPowerOverflow) + " MWh because luck on accumulator size"));
         }
     }
 
