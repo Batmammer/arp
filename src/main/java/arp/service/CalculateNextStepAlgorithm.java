@@ -20,6 +20,7 @@ public class CalculateNextStepAlgorithm {
         double hydrogenLevel = Math.max(step.storageState.currentLevel, 0);
         hydrogenLevel = calculateStorageLoss(hydrogenLevel, data.gridConstants.storageLoss);
         Map<Electrolyzer, ElectrolyzerState> newElectrolyzerStates = new HashMap<>();
+        double overflowPowerProduction = 0;
         for (Map.Entry<Electrolyzer, ElectrolyzerState> entry : step.electorizersStates.entrySet()) {
             double newAccumulatorCurrentLevel = entry.getValue().accumulatorCurrentLevel + entry.getKey().summaryEnergyProduction[step.hour];
             if (newAccumulatorCurrentLevel < entry.getKey().minPower) {
@@ -28,21 +29,22 @@ public class CalculateNextStepAlgorithm {
             double usedPower = Math.min(entry.getKey().maxPower, newAccumulatorCurrentLevel);
             newAccumulatorCurrentLevel -= usedPower;
             if (newAccumulatorCurrentLevel > entry.getKey().accumulatorMaxSize) {
-                newStep.overflowPowerProduction = newAccumulatorCurrentLevel - entry.getKey().accumulatorMaxSize;
+                overflowPowerProduction += newAccumulatorCurrentLevel - entry.getKey().accumulatorMaxSize;
                 newAccumulatorCurrentLevel = entry.getKey().accumulatorMaxSize;
             }
             hydrogenLevel += usedPower * entry.getKey().efficiency;
             newElectrolyzerStates.put(entry.getKey(), new ElectrolyzerState(newAccumulatorCurrentLevel));
         }
+        newStep.overflowPowerProduction = overflowPowerProduction;
         newStep.electorizersStates = newElectrolyzerStates;
         hydrogenLevel -= data.vehiclesConsumption[hour];
 
-        double overFlowProduction = 0;
+        double overFlowHydrogenProduction = 0;
         if (hydrogenLevel > data.summaryStorage.maxCapacity) {
-            overFlowProduction = hydrogenLevel - data.summaryStorage.maxCapacity;
+            overFlowHydrogenProduction += hydrogenLevel - data.summaryStorage.maxCapacity;
             hydrogenLevel = data.summaryStorage.maxCapacity;
         }
-        newStep.overflowHydrogenProduction = overFlowProduction;
+        newStep.overflowHydrogenProduction = overFlowHydrogenProduction;
 
         newStep.storageState = new StorageState(hydrogenLevel);
 
