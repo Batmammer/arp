@@ -14,14 +14,16 @@ public class YearResult {
     private double sumPowerOverflow;
     private List<Warning> warnings;
     private List<BusinessError> errors;
+    private double totalHydrogenWasted;
 
-    public YearResult(double minHourHydrogenLevel, List<Step> steps, double sumHydrogenOverflow, double sumPowerOverflow, List<Warning> warnings, List<BusinessError> errors) {
+    public YearResult(double minHourHydrogenLevel, List<Step> steps, double sumHydrogenOverflow, double sumPowerOverflow, List<Warning> warnings, List<BusinessError> errors, double totalHydrogenWasted) {
         this.minHourHydrogenLevel = minHourHydrogenLevel;
         this.steps = steps;
         this.sumHydrogenOverflow = sumHydrogenOverflow;
         this.sumPowerOverflow = sumPowerOverflow;
         this.warnings = warnings;
         this.errors = errors;
+        this.totalHydrogenWasted = totalHydrogenWasted;
     }
 
     public boolean isGood() {
@@ -43,5 +45,9 @@ public class YearResult {
 
     public void setSumPowerOverflow(double sumPowerOverflow) {
         this.sumPowerOverflow = Utils.standardRound(sumPowerOverflow);
+    }
+
+    public void setTotalHydrogenWasted(double totalHydrogenWasted) {
+        this.totalHydrogenWasted = Utils.standardRound(totalHydrogenWasted);
     }
 }

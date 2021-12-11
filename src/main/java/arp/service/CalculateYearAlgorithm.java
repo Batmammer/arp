@@ -53,11 +53,11 @@ public class CalculateYearAlgorithm {
                 break;
             }
         }
-        finalValidation(minHourHydrogenLevel, sumHydrogenOverflow, sumPowerOverflow);
-        return new YearResult(minHourHydrogenLevel, steps, sumHydrogenOverflow, sumPowerOverflow, warnings, errors);
+        finalValidation(minHourHydrogenLevel, sumHydrogenOverflow, sumPowerOverflow, step.getTotalHydrogenWasted());
+        return new YearResult(minHourHydrogenLevel, steps, sumHydrogenOverflow, sumPowerOverflow, warnings, errors, step.getTotalHydrogenWasted());
     }
 
-    private void finalValidation(double minHourHydrogenLevel, double sumHydrogenOverflow, double sumPowerOverflow) {
+    private void finalValidation(double minHourHydrogenLevel, double sumHydrogenOverflow, double sumPowerOverflow, double totalHydrogenWasted) {
         if (minHourHydrogenLevel < 0) {
             warnings.add(new Warning("There biggest luck of hydrogen was: " + Utils.standardRound(-minHourHydrogenLevel)));
         }
@@ -65,10 +65,13 @@ public class CalculateYearAlgorithm {
             warnings.add(new Warning("For whole year there was at least: " + Utils.standardRound(minHourHydrogenLevel) + " kg of hydroxen in storage"));
         }
         if (sumHydrogenOverflow > 0) {
-            warnings.add(new Warning("In whole year we lost: " + Utils.standardRound(sumHydrogenOverflow) + " kg of hydroxen because luck of storage"));
+            warnings.add(new Warning("In whole year your grid lost: " + Utils.standardRound(sumHydrogenOverflow) + " kg of hydroxen because luck of storage"));
         }
         if (sumPowerOverflow > 0) {
-            warnings.add(new Warning("In whole year we lost: " + Utils.standardRound(sumPowerOverflow) + " MWh because luck on accumulator size"));
+            warnings.add(new Warning("In whole year your grid lost: " + Utils.standardRound(sumPowerOverflow) + " MWh because luck on accumulator size"));
+        }
+        if (totalHydrogenWasted > 0) {
+            warnings.add(new Warning("In whole year your grid lost: " +  Utils.standardRound(totalHydrogenWasted) + " kg of hydrogen in evaporation process"));
         }
     }
 
@@ -84,6 +87,7 @@ public class CalculateYearAlgorithm {
         firstStep.setStorageStates(data.getStorages().stream().collect(Collectors.toMap(storage -> storage, storage -> new StorageState(0))));
         firstStep.setOverflowHydrogenProduction(0);
         firstStep.setOverflowPowerProduction(0);
+        firstStep.setTotalHydrogenWasted(0);
         return firstStep;
     }
 }

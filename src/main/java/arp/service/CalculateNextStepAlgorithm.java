@@ -28,7 +28,9 @@ public class CalculateNextStepAlgorithm {
         double overflowPowerProduction = 0;
         for (Storage storage : data.getStorages()) {
             double hydrogenLevel = Math.max(step.getStorageStates().get(storage).getCurrentLevel(), 0);
-            hydrogenLevel = calculateStorageLoss(hydrogenLevel, data.getGridConstants().getStorageLoss());
+            double hydrogenStorageLoss = calculateStorageLoss(hydrogenLevel, data.getGridConstants().getStorageLoss());
+            newStep.setTotalHydrogenWasted(step.getTotalHydrogenWasted() + hydrogenStorageLoss);
+            hydrogenLevel -= hydrogenStorageLoss;
             for (Electrolyzer electrolyzer : storage.getElectrolyzers()) {
                 double newAccumulatorCurrentLevel = step.getAcumulatorsStates().get(electrolyzer.getAccumulator()).getAccumulatorCurrentLevel() + data.getSummaryEnergyProduction().get(electrolyzer.getId())[step.getHour()];
                 totalElectricityProduction += data.getSummaryEnergyProduction().get(electrolyzer.getId())[step.getHour()];
@@ -51,7 +53,7 @@ public class CalculateNextStepAlgorithm {
         newStep.setStorageStates(newStorageStates);
         newStep.setOverflowPowerProduction(overflowPowerProduction);
         double neededHydrogen = data.getVehiclesConsumption()[hour];
-        double currentHydrogen = newStorageStates.values().stream().mapToDouble(storageState -> storageState.getCurrentLevel()).sum();
+        double currentHydrogen = newStorageStates.values().stream().mapToDouble(StorageState::getCurrentLevel).sum();
         if (currentHydrogen > 0) {
             double ratio = 1 - neededHydrogen / currentHydrogen;
             newStorageStates.values().forEach(storageState -> storageState.setCurrentLevel(ratio * storageState.getCurrentLevel()));
@@ -80,6 +82,6 @@ public class CalculateNextStepAlgorithm {
         if (hydrogenLevel <= 0) {
             return hydrogenLevel;
         }
-        return hydrogenLevel * (1.0 - storageLoss / 24.0);
+        return hydrogenLevel * (storageLoss / 24.0);
     }
 }

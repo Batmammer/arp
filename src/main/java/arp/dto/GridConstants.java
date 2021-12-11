@@ -16,7 +16,7 @@ public class GridConstants {
     @Schema(description = "Hydrogen Transport Loss", example = "0.1", required = true)
     private double hydrogenTransportLoss;
 
-    @Schema(description = "Storage Hydrogen Loss", example = "0.1", required = true)
+    @Schema(description = "Storage Hydrogen Loss", example = "0.005", required = true)
     private double storageLoss;
 
     @Schema(description = "Transmission Electricity Loss", example = "0.1", required = true)

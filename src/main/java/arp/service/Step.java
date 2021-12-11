@@ -17,6 +17,7 @@ public class Step {
     private double overflowPowerProduction;
     private double hydrogenProduction;
     private double electricityProduction;
+    private double totalHydrogenWasted;
 
     @Override
     public String toString() {
@@ -47,5 +48,9 @@ public class Step {
 
     public void setElectricityProduction(double electricityProduction) {
         this.electricityProduction = Utils.standardRound(electricityProduction);
+    }
+
+    public void setTotalHydrogenWasted(double totalHydrogenWasted) {
+        this.totalHydrogenWasted = Utils.standardRound(totalHydrogenWasted);
     }
 }
