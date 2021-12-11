@@ -29,4 +29,11 @@ public class Utils {
         }
     }
 
+    public static String toString(double value) {
+        return String.format("%.3f", value);
+    }
+
+    public static double standardRound(double value) {
+        return Math.round(1000 * value) / 1000.0;
+    }
 }

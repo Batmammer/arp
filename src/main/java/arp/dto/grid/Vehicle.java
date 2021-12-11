@@ -1,6 +1,7 @@
 package arp.dto.grid;
 
 import arp.dto.util.WeeklyPeriod;
+import arp.service.Utils;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -27,4 +28,8 @@ public class Vehicle {
 
     @Schema(description = "Distance from refueling station", example = "30", required = true)
     private Long distance;
+
+    public void setFuelConsumption(Double fuelConsumption) {
+        this.fuelConsumption = Utils.standardRound(fuelConsumption);
+    }
 }

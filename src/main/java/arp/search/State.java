@@ -78,4 +78,12 @@ public class State implements Comparable<State> {
         }
         return actions;
     }
+
+    public void setActionCost(double actionCost) {
+        this.actionCost = Utils.standardRound(actionCost);
+    }
+
+    public void setTotalCost(double totalCost) {
+        this.totalCost = Utils.standardRound(totalCost);
+    }
 }

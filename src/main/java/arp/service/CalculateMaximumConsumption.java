@@ -19,7 +19,7 @@ public class CalculateMaximumConsumption {
 
         YearResult result = calculate(max);
         if (result.isGood()) {
-            return new MaxConsumptionYearResult(result, max);
+            return new MaxConsumptionYearResult(result, Utils.standardRound(max));
         }
 
         while (min < max - epsilon) {
@@ -34,7 +34,7 @@ public class CalculateMaximumConsumption {
             }
         }
 
-        return new MaxConsumptionYearResult(result, min);
+        return new MaxConsumptionYearResult(result, Utils.standardRound(min));
     }
 
     private YearResult calculate(double value) {

@@ -36,4 +36,12 @@ public class YearResult {
                 ", sumPowerOverflow=" + sumPowerOverflow +
                 '}';
     }
+
+    public void setSumHydrogenOverflow(double sumHydrogenOverflow) {
+        this.sumHydrogenOverflow = Utils.standardRound(sumHydrogenOverflow);
+    }
+
+    public void setSumPowerOverflow(double sumPowerOverflow) {
+        this.sumPowerOverflow = Utils.standardRound(sumPowerOverflow);
+    }
 }

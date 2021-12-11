@@ -8,4 +8,8 @@ import lombok.Data;
 public class MaxConsumptionYearResult {
     private YearResult yearResult;
     private double maxConsumption;
+
+    public void setMaxConsumption(double maxConsumption) {
+        this.maxConsumption = Utils.standardRound(maxConsumption);
+    }
 }

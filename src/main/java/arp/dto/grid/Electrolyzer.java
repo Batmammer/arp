@@ -1,5 +1,6 @@
 package arp.dto.grid;
 
+import arp.service.Utils;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -30,6 +31,18 @@ public class Electrolyzer implements Cloneable {
 
     @Schema(description = "Electrolyzer min power", example = "5.0", required = true)
     private double maxPower;
+
+    public void setEfficiency(double efficiency) {
+        this.efficiency = Utils.standardRound(efficiency);
+    }
+
+    public void setMinPower(double minPower) {
+        this.minPower = Utils.standardRound(minPower);
+    }
+
+    public void setMaxPower(double maxPower) {
+        this.maxPower = Utils.standardRound(maxPower);
+    }
 
     public Electrolyzer clone() {
         List<EnergySource> newSources = new ArrayList<>();
