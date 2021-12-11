@@ -1,5 +1,7 @@
 package arp.service;
 
+import arp.dto.grid.Electrolyzer;
+import arp.dto.grid.Storage;
 import arp.dto.warming.BusinessError;
 import arp.dto.warming.Warning;
 import arp.exception.BusinessException;
@@ -8,6 +10,7 @@ import arp.exception.FailureReason;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import static arp.service.Utils.HOURS_OF_YEAR;
 
@@ -26,7 +29,7 @@ public class CalculateYearAlgorithm {
 
     public YearResult calculate() {
         Step step = initializeFirstStep();
-        double minHourHydrogenLevel = step.storageStates.currentLevel;
+        double minHourHydrogenLevel = step.storageStates.values().stream().mapToDouble(storageState -> storageState.currentLevel).sum();
         double sumHydrogenOverflow = 0;
         double sumPowerOverflow = 0;
         List<Step> steps = new ArrayList<>();
@@ -35,7 +38,7 @@ public class CalculateYearAlgorithm {
             try {
                 Step newStep = calculateNextStepAlgorithm.calculate(step);
                 steps.add(newStep);
-                minHourHydrogenLevel = Math.min(minHourHydrogenLevel, newStep.storageStates.currentLevel);
+                minHourHydrogenLevel = Math.min(minHourHydrogenLevel, newStep.storageStates.values().stream().mapToDouble(storageState -> storageState.currentLevel).sum());
                 sumHydrogenOverflow += newStep.overflowHydrogenProduction;
                 sumPowerOverflow += newStep.overflowPowerProduction;
                 step = newStep;
@@ -61,10 +64,11 @@ public class CalculateYearAlgorithm {
         Step firstStep = new Step();
         firstStep.hour = 0;
         firstStep.electorizersStates = new HashMap<>();
-        for (Electrolyzer electrolyzer : data.summaryStorage.electrolyzers) {
-            firstStep.electorizersStates.put(electrolyzer, new ElectrolyzerState(0));
+        for (Storage storage: data.storages)
+        for (Electrolyzer electrolyzer : storage.getElectrolyzers()) {
+            firstStep.electorizersStates.put(electrolyzer.getId(), new ElectrolyzerState(0));
         }
-        firstStep.storageStates = new StorageState(0);
+        firstStep.storageStates =  data.storages.stream().collect(Collectors.toMap(storage -> storage.getId(), storage -> new StorageState(0)));
         firstStep.overflowHydrogenProduction = 0;
         firstStep.overflowPowerProduction = 0;
         return firstStep;
