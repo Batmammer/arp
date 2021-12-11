@@ -145,10 +145,12 @@ public class GridController {
 
         JFreeChart electricityChart = ChartFactory.createScatterPlot("electricity", "x", "y", electricityDataset, PlotOrientation.VERTICAL, false, false, false);
         JFreeChart hydrogenChart = ChartFactory.createScatterPlot("hydrogen", "x", "y", hydrogenDataset, PlotOrientation.VERTICAL, false, false, false);
-        XYLineAndShapeRenderer rndr = (XYLineAndShapeRenderer) ((XYPlot) electricityChart.getPlot()).getRenderer();
-        rndr.setSeriesShape(0, new Ellipse2D.Double(0, 0, 0.5, 0.5));
-        rndr.setBaseLinesVisible(true);
-        ((XYPlot) hydrogenChart.getPlot()).setRenderer(rndr);
+        XYLineAndShapeRenderer rendererElectricity = (XYLineAndShapeRenderer) ((XYPlot) electricityChart.getPlot()).getRenderer();
+        XYLineAndShapeRenderer rendererHydrogen = (XYLineAndShapeRenderer) ((XYPlot) hydrogenChart.getPlot()).getRenderer();
+        rendererElectricity.setSeriesShape(0, new Ellipse2D.Double(0, 0, 0.5, 0.5));
+        rendererHydrogen.setSeriesShape(0, new Ellipse2D.Double(0, 0, 0.5, 0.5));
+        rendererElectricity.setBaseLinesVisible(true);
+        rendererHydrogen.setBaseLinesVisible(true);
         try {
             ChartUtilities.saveChartAsPNG(new File("electricityChart.png"), electricityChart, 1500, 1000);
             ChartUtilities.saveChartAsPNG(new File("hydrogenChart.png"), hydrogenChart, 1500, 1000);
