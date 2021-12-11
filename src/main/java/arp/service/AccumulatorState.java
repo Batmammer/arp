@@ -3,10 +3,10 @@ package arp.service;
 import lombok.Data;
 
 @Data
-public class AcumulatorState {
-    private double accumulatorCurrentLevel = 0.0;
+public class AccumulatorState {
+    private double accumulatorCurrentLevel;
 
-    public AcumulatorState(double accumulatorCurrentLevel) {
+    public AccumulatorState(double accumulatorCurrentLevel) {
         this.accumulatorCurrentLevel = Utils.standardRound(accumulatorCurrentLevel);
     }
 
