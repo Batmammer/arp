@@ -72,7 +72,7 @@ public class GridService {
                                         .map(s -> s.getElectrolyzers()).collect(Collectors.toList()).stream().flatMap(List::stream).collect(Collectors.toList()),
                                 gridInput.getConstants())
                 ));
-        return calculateMaximumConsumption.calculate();
+        return calculateMaximumConsumption.calculate().getMaxConsumption();
     }
 
     private Map<Long, double[]> calculateElectrolyzers(List<Electrolyzer> input, GridConstants constants) {

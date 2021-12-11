@@ -21,7 +21,7 @@ class CalculateMaximumConsumptionTest extends AbstractAlgorithmTest {
         data.getSummaryEnergyProduction().put(1l, createTableOfValue(3.0));
 
         // when
-        double value = new CalculateMaximumConsumption(data).calculate();
+        double value = new CalculateMaximumConsumption(data).calculate().getMaxConsumption();
 
         // then
         double expectedValue = 6.0;
@@ -40,7 +40,7 @@ class CalculateMaximumConsumptionTest extends AbstractAlgorithmTest {
         data.getSummaryEnergyProduction().put(1l, createTableOfValue(2.0));
 
         // when
-        double value = new CalculateMaximumConsumption(data).calculate();
+        double value = new CalculateMaximumConsumption(data).calculate().getMaxConsumption();
 
         // then
         double expectedValue = 6.0;
@@ -60,7 +60,7 @@ class CalculateMaximumConsumptionTest extends AbstractAlgorithmTest {
         data.getSummaryEnergyProduction().put(1l, createTableOfValue(1.0));
 
         // when
-        double value = new CalculateMaximumConsumption(data).calculate();
+        double value = new CalculateMaximumConsumption(data).calculate().getMaxConsumption();
 
         // then
         double expectedValue = 3.0;
@@ -80,7 +80,7 @@ class CalculateMaximumConsumptionTest extends AbstractAlgorithmTest {
         data.getSummaryEnergyProduction().put(electrolyzer.getId(), createTableOfValue(1.0));
 
         // when
-        double value = new CalculateMaximumConsumption(data).calculate();
+        double value = new CalculateMaximumConsumption(data).calculate().getMaxConsumption();
 
         // then
         double expectedValue = 0.0;
@@ -107,7 +107,7 @@ class CalculateMaximumConsumptionTest extends AbstractAlgorithmTest {
         data.getSummaryEnergyProduction().put(1l, tableOfValue);
 
         // when
-        double value = new CalculateMaximumConsumption(data).calculate();
+        double value = new CalculateMaximumConsumption(data).calculate().getMaxConsumption();
 
         // then
         double expectedValue = 2.0;
@@ -134,7 +134,7 @@ class CalculateMaximumConsumptionTest extends AbstractAlgorithmTest {
         data.getSummaryEnergyProduction().put(1l, tableOfValue);
 
         // when
-        double value = new CalculateMaximumConsumption(data).calculate();
+        double value = new CalculateMaximumConsumption(data).calculate().getMaxConsumption();
 
         // then
         double expectedValue = 1.5;

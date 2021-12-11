@@ -13,13 +13,13 @@ public class CalculateMaximumConsumption {
         this.data = data;
     }
 
-    public double calculate() {
+    public MaxConsumptionYearResult calculate() {
         double min = 0;
         double max = getMax();
 
         YearResult result = calculate(max);
         if (result.isGood()) {
-            return max;
+            return new MaxConsumptionYearResult(result, max);
         }
 
         while (min < max - epsilon) {
@@ -34,7 +34,7 @@ public class CalculateMaximumConsumption {
             }
         }
 
-        return min;
+        return new MaxConsumptionYearResult(result, min);
     }
 
     private YearResult calculate(double value) {
