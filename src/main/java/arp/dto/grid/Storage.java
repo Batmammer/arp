@@ -13,7 +13,7 @@ import java.util.List;
 public class Storage implements Cloneable {
     private Long id;
     private double maxCapacity;
-    private List<Electrolyzer> electrolyzers;
+    private List<Electrolyzer> electrolyzers = new ArrayList<>();
 
     public Storage clone() {
         List<Electrolyzer> newElectrolyzers = new ArrayList<>();
