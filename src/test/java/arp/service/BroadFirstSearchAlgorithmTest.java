@@ -7,8 +7,6 @@ import arp.search.BroadFirstSearchAlgorithm;
 import arp.search.State;
 import org.junit.jupiter.api.Test;
 
-import java.util.HashMap;
-
 import static arp.service.Utils.createTableOfValue;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
@@ -38,19 +36,11 @@ public class BroadFirstSearchAlgorithmTest {
         data.setVehiclesConsumption(createTableOfValue(consumption));
 
         // when
-        double cost = calculate(data);
+        String state = calculate(data);
 
         // then
-        double expectedCost = 7.0d;
-        assertEquals(expectedCost, cost);
-    }
-
-    private GridConstants buildGridConstants() {
-        GridConstants gridConstants = new GridConstants();
-        gridConstants.setPvDailyProduction(createTableOfValue(1.0));
-        gridConstants.setWindDailyProduction(createTableOfValue(1.0));
-        gridConstants.setElectrolyzerEfficiency(1.0);
-        return gridConstants;
+        String esxpectedStateString = "7.0: PV, STORAGE";
+        assertEquals(esxpectedStateString, state);
     }
 
     @Test
@@ -77,11 +67,12 @@ public class BroadFirstSearchAlgorithmTest {
         data.setVehiclesConsumption(createTableOfValue(consumption));
 
         // when
-        double cost = calculate(data);
+        // when
+        String state = calculate(data);
 
         // then
-        double expectedCost = 8.0d;
-        assertEquals(expectedCost, cost);
+        String esxpectedStateString = "8.0: WIND, STORAGE";
+        assertEquals(esxpectedStateString, state);
     }
 
     @Test
@@ -109,15 +100,15 @@ public class BroadFirstSearchAlgorithmTest {
         data.setVehiclesConsumption(createTableOfValue(consumption));
 
         // when
-        double cost = calculate(data);
+        String state = calculate(data);
 
         // then
-        double expectedCost = 9.0d;
-        assertEquals(expectedCost, cost);
+        String esxpectedStateString = "9.0: PV, ELECTROLYZER";
+        assertEquals(esxpectedStateString, state);
     }
 
     @Test
-    public void shouldPreferAccumulatorBeforePower() {
+    public void shouldPreferAccumulatorBeforeStorage() {
         // given
         GridConstants gridConstants = buildGridConstants();
 
@@ -136,18 +127,58 @@ public class BroadFirstSearchAlgorithmTest {
         data.setGridConstants(gridConstants);
         data.getStorages().add(storage);
 
-        gridConstants.setPvDailyProduction(createOneHalfTable());
+        gridConstants.setPvDailyProduction(createOneZeroTable());
         data.setVehiclesConsumption(createTableOfValue(1.0));
 
         // when
-        double cost = calculate(data);
+        String state = calculate(data);
 
         // then
-        double expectedCost = 15.0d;
-        assertEquals(expectedCost, cost);
+        String esxpectedStateString = "15.0: PV, PV, ELECTROLYZER, ACCUMULATOR, ACCUMULATOR";
+        assertEquals(esxpectedStateString, state);
     }
 
-    private double[] createOneHalfTable() {
+    @Test
+    public void shouldPreferStorageBeforeAccumulator() {
+        // given
+        GridConstants gridConstants = buildGridConstants();
+
+        GridCosts gridCosts = new GridCosts();
+        gridCosts.setWindCost(1000d);
+        gridCosts.setPvCost(4.0d);
+        gridCosts.setStoragePowerCost(10.0d);
+        gridCosts.setElectrolyzerCost(5.0d);
+        gridCosts.setStorageHydrogenCost(2.0d);
+
+        Storage storage = new Storage();
+        storage.setMaxCapacity(0.0);
+
+        Data data = new Data();
+        data.setGridCosts(gridCosts);
+        data.setGridConstants(gridConstants);
+        data.getStorages().add(storage);
+
+        gridConstants.setPvDailyProduction(createOneZeroTable());
+        data.setVehiclesConsumption(createTableOfValue(1.0));
+
+        // when
+        String state = calculate(data);
+
+        // then
+        String esxpectedStateString = "20.0: STORAGE, PV, PV, ELECTROLYZER";
+        assertEquals(esxpectedStateString, state);
+    }
+
+
+    private GridConstants buildGridConstants() {
+        GridConstants gridConstants = new GridConstants();
+        gridConstants.setPvDailyProduction(createTableOfValue(1.0));
+        gridConstants.setWindDailyProduction(createTableOfValue(1.0));
+        gridConstants.setElectrolyzerEfficiency(1.0);
+        return gridConstants;
+    }
+
+    private double[] createOneZeroTable() {
         double[] table = createTableOfValue(1.0d);
         for (int i = 0; i < table.length; i++) {
             if (i % 2 == 1) {
@@ -167,11 +198,9 @@ public class BroadFirstSearchAlgorithmTest {
         return table;
     }
 
-    private double calculate(Data data) {
+    private String calculate(Data data) {
         BroadFirstSearchAlgorithm broadFirstSearchAlgorithm = new BroadFirstSearchAlgorithm(data);
-        State state = broadFirstSearchAlgorithm.calculate();
-        System.out.println("FINISH: " + state);
-        return state.getTotalCost();
+        return broadFirstSearchAlgorithm.calculate().toString();
     }
 
     private GridConstants createGridConstants() {
