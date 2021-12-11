@@ -20,6 +20,7 @@ public class CalculateYearAlgorithm {
     private List<Warning> warnings;
     private List<BusinessError> errors;
 
+
     public CalculateYearAlgorithm(Data data) {
         this.data = data;
         this.calculateNextStepAlgorithm = new CalculateNextStepAlgorithm(data);
@@ -29,7 +30,7 @@ public class CalculateYearAlgorithm {
 
     public YearResult calculate() {
         Step step = initializeFirstStep();
-        double minHourHydrogenLevel = step.getStorageStates().values().stream().mapToDouble(storageState -> storageState.getCurrentLevel()).sum();
+        double minHourHydrogenLevel = step.getStorageStates().values().stream().mapToDouble(StorageState::getCurrentLevel).sum();
         double sumHydrogenOverflow = 0;
         double sumPowerOverflow = 0;
         List<Step> steps = new ArrayList<>();
@@ -38,7 +39,7 @@ public class CalculateYearAlgorithm {
             try {
                 Step newStep = calculateNextStepAlgorithm.calculate(step);
                 steps.add(newStep);
-                minHourHydrogenLevel = Math.min(minHourHydrogenLevel, newStep.getStorageStates().values().stream().mapToDouble(storageState -> storageState.getCurrentLevel()).sum());
+                minHourHydrogenLevel = Math.min(minHourHydrogenLevel, newStep.getStorageStates().values().stream().mapToDouble(StorageState::getCurrentLevel).sum());
                 sumHydrogenOverflow += newStep.getOverflowHydrogenProduction();
                 sumPowerOverflow += newStep.getOverflowPowerProduction();
                 step = newStep;
