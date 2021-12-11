@@ -48,8 +48,14 @@ public class CalculateNextStepAlgorithm {
         newStep.setOverflowPowerProduction(overflowPowerProduction);
         double neededHydrogen = data.getVehiclesConsumption()[hour];
         double currentHydrogen = newStorageStates.values().stream().mapToDouble(storageState -> storageState.getCurrentLevel()).sum();
-        double ratio = 1 - neededHydrogen / currentHydrogen;
-        newStorageStates.values().forEach(storageState -> storageState.setCurrentLevel(ratio * storageState.getCurrentLevel()));
+        if (currentHydrogen > 0) {
+            double ratio = 1 - neededHydrogen / currentHydrogen;
+            newStorageStates.values().forEach(storageState -> storageState.setCurrentLevel(ratio * storageState.getCurrentLevel()));
+        } else {
+            double part = neededHydrogen / newStorageStates.values().size();
+            newStorageStates.values().forEach(storageState -> storageState.setCurrentLevel(storageState.getCurrentLevel() - part));
+        }
+
 
         double overFlowHydrogenProduction = 0;
         for (Storage storage: data.getStorages()) {

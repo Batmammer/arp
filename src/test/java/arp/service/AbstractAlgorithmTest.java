@@ -26,6 +26,7 @@ public class AbstractAlgorithmTest {
         gridConstants.setTransmissionLoss(0d);
 
         Storage storage = new Storage();
+        storage.setId(1l);
         storage.setMaxCapacity(storageMaxCapacity);
         storage.setElectrolyzers(Lists.newArrayList(electrolyzer));
 
