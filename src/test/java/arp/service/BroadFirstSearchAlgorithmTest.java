@@ -7,6 +7,8 @@ import arp.search.BroadFirstSearchAlgorithm;
 import arp.search.State;
 import org.junit.jupiter.api.Test;
 
+import java.util.HashMap;
+
 import static arp.service.Utils.createTableOfValue;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
@@ -17,7 +19,7 @@ public class BroadFirstSearchAlgorithmTest {
         // given
         double consumption = 1.0;
 
-        GridConstants gridConstants = new GridConstants();
+        GridConstants gridConstants = buildGridConstants();
 
         GridCosts gridCosts = new GridCosts();
         gridCosts.setPvCost(2.0d);
@@ -43,12 +45,20 @@ public class BroadFirstSearchAlgorithmTest {
         assertEquals(expectedCost, cost);
     }
 
+    private GridConstants buildGridConstants() {
+        GridConstants gridConstants = new GridConstants();
+        gridConstants.setPvDailyProduction(createTableOfValue(1.0));
+        gridConstants.setWindDailyProduction(createTableOfValue(1.0));
+        gridConstants.setElectrolizerEfficiency(1.0);
+        return gridConstants;
+    }
+
     @Test
     public void shouldAddWind() {
         // given
         double consumption = 1.0;
 
-        GridConstants gridConstants = new GridConstants();
+        GridConstants gridConstants = buildGridConstants();
 
         GridCosts gridCosts = new GridCosts();
         gridCosts.setPvCost(4.0d);
@@ -109,7 +119,7 @@ public class BroadFirstSearchAlgorithmTest {
     @Test
     public void shouldPreferAccumulatorBeforePower() {
         // given
-        GridConstants gridConstants = new GridConstants();
+        GridConstants gridConstants = buildGridConstants();
 
         GridCosts gridCosts = new GridCosts();
         gridCosts.setWindCost(1000d);
@@ -127,7 +137,7 @@ public class BroadFirstSearchAlgorithmTest {
         data.getStorages().add(storage);
 
         gridConstants.setPvDailyProduction(createOneHalfTable());
-        data.setVehiclesConsumption(createOneTwoTable());
+        data.setVehiclesConsumption(createTableOfValue(1.0));
 
         // when
         double cost = calculate(data);
@@ -141,14 +151,14 @@ public class BroadFirstSearchAlgorithmTest {
         double[] table = createTableOfValue(1.0d);
         for (int i = 0; i < table.length; i++) {
             if (i % 2 == 1) {
-                table[i] = 0.5;
+                table[i] = 0.0;
             }
         }
         return table;
     }
 
     private double[] createOneTwoTable() {
-        double[] table = createTableOfValue(2.0d);
+        double[] table = createTableOfValue(1.0d);
         for (int i = 0; i < table.length; i++) {
             if (i % 2 == 0) {
                 table[i] = 1;
@@ -160,7 +170,7 @@ public class BroadFirstSearchAlgorithmTest {
     private double calculate(Data data) {
         BroadFirstSearchAlgorithm broadFirstSearchAlgorithm = new BroadFirstSearchAlgorithm(data);
         State state = broadFirstSearchAlgorithm.calculate();
-//        System.out.println(state);
+        System.out.println("FINISH: " + state);
         return state.totalCost;
     }
 
