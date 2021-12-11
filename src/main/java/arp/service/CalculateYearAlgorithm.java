@@ -6,6 +6,8 @@ import arp.dto.warming.BusinessError;
 import arp.dto.warming.Warning;
 import arp.exception.BusinessException;
 import arp.exception.FailureReason;
+import lombok.extern.log4j.Log4j;
+import lombok.extern.slf4j.Slf4j;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -35,7 +37,11 @@ public class CalculateYearAlgorithm {
         double sumPowerOverflow = 0;
         List<Step> steps = new ArrayList<>();
         steps.add(step);
+
+        System.out.print("START CALCULATE WHOLE YEAR ");
         for (int hour = 1; hour < getHoursOfSimulation(data); ++hour) {
+            if (hour % 1000 == 0)
+                System.out.print(".");
             try {
                 Step newStep = calculateNextStepAlgorithm.calculate(step);
                 steps.add(newStep);
@@ -52,6 +58,7 @@ public class CalculateYearAlgorithm {
                 break;
             }
         }
+        System.out.println(" FINISH");
         finalValidation(minHourHydrogenLevel, sumHydrogenOverflow, sumPowerOverflow);
         return new YearResult(minHourHydrogenLevel, steps, sumHydrogenOverflow, sumPowerOverflow, warnings, errors);
     }
