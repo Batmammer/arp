@@ -10,14 +10,17 @@ import java.util.stream.Collectors;
 @Service
 public class GridService {
 
-    public void runSimulation(InputGrid inputGrid) {
-        Data data = new Data(inputGrid.getConstants(),
+    private CalculateYearAlgorithm calculateYearAlgorithm;
+
+    public YearResult runSimulation(InputGrid inputGrid) {
+        calculateYearAlgorithm = new CalculateYearAlgorithm(new Data(inputGrid.getConstants(),
                 new Storage(inputGrid.getGrid().getWatSide().getStorage().getMaxCapacity(),
                         calculateElectrolyzers(
                                 inputGrid.getGrid().getWatSide().getStorage().getElectrolyzers(),
-                        inputGrid.getConstants().getTransmissionLoss())),
+                                inputGrid.getConstants().getTransmissionLoss())),
                 calculateYearlyConsumption(inputGrid.getGrid().getHydrogenSide(),
-                        inputGrid.getConstants().getHydrogenTransportLoss()));
+                        inputGrid.getConstants().getHydrogenTransportLoss())));
+        return calculateYearAlgorithm.calculate();
     }
 
     private List<Electrolyzer> calculateElectrolyzers(List<Electrolyzer> input, double transmissionLoss) {
@@ -38,7 +41,7 @@ public class GridService {
         for (int i = 0; i < 365 * 24; i++) {
             double current = 0;
             for (EnergySource es : electrolyzer.getSources()) {
-                current += es.getMaxPower() * getPowerMultiplier(i, es.getType()) * transmissionLoss;
+                current += es.getMaxPower() * getPowerMultiplier(i, es.getType()) * (1.0 - transmissionLoss);
             }
             production[i] = current;
         }
