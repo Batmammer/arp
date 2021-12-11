@@ -60,9 +60,10 @@ public class State implements Comparable<State> {
     }
 
     private String actionsTypesToString(List<ActionType> actions) {
-        return actions.stream().sorted()
+        return actions.stream()
                 .filter(a -> a != null)
                 .map(a -> a.toString())
+                .sorted()
                 .collect(Collectors.joining(", "));
     }
 
