@@ -16,11 +16,15 @@ public class CalculateMaximumConsumption {
         double min = 0;
         double max = getMax();
 
+        YearResult result = calculate(max);
+        if (result.isGood()) {
+            return max;
+        }
+
         while (min < max - epsilon) {
             double mid = (max + min) / 2;
 
-            Data midData = cloneDataWithConsumption(mid);
-            YearResult result = new CalculateYearAlgorithm(midData).calculate();
+            result = calculate(mid);
 
             if (result.isGood()) {
                 min = mid;
@@ -30,6 +34,11 @@ public class CalculateMaximumConsumption {
         }
 
         return min;
+    }
+
+    private YearResult calculate(double value) {
+        Data midData = cloneDataWithConsumption(value);
+        return new CalculateYearAlgorithm(midData).calculate();
     }
 
     private double getMax() {

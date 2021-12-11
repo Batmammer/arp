@@ -18,7 +18,7 @@ public class AbstractAlgorithmTest {
         return new ElectrolyzerState(accumulatorState);
     }
 
-    protected Data buildData(Electrolyzer electrolyzer, double storageMaxCapacity, double[] cosumption) {
+    protected Data buildData(Electrolyzer electrolyzer, double storageMaxCapacity, double[] consumption) {
         GridConstants gridConstants = new GridConstants();
         gridConstants.hydrogenTransportLoss = 0d;
         gridConstants.storageLoss = 0d;
@@ -31,7 +31,7 @@ public class AbstractAlgorithmTest {
         Data data = new Data();
         data.gridConstants = gridConstants;
         data.summaryStorage = storage;
-        data.vehiclesConsumption = cosumption;
+        data.vehiclesConsumption = consumption;
         return data;
     }
 }

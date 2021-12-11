@@ -8,9 +8,48 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 class CalculateMaximumConsumptionTest extends AbstractAlgorithmTest {
     @Test
-    public void shouldUseEfficiency() {
+    public void shouldUseFullElectrolyzerMaxPowerEventIfPowerIsGreater() {
         // given
-        double storageMaxCapacity = 1.0d;
+        double storageMaxCapacity = 0.0d;
+
+        Electrolyzer electrolyzer = new Electrolyzer();
+        electrolyzer.maxPower = 2d;
+        electrolyzer.efficiency = 3.0d;
+        electrolyzer.accumulatorMaxSize = 0.d;
+        electrolyzer.summaryEnergyProduction = createTableOfValue(3.0);
+        Data data = buildData(electrolyzer, storageMaxCapacity, null);
+
+        // when
+        double value = new CalculateMaximumConsumption(data).calculate();
+
+        // then
+        double expectedValue = 6.0;
+        assertEquals(expectedValue, value);
+    }
+
+    @Test
+    public void shouldUseFullElectrolyzerMaxPower() {
+        // given
+        double storageMaxCapacity = 0.0d;
+        Electrolyzer electrolyzer = new Electrolyzer();
+        electrolyzer.maxPower = 2d;
+        electrolyzer.efficiency = 3.0d;
+        electrolyzer.accumulatorMaxSize = 0.d;
+        electrolyzer.summaryEnergyProduction = createTableOfValue(2.0);
+        Data data = buildData(electrolyzer, storageMaxCapacity, null);
+
+        // when
+        double value = new CalculateMaximumConsumption(data).calculate();
+
+        // then
+        double expectedValue = 6.0;
+        assertEquals(expectedValue, value);
+    }
+
+    @Test
+    public void shouldUseHalfElectrolyzerMaxPower() {
+        // given
+        double storageMaxCapacity = 0.0d;
 
         Electrolyzer electrolyzer = new Electrolyzer();
         electrolyzer.maxPower = 2d;
@@ -24,6 +63,26 @@ class CalculateMaximumConsumptionTest extends AbstractAlgorithmTest {
 
         // then
         double expectedValue = 3.0;
+        assertEquals(expectedValue, value);
+    }
+
+    @Test
+    public void shouldReturnZero() {
+        // given
+        double storageMaxCapacity = 0.0d;
+
+        Electrolyzer electrolyzer = new Electrolyzer();
+        electrolyzer.maxPower = 0d;
+        electrolyzer.efficiency = 3.0d;
+        electrolyzer.accumulatorMaxSize = 0.d;
+        electrolyzer.summaryEnergyProduction = createTableOfValue(1.0);
+        Data data = buildData(electrolyzer, storageMaxCapacity, null);
+
+        // when
+        double value = new CalculateMaximumConsumption(data).calculate();
+
+        // then
+        double expectedValue = 0.0;
         assertEquals(expectedValue, value);
     }
 }
