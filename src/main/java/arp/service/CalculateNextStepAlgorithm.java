@@ -25,10 +25,10 @@ public class CalculateNextStepAlgorithm {
         Map<Storage, StorageState> newStorageStates = new HashMap<>();
         double overflowPowerProduction = 0;
         for (Storage storage : data.getStorages()) {
-            double hydrogenLevel = Math.max(step.getStorageStates().get(storage).currentLevel, 0);
+            double hydrogenLevel = Math.max(step.getStorageStates().get(storage).getCurrentLevel(), 0);
             hydrogenLevel = calculateStorageLoss(hydrogenLevel, data.getGridConstants().getStorageLoss());
             for (Electrolyzer electrolyzer : storage.getElectrolyzers()) {
-                double newAccumulatorCurrentLevel = step.getAcumulatorsStates().get(electrolyzer.getAccumulator()).accumulatorCurrentLevel + data.getSummaryEnergyProduction().get(electrolyzer.getId())[step.getHour()];
+                double newAccumulatorCurrentLevel = step.getAcumulatorsStates().get(electrolyzer.getAccumulator()).getAccumulatorCurrentLevel() + data.getSummaryEnergyProduction().get(electrolyzer.getId())[step.getHour()];
                 if (newAccumulatorCurrentLevel < electrolyzer.getMinPower()) {
                     throw new BusinessException("Luck of power on Electrolyzer: " + hour + " power: " + newAccumulatorCurrentLevel, FailureReason.LUCK_OF_POWER_ON_ELECTROLIZER);
                 }
@@ -47,7 +47,7 @@ public class CalculateNextStepAlgorithm {
         newStep.setStorageStates(newStorageStates);
         newStep.setOverflowPowerProduction(overflowPowerProduction);
         double neededHydrogen = data.getVehiclesConsumption()[hour];
-        double currentHydrogen = newStorageStates.values().stream().mapToDouble(storageState -> storageState.currentLevel).sum();
+        double currentHydrogen = newStorageStates.values().stream().mapToDouble(storageState -> storageState.getCurrentLevel()).sum();
         double ratio = 1 - neededHydrogen / currentHydrogen;
         newStorageStates.values().forEach(storageState -> storageState.setCurrentLevel(ratio * storageState.getCurrentLevel()));
 

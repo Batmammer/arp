@@ -4,7 +4,7 @@ import lombok.Data;
 
 @Data
 public class AcumulatorState {
-    public double accumulatorCurrentLevel = 0.0;
+    private double accumulatorCurrentLevel = 0.0;
 
     public AcumulatorState(double accumulatorCurrentLevel) {
         this.accumulatorCurrentLevel = accumulatorCurrentLevel;
