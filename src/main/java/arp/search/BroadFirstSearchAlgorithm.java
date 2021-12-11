@@ -229,7 +229,7 @@ public class BroadFirstSearchAlgorithm {
         Action action = new Action();
         action.setType(ActionType.WIND);
         action.setObjectId(id);
-        action.setActionCost(this.data.getGridCosts().getStoragePowerCost());
+        action.setActionCost(this.data.getGridCosts().getWindCost());
         return action;
     }
 
@@ -237,7 +237,7 @@ public class BroadFirstSearchAlgorithm {
 
     private void addPvSource(List<State> results, State state, Long parentId) {
         long newId = state.nextEnergySourceId();
-        Action action = createWindAction(newId);
+        Action action = createPvAction(newId);
 
         State nextState = state.buildNextState(action);
         EnergySource energySource = new EnergySource();
@@ -274,7 +274,7 @@ public class BroadFirstSearchAlgorithm {
         Action action = new Action();
         action.setType(ActionType.PV);
         action.setObjectId(id);
-        action.setActionCost(this.data.getGridCosts().getStoragePowerCost());
+        action.setActionCost(this.data.getGridCosts().getPvCost());
         return action;
     }
 
