@@ -7,6 +7,7 @@ import arp.service.Utils;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class State implements Comparable<State> {
 
@@ -45,20 +46,34 @@ public class State implements Comparable<State> {
         if (toString != null) {
             return toString;
         }
-        StringBuilder result = new StringBuilder().append(Utils.roundDouble(totalCost)).append(": ");
+
+        List<ActionType> actions = getActionTypesPath();
+
+        toString = new StringBuilder()
+                .append(Utils.roundDouble(totalCost))
+                .append(": ")
+                .append(actionsTypesToString(actions))
+                .toString();
+
+        return toString;
+    }
+
+    private String actionsTypesToString(List<ActionType> actions) {
+        return actions.stream().sorted()
+                .filter(a -> a != null)
+                .map(a -> a.toString())
+                .collect(Collectors.joining(", "));
+    }
+
+    private List<ActionType> getActionTypesPath() {
         List<ActionType> actions = new ArrayList<>();
         State state = this;
         while (state != null) {
-            if (state.actionType != null)
+            if (state.actionType != null) {
                 actions.add(state.actionType);
+            }
             state = state.previousState;
         }
-        Collections.sort(actions);
-        for (ActionType actionType : actions)
-            if (actionType != null) {
-                result.append(actionType).append(", ");
-            }
-        toString = result.toString();
-        return toString;
+        return actions;
     }
 }

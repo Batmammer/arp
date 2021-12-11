@@ -85,15 +85,15 @@ public class BroadFirstSearchAlgorithm {
                     case PV:
                         actionCost = addPv(electrolyzer, newSummaryEnergyProduction);
                         break;
-                    case ELECTROLIZER:
+                    case ELECTROLYZER:
                         actionCost = state.data.getGridCosts().getElectrolyzerCost();
                         electrolyzer.setMaxPower(electrolyzer.getMaxPower() + 1.0);
                         break;
-                    case STORAGE_POWER:
+                    case ACCUMULATOR:
                         actionCost = state.data.getGridCosts().getStoragePowerCost();
                         electrolyzer.getAccumulator().setAccumulatorMaxSize(electrolyzer.getAccumulator().getAccumulatorMaxSize() + 1.0);
                         break;
-                    case STORAGE_HYDROGEN:
+                    case STORAGE:
                         actionCost = state.data.getGridCosts().getStorageHydrogenCost();
                         storage.setMaxCapacity(storage.getMaxCapacity() + 1.0);
                         break;
