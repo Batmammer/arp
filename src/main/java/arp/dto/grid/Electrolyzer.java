@@ -52,7 +52,10 @@ public class Electrolyzer implements Cloneable {
         }
     }
 
-    public double getSummaryEnergyProduction(int hour) {
+    public double getSummaryEnergyProduction(arp.service.Data data, int hour) {
+        if (summaryEnergyProduction == null) {
+           recalculateSummaryEnergyProduction(data);
+        }
         if (summaryEnergyProduction != null && hour < summaryEnergyProduction.length) {
             return summaryEnergyProduction[hour];
         } else {
