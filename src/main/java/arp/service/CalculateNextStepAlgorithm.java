@@ -24,18 +24,19 @@ public class CalculateNextStepAlgorithm {
         Map<Electrolyzer, ElectrolyzerState> newElectrolyzerStates = new HashMap<>();
         double overflowPowerProduction = 0;
         for (Map.Entry<Electrolyzer, ElectrolyzerState> entry : step.electorizersStates.entrySet()) {
-            double newAccumulatorCurrentLevel = entry.getValue().accumulatorCurrentLevel + entry.getKey().summaryEnergyProduction[step.hour];
-            if (newAccumulatorCurrentLevel < entry.getKey().minPower) {
+            Electrolyzer electrolyzer = entry.getKey();
+            double newAccumulatorCurrentLevel = entry.getValue().accumulatorCurrentLevel + electrolyzer.summaryEnergyProduction[step.hour];
+            if (newAccumulatorCurrentLevel < electrolyzer.minPower) {
                 throw new BusinessException("Luck of power on Electrolyzer: " + hour + " power: " + newAccumulatorCurrentLevel, FailureReason.LUCK_OF_POWER_ON_ELECTROLIZER);
             }
-            double usedPower = Math.min(entry.getKey().maxPower, newAccumulatorCurrentLevel);
+            double usedPower = Math.min(electrolyzer.maxPower, newAccumulatorCurrentLevel);
             newAccumulatorCurrentLevel -= usedPower;
-            if (newAccumulatorCurrentLevel > entry.getKey().accumulatorMaxSize) {
-                overflowPowerProduction += newAccumulatorCurrentLevel - entry.getKey().accumulatorMaxSize;
-                newAccumulatorCurrentLevel = entry.getKey().accumulatorMaxSize;
+            if (newAccumulatorCurrentLevel > electrolyzer.accumulatorMaxSize) {
+                overflowPowerProduction += newAccumulatorCurrentLevel - electrolyzer.accumulatorMaxSize;
+                newAccumulatorCurrentLevel = electrolyzer.accumulatorMaxSize;
             }
-            hydrogenLevel += usedPower * entry.getKey().efficiency;
-            newElectrolyzerStates.put(entry.getKey(), new ElectrolyzerState(newAccumulatorCurrentLevel));
+            hydrogenLevel += usedPower * electrolyzer.efficiency;
+            newElectrolyzerStates.put(electrolyzer, new ElectrolyzerState(newAccumulatorCurrentLevel));
         }
         newStep.overflowPowerProduction = overflowPowerProduction;
         newStep.electorizersStates = newElectrolyzerStates;
