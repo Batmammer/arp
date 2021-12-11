@@ -28,8 +28,8 @@ public class AbstractAlgorithmTest {
 
         Data data = new Data();
         data.gridConstants = gridConstants;
-        data.summaryStorage = storage;
-        data.vehiclesConsumption = consumption;
+        data.setSummaryStorage(storage;
+        data.setVehiclesConsumption(consumption;
         return data;
     }
 }

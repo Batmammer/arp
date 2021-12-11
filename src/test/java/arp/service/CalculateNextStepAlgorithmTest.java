@@ -533,8 +533,8 @@ class CalculateNextStepAlgorithmTest extends AbstractAlgorithmTest {
 
         Data data = new Data();
         data.gridConstants = gridConstants;
-        data.summaryStorage = storage;
-        data.vehiclesConsumption = new double[]{11.0};
+        data.setSummaryStorage(storage;
+        data.setVehiclesConsumption(new double[]{11.0};
 
         Step step = new Step();
         step.hour = 0;

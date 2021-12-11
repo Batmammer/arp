@@ -5,11 +5,9 @@ import arp.dto.GridCosts;
 import arp.dto.grid.Storage;
 import arp.search.BroadFirstSearchAlgorithm;
 import arp.search.State;
-import org.assertj.core.util.Lists;
 import org.junit.jupiter.api.Test;
 
 import static arp.service.Utils.createTableOfValue;
-import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class BroadFirstSearchAlgorithmTest {
@@ -19,20 +17,22 @@ public class BroadFirstSearchAlgorithmTest {
         // given
         double consumption = 1.0;
 
-        GridConstants gridConstants = createGridConstants();
-        gridConstants.setPvCost(2.0d;
-        gridConstants.setWindCost(3.0d;
-        gridConstants.setStoragePowerCost(10.0d;
-        gridConstants.setElectrolizerCost(5.0d;
-        gridConstants.setStorageHydrogenCost(10.0d;
+        GridConstants gridConstants = new GridConstants();
+
+        GridCosts gridCosts = new GridCosts();
+        gridCosts.setPvCost(2.0d);
+        gridCosts.setWindCost(3.0d);
+        gridCosts.setStoragePowerCost(10.0d);
+        gridCosts.setElectrolyzerCost(5.0d);
+        gridCosts.setStorageHydrogenCost(10.0d);
 
         Storage storage = new Storage();
-        storage.maxCapacity = 0.0;
+        storage.setMaxCapacity(0.0);
 
         Data data = new Data();
-        data.gridConstants = gridConstants;
-        data.summaryStorage = storage;
-        data.vehiclesConsumption = createTableOfValue(consumption);
+        data.setGridConstants(gridConstants);
+        data.setSummaryStorage(storage;
+        data.setVehiclesConsumption(createTableOfValue(consumption));
 
         // when
         double cost = calculate(data);
@@ -47,20 +47,22 @@ public class BroadFirstSearchAlgorithmTest {
         // given
         double consumption = 1.0;
 
-        GridConstants gridConstants = createGridConstants();
-        gridConstants.setPvCost(4.0d;
-        gridConstants.setWindCost(3.0d;
-        gridConstants.setStoragePowerCost(10.0d;
-        gridConstants.setElectrolizerCost(5.0d;
-        gridConstants.setStorageHydrogenCost(10.0d;
+        GridConstants gridConstants = new GridConstants();
+
+        GridCosts gridCosts = new GridCosts();
+        gridCosts.setPvCost(4.0d);
+        gridCosts.setWindCost(3.0d);
+        gridCosts.setStoragePowerCost(10.0d);
+        gridCosts.setElectrolyzerCost(5.0d);
+        gridCosts.setStorageHydrogenCost(10.0d);
 
         Storage storage = new Storage();
-        storage.maxCapacity = 0.0;
+        storage.setMaxCapacity(0.0);
 
         Data data = new Data();
-        data.gridConstants = gridConstants;
-        data.summaryStorage = storage;
-        data.vehiclesConsumption = createTableOfValue(consumption);
+        data.setGridConstants(gridConstants);
+        data.setSummaryStorage(storage);
+        data.setVehiclesConsumption(createTableOfValue(consumption));
 
         // when
         double cost = calculate(data);
@@ -104,6 +106,8 @@ public class BroadFirstSearchAlgorithmTest {
     @Test
     public void shouldPreferAccumulatorBeforePower() {
         // given
+        GridConstants gridConstants = new GridConstants();
+
         GridCosts gridCosts = new GridCosts();
         gridCosts.setWindCost(1000d);
         gridCosts.setPvCost(4.0d);
@@ -116,11 +120,11 @@ public class BroadFirstSearchAlgorithmTest {
 
         Data data = new Data();
         data.setGridCosts(gridCosts);
-        data.setGridConstants(gridCosts);
+        data.setGridConstants(gridConstants);
         data.setSummaryStorage(storage);
 
-        gridCosts.setPvDailyProduction(createOneHalfTable());
-        data.vehiclesConsumption = createOneTwoTable();
+        gridConstants.setPvDailyProduction(createOneHalfTable());
+        data.setVehiclesConsumption(createOneTwoTable());
 
         // when
         double cost = calculate(data);
@@ -152,7 +156,7 @@ public class BroadFirstSearchAlgorithmTest {
 
     private double calculate(Data data) {
         BroadFirstSearchAlgorithm broadFirstSearchAlgorithm = new BroadFirstSearchAlgorithm(data);
-        State state  = broadFirstSearchAlgorithm.calculate();
+        State state = broadFirstSearchAlgorithm.calculate();
         System.out.println(state);
         return state.totalCost;
     }
