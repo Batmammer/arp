@@ -16,9 +16,9 @@ class CalculateMaximumConsumptionTest extends AbstractAlgorithmTest {
         Electrolyzer electrolyzer = new Electrolyzer();
         electrolyzer.setMaxPower(2d);
         electrolyzer.setEfficiency(3.0d);
-        electrolyzer.setAccumulatorMaxSize(0.d);
-        electrolyzer.setSummaryEnergyProduction(createTableOfValue(3.0);
+        electrolyzer.getAccumulator().setAccumulatorMaxSize(0.d);
         Data data = buildData(electrolyzer, storageMaxCapacity, null);
+        data.getSummaryEnergyProduction().put(1l, createTableOfValue(3.0));
 
         // when
         double value = new CalculateMaximumConsumption(data).calculate();
@@ -35,9 +35,9 @@ class CalculateMaximumConsumptionTest extends AbstractAlgorithmTest {
         Electrolyzer electrolyzer = new Electrolyzer();
         electrolyzer.setMaxPower(2d);
         electrolyzer.setEfficiency(3.0d);
-        electrolyzer.setAccumulatorMaxSize(0.d);
-        electrolyzer.setSummaryEnergyProduction(createTableOfValue(2.0);
+        electrolyzer.getAccumulator().setAccumulatorMaxSize(0.d);
         Data data = buildData(electrolyzer, storageMaxCapacity, null);
+        data.getSummaryEnergyProduction().put(1l, createTableOfValue(2.0));
 
         // when
         double value = new CalculateMaximumConsumption(data).calculate();
@@ -55,9 +55,9 @@ class CalculateMaximumConsumptionTest extends AbstractAlgorithmTest {
         Electrolyzer electrolyzer = new Electrolyzer();
         electrolyzer.setMaxPower(2d);
         electrolyzer.setEfficiency(3.0d);
-        electrolyzer.setAccumulatorMaxSize(0.d);
-        electrolyzer.setSummaryEnergyProduction(createTableOfValue(1.0);
+        electrolyzer.getAccumulator().setAccumulatorMaxSize(0.d);
         Data data = buildData(electrolyzer, storageMaxCapacity, null);
+        data.getSummaryEnergyProduction().put(1l, createTableOfValue(1.0));
 
         // when
         double value = new CalculateMaximumConsumption(data).calculate();
@@ -75,9 +75,9 @@ class CalculateMaximumConsumptionTest extends AbstractAlgorithmTest {
         Electrolyzer electrolyzer = new Electrolyzer();
         electrolyzer.setMaxPower(0d);
         electrolyzer.setEfficiency(3.0d);
-        electrolyzer.setAccumulatorMaxSize(0.d);
-        electrolyzer.setSummaryEnergyProduction(createTableOfValue(1.0));
+        electrolyzer.getAccumulator().setAccumulatorMaxSize(0.d);
         Data data = buildData(electrolyzer, storageMaxCapacity, null);
+        data.getSummaryEnergyProduction().put(1l, createTableOfValue(1.0));
 
         // when
         double value = new CalculateMaximumConsumption(data).calculate();
@@ -95,14 +95,16 @@ class CalculateMaximumConsumptionTest extends AbstractAlgorithmTest {
         Electrolyzer electrolyzer = new Electrolyzer();
         electrolyzer.setMaxPower(2.0d);
         electrolyzer.setEfficiency(1.0d);
-        electrolyzer.setAccumulatorMaxSize(4.d);
-        electrolyzer.setSummaryEnergyProduction(createTableOfValue(0.0));
-        for (int i = 0; i < electrolyzer.summaryEnergyProduction.length; i++) {
+        electrolyzer.getAccumulator().setAccumulatorMaxSize(4.d);
+
+        Data data = buildData(electrolyzer, storageMaxCapacity, null);
+        double[] tableOfValue = createTableOfValue(0.0);
+        for (int i = 0; i < tableOfValue.length; i++) {
             if (i % 3 == 0) {
-                electrolyzer.summaryEnergyProduction[i] = 6;
+                tableOfValue[i] = 6;
             }
         }
-        Data data = buildData(electrolyzer, storageMaxCapacity, null);
+        data.getSummaryEnergyProduction().put(1l, tableOfValue);
 
         // when
         double value = new CalculateMaximumConsumption(data).calculate();
@@ -121,14 +123,15 @@ class CalculateMaximumConsumptionTest extends AbstractAlgorithmTest {
         Electrolyzer electrolyzer = new Electrolyzer();
         electrolyzer.setMaxPower(2.0d);
         electrolyzer.setEfficiency(1.0d);
-        electrolyzer.setAccumulatorMaxSize(3.0d);
-        electrolyzer.setSummaryEnergyProduction(createTableOfValue(0.0);
-        for (int i = 0; i < electrolyzer.summaryEnergyProduction.length; i++) {
+        electrolyzer.getAccumulator().setAccumulatorMaxSize(3.0d);
+        Data data = buildData(electrolyzer, storageMaxCapacity, null);
+        double[] tableOfValue = createTableOfValue(0.0);
+        for (int i = 0; i < tableOfValue.length; i++) {
             if (i % 3 == 0) {
-                electrolyzer.summaryEnergyProduction[i] = 6;
+                tableOfValue[i] = 6;
             }
         }
-        Data data = buildData(electrolyzer, storageMaxCapacity, null);
+        data.getSummaryEnergyProduction().put(1l, tableOfValue);
 
         // when
         double value = new CalculateMaximumConsumption(data).calculate();

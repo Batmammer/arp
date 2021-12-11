@@ -57,11 +57,11 @@ class GridServiceTest {
     private Electrolyzer getElectrolyzer() {
         EnergySource energySource = new EnergySource();
         energySource.type = EnergySourceType.WIND;
-        energySource.maxPower = 100d;
+        energySource.setMaxPower(100d;
         energySource.distance = 0d;
 
         Electrolyzer e = new Electrolyzer();
-        e.maxPower = 10d;
+        e.setMaxPower(10d;
         e.minPower = 1d;
         e.setEfficiency(10;
         e.setAccumulatorMaxSize(100d;
