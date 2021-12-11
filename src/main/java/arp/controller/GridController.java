@@ -50,8 +50,8 @@ public class GridController {
         List<Double> hydrogenProduction = new ArrayList<>();
         List<Double> hydrogenLevel = new ArrayList<>();
         for (Step s : yearResult.getSteps()) {
-            hydrogenProduction.add(s.getHydrogenProduction());
-            electricityProduction.add(s.getElectricityProduction());
+            hydrogenProduction.add(s.getTotalHydrogenProduction());
+            electricityProduction.add(s.getTotalElectricityProduction());
             hydrogenLevel.add(s.getStorageStates().values().stream().map(ss ->
                     ss.getCurrentLevel()).collect(Collectors.summingDouble(Double::doubleValue)));
         }
@@ -84,8 +84,8 @@ public class GridController {
         List<Double> hydrogenProduction = new ArrayList<>();
         List<Double> hydrogenLevel = new ArrayList<>();
         for (Step s : yearResult.getSteps()) {
-            hydrogenProduction.add(s.getHydrogenProduction());
-            electricityProduction.add(s.getElectricityProduction());
+            hydrogenProduction.add(s.getTotalHydrogenProduction());
+            electricityProduction.add(s.getTotalElectricityProduction());
             hydrogenLevel.add(s.getStorageStates().values().stream().map(ss ->
                     ss.getCurrentLevel()).collect(Collectors.summingDouble(Double::doubleValue)));
         }
