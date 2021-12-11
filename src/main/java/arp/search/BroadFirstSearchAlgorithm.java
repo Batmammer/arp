@@ -66,22 +66,20 @@ public class BroadFirstSearchAlgorithm {
     private List<State> getNextState(State state, ActionType actionType) {
         List<State> results = new ArrayList<>();
         List<Storage> nextStorages = state.getStorages().stream().map(storage -> storage.clone()).collect(Collectors.toList());
-        double totalCost = state.getTotalCost();
-        double actionCost = 0;
+
         Map<Long, double[]> newSummaryEnergyProduction = new HashMap<>();
         for (Map.Entry<Long, double[]> entry : state.getData().getSummaryEnergyProduction().entrySet()) {
             newSummaryEnergyProduction.put(entry.getKey(), Arrays.copyOf(entry.getValue(), entry.getValue().length));
         }
 
         for (Storage storage : nextStorages) {
+            double totalCost = state.getTotalCost();
+            double actionCost = 0;
             if (storage.getElectrolyzers().isEmpty()) {
                 storage.getElectrolyzers().add(createNewElectorlyzer(newSummaryEnergyProduction));
                 actionCost = state.getData().getGridCosts().getElectrolyzerCost();
             } else {
                 Electrolyzer electrolyzer = storage.getElectrolyzers().get(0);
-//                if (!newSummaryEnergyProduction.containsKey(electrolyzer.getId())) {
-//                    newSummaryEnergyProduction.put(electrolyzer.getId(), createTableOfValue(0.0));
-//                }
                 switch (actionType) {
                     case WIND:
                         actionCost = addWind(electrolyzer, newSummaryEnergyProduction);
@@ -143,6 +141,7 @@ public class BroadFirstSearchAlgorithm {
 
     private double addWind(Electrolyzer electrolyzer, Map<Long, double[]> newSummaryEnergyProduction) {
         double actionCost = data.getGridCosts().getWindCost();
+//        System.err.println("WIND COST: " + actionCost);
 
         EnergySource energySource = getOrCreate(electrolyzer, EnergySourceType.WIND);
         energySource.setMaxPower(energySource.getMaxPower() + 1.0);
