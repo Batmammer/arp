@@ -171,7 +171,7 @@ public class BroadFirstSearchAlgorithmTest {
         BroadFirstSearchAlgorithm broadFirstSearchAlgorithm = new BroadFirstSearchAlgorithm(data);
         State state = broadFirstSearchAlgorithm.calculate();
         System.out.println("FINISH: " + state);
-        return state.totalCost;
+        return state.getTotalCost();
     }
 
     private GridConstants createGridConstants() {

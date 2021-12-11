@@ -8,16 +8,17 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+@lombok.Data
 public class State implements Comparable<State> {
 
-    public List<Storage> storages;
-    public boolean good;
-    public double minHourHydrogenLevel;
-    public State previousState;
-    public ActionType actionType;
-    public double actionCost;
-    public double totalCost;
-    public Data data;
+    private List<Storage> storages;
+    private boolean good;
+    private double minHourHydrogenLevel;
+    private State previousState;
+    private ActionType actionType;
+    private double actionCost;
+    private double totalCost;
+    private Data data;
     private String toString;
 
     public State(List<Storage> storages, boolean good, double minHourHydrogenLevel, State previousState, ActionType actionType, double actionCost, double totalCost, Data data) {

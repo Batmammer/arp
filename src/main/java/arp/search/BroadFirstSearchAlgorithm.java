@@ -17,10 +17,11 @@ import java.util.stream.Collectors;
 import static arp.exception.FailureReason.SOLUTION_NOT_FOUND;
 import static arp.service.Utils.createTableOfValue;
 
+@lombok.Data
 public class BroadFirstSearchAlgorithm {
-    public Data data;
-    public PriorityQueue<State> priorityQueue;
-    public Set<String> visitedStates;
+    private Data data;
+    private PriorityQueue<State> priorityQueue;
+    private Set<String> visitedStates;
 
     public BroadFirstSearchAlgorithm(Data data) {
         this.data = data;
@@ -34,7 +35,7 @@ public class BroadFirstSearchAlgorithm {
         visitedStates.add(initialState.toString());
         while (!priorityQueue.isEmpty()) {
             State state = priorityQueue.poll();
-            if (state.good)
+            if (state.isGood())
                 return state;
             priorityQueue.addAll(processState(state));
         }
@@ -59,23 +60,23 @@ public class BroadFirstSearchAlgorithm {
     private State initialState() {
         CalculateYearAlgorithm calculateYearAlgorithm = new CalculateYearAlgorithm(data);
         YearResult yearResult = calculateYearAlgorithm.calculate();
-        return new State(data.getStorages(), yearResult.isGood(), yearResult.minHourHydrogenLevel, null, null, 0, 0, data);
+        return new State(data.getStorages(), yearResult.isGood(), yearResult.getMinHourHydrogenLevel(), null, null, 0, 0, data);
     }
 
     private List<State> getNextState(State state, ActionType actionType) {
         List<State> results = new ArrayList<>();
-        List<Storage> nextStorages = state.storages.stream().map(storage -> storage.clone()).collect(Collectors.toList());
-        double totalCost = state.totalCost;
+        List<Storage> nextStorages = state.getStorages().stream().map(storage -> storage.clone()).collect(Collectors.toList());
+        double totalCost = state.getTotalCost();
         double actionCost = 0;
         Map<Long, double[]> newSummaryEnergyProduction = new HashMap<>();
-        for (Map.Entry<Long, double[]> entry : state.data.getSummaryEnergyProduction().entrySet()) {
+        for (Map.Entry<Long, double[]> entry : state.getData().getSummaryEnergyProduction().entrySet()) {
             newSummaryEnergyProduction.put(entry.getKey(), Arrays.copyOf(entry.getValue(), entry.getValue().length));
         }
 
         for (Storage storage : nextStorages) {
             if (storage.getElectrolyzers().isEmpty()) {
                 storage.getElectrolyzers().add(createNewElectorlyzer(newSummaryEnergyProduction));
-                actionCost = state.data.getGridCosts().getElectrolyzerCost();
+                actionCost = state.getData().getGridCosts().getElectrolyzerCost();
             } else {
                 Electrolyzer electrolyzer = storage.getElectrolyzers().get(0);
 //                if (!newSummaryEnergyProduction.containsKey(electrolyzer.getId())) {
@@ -89,24 +90,24 @@ public class BroadFirstSearchAlgorithm {
                         actionCost = addPv(electrolyzer, newSummaryEnergyProduction);
                         break;
                     case ELECTROLIZER:
-                        actionCost = state.data.getGridCosts().getElectrolyzerCost();
+                        actionCost = state.getData().getGridCosts().getElectrolyzerCost();
                         electrolyzer.setMaxPower(electrolyzer.getMaxPower() + 1.0);
                         break;
                     case STORAGE_POWER:
-                        actionCost = state.data.getGridCosts().getStoragePowerCost();
+                        actionCost = state.getData().getGridCosts().getStoragePowerCost();
                         electrolyzer.getAccumulator().setAccumulatorMaxSize(electrolyzer.getAccumulator().getAccumulatorMaxSize() + 1.0);
                         break;
                     case STORAGE_HYDROGEN:
-                        actionCost = state.data.getGridCosts().getStorageHydrogenCost();
+                        actionCost = state.getData().getGridCosts().getStorageHydrogenCost();
                         storage.setMaxCapacity(storage.getMaxCapacity() + 1.0);
                         break;
                 }
             }
             totalCost += actionCost;
-            Data newData = new Data(state.data.getGridConstants(), state.data.getGridCosts(), nextStorages, state.data.getVehiclesConsumption(), newSummaryEnergyProduction);
+            Data newData = new Data(state.getData().getGridConstants(), state.getData().getGridCosts(), nextStorages, state.getData().getVehiclesConsumption(), newSummaryEnergyProduction);
             CalculateYearAlgorithm calculateYearAlgorithm = new CalculateYearAlgorithm(newData);
             YearResult yearResult = calculateYearAlgorithm.calculate();
-            State newState = new State(nextStorages, yearResult.isGood(), yearResult.minHourHydrogenLevel, state, actionType, actionCost, totalCost, newData);
+            State newState = new State(nextStorages, yearResult.isGood(), yearResult.getMinHourHydrogenLevel(), state, actionType, actionCost, totalCost, newData);
             System.out.println("\tADDING NEW STATE: " + yearResult.isGood() + ": " + yearResult + ": " + newState.toString());
             results.add(newState);
         }
