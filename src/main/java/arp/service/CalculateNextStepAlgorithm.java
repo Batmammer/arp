@@ -13,14 +13,14 @@ public class CalculateNextStepAlgorithm {
     }
 
     public Step calculate(Step step) {
-        int hour = step.hour + 1;
+        int hour = step.hour;
         Step newStep = new Step();
-        newStep.hour = hour;
+        newStep.hour = hour + 1;
         double hydrogenLevel = step.storageState.currentLevel;
         Map<Electrolyzer, ElectrolyzerState> newElectrolyzerStates = new HashMap<>();
         for (Map.Entry<Electrolyzer, ElectrolyzerState> entry : step.electorizersStates.entrySet()) {
             ElectrolyzerState newElectrolyzerState = new ElectrolyzerState();
-            double newAccumulatorCurrentLevel = entry.getValue().accumulatorCurrentLevel + entry.getKey().summaryEnergyProduction[hour];
+            double newAccumulatorCurrentLevel = entry.getValue().accumulatorCurrentLevel + entry.getKey().summaryEnergyProduction[step.hour];
             if (newAccumulatorCurrentLevel < entry.getKey().minPower) {
                 throw new IllegalStateException("Luck of power on Electrolyzer: " + hour + " power: " + newAccumulatorCurrentLevel);
             }

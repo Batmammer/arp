@@ -5,10 +5,11 @@ import java.util.List;
 public class Electrolyzer {
     public List<EnergySource> sources; // w algorytmie korzystamy tylko z summary
 
-    public Double accumulatorMaxSize;
-    public Double efficiency;
-    public Double maxPower;
-    public Double minPower;
+    public int lp;
+    public double accumulatorMaxSize;
+    public double efficiency;
+    public double maxPower;
+    public double minPower;
 
     /**
      * rzeczywista moc dostarczona przez wszyskie źródła energii
