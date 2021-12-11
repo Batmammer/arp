@@ -49,7 +49,7 @@ public class BroadFirstSearchAlgorithmTest {
         GridConstants gridConstants = new GridConstants();
         gridConstants.setPvDailyProduction(createTableOfValue(1.0));
         gridConstants.setWindDailyProduction(createTableOfValue(1.0));
-        gridConstants.setElectrolizerEfficiency(1.0);
+        gridConstants.setElectrolyzerEfficiency(1.0);
         return gridConstants;
     }
 
@@ -143,7 +143,7 @@ public class BroadFirstSearchAlgorithmTest {
         double cost = calculate(data);
 
         // then
-        double expectedCost = 9.0d;
+        double expectedCost = 15.0d;
         assertEquals(expectedCost, cost);
     }
 

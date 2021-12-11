@@ -132,7 +132,7 @@ public class BroadFirstSearchAlgorithm {
         energySource.setMaxPower(energySource.getMaxPower() + 1.0);
 
         for (int hour = 0; hour < Utils.HOURS_OF_YEAR; ++hour) {
-            newSummaryEnergyProduction.get(electrolyzer.getId())[hour] += data.getGridConstants().getWindDailyProduction()[hour];
+            newSummaryEnergyProduction.get(electrolyzer.getId())[hour] += data.getGridConstants().getPvDailyProduction()[hour];
         }
         return actionCost;
     }
