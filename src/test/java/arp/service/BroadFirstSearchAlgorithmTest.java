@@ -4,6 +4,7 @@ import arp.dto.Electrolyzer;
 import arp.dto.GridConstants;
 import arp.dto.Storage;
 import arp.search.BroadFirstSearchAlgorithm;
+import arp.search.State;
 import org.assertj.core.util.Lists;
 import org.junit.jupiter.api.Test;
 
@@ -14,7 +15,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 public class BroadFirstSearchAlgorithmTest {
 
     @Test
-    public void abc() {
+    public void shouldAddPv() {
         // given
         double consumption = 1.0;
 
@@ -41,12 +42,17 @@ public class BroadFirstSearchAlgorithmTest {
         data.vehiclesConsumption = createTableOfValue(consumption);
 
         // when
-        BroadFirstSearchAlgorithm broadFirstSearchAlgorithm = new BroadFirstSearchAlgorithm(data);
-        double cost = broadFirstSearchAlgorithm.calculate();
+        double cost = calculate(data);
 
         // then
         double expectedCost = 2.0;
         assertEquals(expectedCost, cost);
+    }
+
+    private double calculate(Data data) {
+        BroadFirstSearchAlgorithm broadFirstSearchAlgorithm = new BroadFirstSearchAlgorithm(data);
+        State state  = broadFirstSearchAlgorithm.calculate();
+        return state.totalCost;
     }
 
     private GridConstants createGridConstants() {
