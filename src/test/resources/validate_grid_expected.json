@@ -42,12 +42,12 @@
       }
     ]
   },
-  "electricityProduction": null,
-  "hydrogenProduction": null,
-  "hydrogenLevel": null,
+  "electricityProduction": [1],
+  "hydrogenProduction": [1],
+  "hydrogenLevel": [0],
   "maxVehicleConsumption": null,
   "minHydrogenProduction": null,
   "minCapex": null,
-  "resMaxPower": null,
-  "resAnnualCapacity": null
+  "resMaxPower": 1,
+  "resAnnualCapacity": 1
 }

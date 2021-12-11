@@ -15,4 +15,18 @@ public class Utils {
         return "" + Math.round(1000 * d) / 1000.0;
     }
 
+    public static int getHoursOfSimulation(Data data) {
+        Integer hoursOfSimulation = data.getGridConstants().getHoursOfSimulation();
+        if (hoursOfSimulation != null) {
+            if (hoursOfSimulation < 1) {
+                hoursOfSimulation = 1;
+            } else if (hoursOfSimulation > HOURS_OF_YEAR) {
+                hoursOfSimulation = HOURS_OF_YEAR;
+            }
+            return hoursOfSimulation;
+        } else {
+            return HOURS_OF_YEAR;
+        }
+    }
+
 }

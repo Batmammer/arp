@@ -13,6 +13,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import static arp.service.Utils.HOURS_OF_YEAR;
+import static arp.service.Utils.getHoursOfSimulation;
 
 public class CalculateYearAlgorithm {
     private final Data data;
@@ -34,7 +35,7 @@ public class CalculateYearAlgorithm {
         double sumPowerOverflow = 0;
         List<Step> steps = new ArrayList<>();
         steps.add(step);
-        for (int hour = 1; hour < HOURS_OF_YEAR; ++hour) {
+        for (int hour = 1; hour < getHoursOfSimulation(data); ++hour) {
             try {
                 Step newStep = calculateNextStepAlgorithm.calculate(step);
                 steps.add(newStep);
@@ -53,6 +54,8 @@ public class CalculateYearAlgorithm {
         finalValidation(minHourHydrogenLevel, sumHydrogenOverflow, sumPowerOverflow);
         return new YearResult(minHourHydrogenLevel, steps, sumHydrogenOverflow, sumPowerOverflow, warnings, errors);
     }
+
+
 
     private void finalValidation(double minHourHydrogenLevel, double sumHydrogenOverflow, double sumPowerOverflow) {
         if (minHourHydrogenLevel < 0) {

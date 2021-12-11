@@ -9,6 +9,8 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class GridConstants {
+    @Schema(description = "Hours of Simimulation (1..8760)", example = "8760")
+    private Integer hoursOfSimulation;
 
     @Schema(description = "Hydrogen Transport Loss", example = "0.1", required = true)
     private double hydrogenTransportLoss;
