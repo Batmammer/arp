@@ -56,7 +56,7 @@ public class BroadFirstSearchAlgorithm {
     private State initialState() {
         CalculateYearAlgorithm calculateYearAlgorithm = new CalculateYearAlgorithm(data);
         YearResult yearResult = calculateYearAlgorithm.calculate();
-        return new State(data.storages, yearResult.isGood(), yearResult.minHourHydrogenLevel, null, null, 0, 0);
+        return new State(data.getStorages(), yearResult.isGood(), yearResult.minHourHydrogenLevel, null, null, 0, 0);
     }
 
     private State getNextState(State state, ActionType actionType) {

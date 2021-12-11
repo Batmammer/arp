@@ -44,7 +44,7 @@ public class CalculateMaximumConsumption {
 
     private double getMax() {
         double max = 0;
-        for (Storage storage : data.storages) {
+        for (Storage storage : data.getStorages()) {
             for (Electrolyzer e : storage.getElectrolyzers()) {
                 max += e.getMaxPower() * e.getEfficiency();
             }

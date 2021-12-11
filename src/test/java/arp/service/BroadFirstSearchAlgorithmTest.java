@@ -157,7 +157,7 @@ public class BroadFirstSearchAlgorithmTest {
     private double calculate(Data data) {
         BroadFirstSearchAlgorithm broadFirstSearchAlgorithm = new BroadFirstSearchAlgorithm(data);
         State state = broadFirstSearchAlgorithm.calculate();
-        System.out.println(state);
+//        System.out.println(state);
         return state.totalCost;
     }
 
