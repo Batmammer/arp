@@ -117,7 +117,7 @@ public class BroadFirstSearchAlgorithm {
             electrolyzer.setId(1L);
         else
             electrolyzer.setId(newSummaryEnergyProduction.keySet().stream().mapToLong(l -> l).max().getAsLong() + 1L);
-        electrolyzer.setEfficiency(data.getGridConstants().getElectrolizerEfficiency());
+        electrolyzer.setEfficiency(data.getGridConstants().getElectrolyzerEfficiency());
         newSummaryEnergyProduction.put(electrolyzer.getId(), createTableOfValue(0.0));
         electrolyzer.setAccumulator(new Accumulator(0.0));
         electrolyzer.setSources(new ArrayList<>());

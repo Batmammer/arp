@@ -7,8 +7,12 @@ import arp.dto.grid.EnergySource;
 import arp.dto.grid.Vehicle;
 import arp.dto.util.WeeklyPeriod;
 import arp.enums.EnergySourceType;
+import org.springframework.core.io.ClassPathResource;
+import org.springframework.core.io.Resource;
 import org.springframework.stereotype.Service;
 
+import java.io.IOException;
+import java.nio.file.Files;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
@@ -19,6 +23,8 @@ import java.util.stream.Collectors;
 public class GridService {
 
     private CalculateYearAlgorithm calculateYearAlgorithm;
+    private static Double pvMultiplier[] = null;
+    private static Double windMultiplier[] = null;
 
     public YearResult runSimulation(GridInput gridInput) {
         calculateYearAlgorithm = new CalculateYearAlgorithm(
@@ -54,17 +60,31 @@ public class GridService {
     }
 
     private double getPowerMultiplier(int hour, EnergySourceType type, GridConstants constants) {
+        if (pvMultiplier == null) {
+            try {
+                Resource resource = new ClassPathResource("irradiance.txt");
+                String pvString = new String(Files.readAllBytes(resource.getFile().toPath()));
+                pvMultiplier = Arrays.stream(pvString.split(",")).map(s -> Double.valueOf(s)).toArray(Double[]::new);
+                resource = new ClassPathResource("wind.txt");
+                String windString = new String(Files.readAllBytes(resource.getFile().toPath()));
+                windMultiplier = Arrays.stream(pvString.split(",")).map(s -> Double.valueOf(s)).toArray(Double[]::new);
+            } catch (IOException e) {
+                e.printStackTrace();
+            } finally {
+                return 1;
+            }
+        }
         if (type == EnergySourceType.PV) {
             if (constants.getPvDailyProduction() != null && hour < constants.getPvDailyProduction().length)
                 return constants.getPvDailyProduction()[hour];
             else
-                return Utils.getPvMultiplier(hour);
+                return pvMultiplier[hour];
         }
         if (type == EnergySourceType.WIND) {
             if (constants.getWindDailyProduction() != null && hour < constants.getWindDailyProduction().length)
                 return constants.getWindDailyProduction()[hour];
             else
-                return Utils.getWindMultiplier(hour);
+                return windMultiplier[hour];
         }
         return 1.0;
     }
