@@ -47,7 +47,7 @@ public class BroadFirstSearchAlgorithmTest extends AbstractAlgorithmTest{
         String state = calculate(data);
 
         // then
-        String expectedStateString = "7.0: PV, ELECTROLYZER";
+        String expectedStateString = "7.0: ELECTROLYZER, PV";
         assertEquals(expectedStateString, state);
     }
 
@@ -113,7 +113,7 @@ public class BroadFirstSearchAlgorithmTest extends AbstractAlgorithmTest{
         String state = calculate(data);
 
         // then
-        String expectedStateString = "12.0: ELECTROLYZER, ELECTROLYZER, PV";
+        String expectedStateString = "14.0: ELECTROLYZER, ELECTROLYZER, PV, PV";
         assertEquals(expectedStateString, state);
     }
 

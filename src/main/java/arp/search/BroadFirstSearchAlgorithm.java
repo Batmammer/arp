@@ -7,7 +7,6 @@ import arp.dto.grid.Storage;
 import arp.enums.EnergySourceType;
 import arp.exception.BusinessException;
 import arp.service.Data;
-import arp.service.Utils;
 
 import java.util.*;
 
@@ -59,25 +58,25 @@ public class BroadFirstSearchAlgorithm {
         List<State> results = new ArrayList<>();
 
         for (Storage storage : state.getStorages()) {
-            addStorage(results, state, storage.getId());
+            updateStorage(results, state, storage.getId());
 
             for (Electrolyzer electrolyzer : storage.getElectrolyzers()) {
-                addElectrolizer(results, state, electrolyzer.getId());
-                addAccumulator(results, state, electrolyzer.getId());
+                updateElectrolizer(results, state, electrolyzer.getId());
+                updateAccumulator(results, state, electrolyzer.getId());
 
                 for (EnergySource source : electrolyzer.getSources()) {
                     if (EnergySourceType.WIND.equals(source.getType())) {
-                        addWindSource(results, state, source.getId());
+                        updateWindSource(results, state, electrolyzer.getId(), source.getId());
                     } else {
-                        addPvSource(results, state, source.getId());
+                        updatePvSource(results, state, electrolyzer.getId(), source.getId());
                     }
                 }
-                addNewWindSource(results, state, electrolyzer.getId());
-                addNewPvSource(results, state, electrolyzer.getId());
+                addWindSource(results, state, electrolyzer.getId());
+                addPvSource(results, state, electrolyzer.getId());
             }
-            addNewElectrolizer(results, state, storage.getId());
+            addElectrolizer(results, state, storage.getId());
         }
-        addNewStorage(results, state);
+        addStorage(results, state);
 
         return results;
     }
@@ -85,14 +84,15 @@ public class BroadFirstSearchAlgorithm {
 
     /** =-=-=-=-= STORAGE =-=-=-=-= */
 
-    private void addNewStorage(List<State> results, State state) {
+    private void addStorage(List<State> results, State state) {
         long newId = state.nextStorageId();
 
         Action action = createStorageAction(newId);
 
         State nextState = state.buildNextState(action);
-        Storage storage = nextState.findStorageById(newId);
-        storage.setMaxCapacity(storage.getMaxCapacity() + 1.0);
+        Storage storage = new Storage();
+        storage.setId(newId);
+        storage.setMaxCapacity(1.0);
 
         nextState.getStorages().add(storage);
         nextState.updateMetrics(this.data);
@@ -100,7 +100,7 @@ public class BroadFirstSearchAlgorithm {
         results.add(nextState);
     }
 
-    private void addStorage(List<State> results, State state, Long id) {
+    private void updateStorage(List<State> results, State state, Long id) {
         Action action = createStorageAction(id);
 
 
@@ -122,7 +122,7 @@ public class BroadFirstSearchAlgorithm {
 
     /** =-=-=-=-= ELECTROLYZER =-=-=-=-= */
 
-    private void addNewElectrolizer(List<State> results, State state, Long parentId) {
+    private void addElectrolizer(List<State> results, State state, Long parentId) {
         long newId = state.nextElectrolyzerId();
 
         Action action = createElectrolizerAction(newId);
@@ -141,7 +141,7 @@ public class BroadFirstSearchAlgorithm {
         results.add(nextState);
     }
 
-    private void addElectrolizer(List<State> results, State state, Long id) {
+    private void updateElectrolizer(List<State> results, State state, Long id) {
         Action action = createElectrolizerAction(id);
         State nextState = state.buildNextState(action);
         Electrolyzer electrolyzer = nextState.findElectrolyzerById(id);
@@ -161,7 +161,7 @@ public class BroadFirstSearchAlgorithm {
 
     /** =-=-=-=-= ACCUMULATOR =-=-=-=-= */
 
-    private void addAccumulator(List<State> results, State state, Long id) {
+    private void updateAccumulator(List<State> results, State state, Long id) {
         Action action = createAccumulatorAction(id);
 
         State nextState = state.buildNextState(action);
@@ -182,7 +182,7 @@ public class BroadFirstSearchAlgorithm {
 
     /** =-=-=-=-= SOURCE WIND =-=-=-=-= */
 
-    private void addNewWindSource(List<State> results, State state, Long parentId) {
+    private void addWindSource(List<State> results, State state, Long parentId) {
         long newId = state.nextEnergySourceId();
         Action action = createWindAction(newId);
 
@@ -197,19 +197,24 @@ public class BroadFirstSearchAlgorithm {
         electrolyzer.getSources().add(energySource);
         electrolyzer.recalculateSummaryEnergyProduction(data);
 
-        energySource.setMaxPower(energySource.getMaxPower() + 1.0);
         nextState.updateMetrics(this.data);
 
         results.add(nextState);
     }
 
-    private void addWindSource(List<State> results, State state, Long id) {
+    private void updateWindSource(List<State> results, State state, Long parentId, Long id) {
         Action action = createWindAction(id);
 
         State nextState = state.buildNextState(action);
         EnergySource energySource = nextState.findEnergySourceById(id);
         energySource.setMaxPower(energySource.getMaxPower() + 1.0);
+
+        Electrolyzer electrolyzer = nextState.findElectrolyzerById(parentId);
+        electrolyzer.getSources().add(energySource);
+        electrolyzer.recalculateSummaryEnergyProduction(data);
+
         nextState.updateMetrics(this.data);
+
 
         //        // TODO
 //        for (int hour = 0; hour < Utils.HOURS_OF_YEAR; ++hour) {
@@ -224,15 +229,15 @@ public class BroadFirstSearchAlgorithm {
         Action action = new Action();
         action.setType(ActionType.WIND);
         action.setObjectId(id);
-        action.setActionCost(this.data.getGridCosts().getStoragePowerCost());
+        action.setActionCost(this.data.getGridCosts().getWindCost());
         return action;
     }
 
     /** =-=-=-=-= SOURCE PV =-=-=-=-= */
 
-    private void addNewPvSource(List<State> results, State state, Long parentId) {
+    private void addPvSource(List<State> results, State state, Long parentId) {
         long newId = state.nextEnergySourceId();
-        Action action = createWindAction(newId);
+        Action action = createPvAction(newId);
 
         State nextState = state.buildNextState(action);
         EnergySource energySource = new EnergySource();
@@ -245,13 +250,12 @@ public class BroadFirstSearchAlgorithm {
         electrolyzer.getSources().add(energySource);
         electrolyzer.recalculateSummaryEnergyProduction(data);
 
-        energySource.setMaxPower(energySource.getMaxPower() + 1.0);
         nextState.updateMetrics(this.data);
 
         results.add(nextState);
     }
 
-    private void addPvSource(List<State> results, State state, Long id) {
+    private void updatePvSource(List<State> results, State state, Long parentId, Long id) {
         Action action = createPvAction(id);
 
         State nextState = state.buildNextState(action);
@@ -259,11 +263,9 @@ public class BroadFirstSearchAlgorithm {
         energySource.setMaxPower(energySource.getMaxPower() + 1.0);
         nextState.updateMetrics(this.data);
 
-//        // TODO
-//        for (int hour = 0; hour < Utils.HOURS_OF_YEAR; ++hour) {
-//            newSummaryEnergyProduction.get(electrolyzer.getId())[hour] += data.getGridConstants().getWindDailyProduction()[hour];
-//        }
-
+        Electrolyzer electrolyzer = nextState.findElectrolyzerById(parentId);
+        electrolyzer.getSources().add(energySource);
+        electrolyzer.recalculateSummaryEnergyProduction(data);
 
         results.add(nextState);
     }
@@ -272,7 +274,7 @@ public class BroadFirstSearchAlgorithm {
         Action action = new Action();
         action.setType(ActionType.PV);
         action.setObjectId(id);
-        action.setActionCost(this.data.getGridCosts().getStoragePowerCost());
+        action.setActionCost(this.data.getGridCosts().getPvCost());
         return action;
     }
 

@@ -84,6 +84,7 @@ public class State implements Comparable<State>, Cloneable {
 
     public void updateMetrics(Data data) {
         Data clonedData = data.clone(false);
+        clonedData.setStorages(storages);
         this.metrics = calculateMetrics(clonedData);
         this.key = updateKey();
     }
@@ -167,7 +168,7 @@ public class State implements Comparable<State>, Cloneable {
                 maxId = Math.max(maxId, s.getId());
             }
         }
-        return maxId++;
+        return maxId+1;
     }
 
     public long nextElectrolyzerId() {
@@ -175,11 +176,11 @@ public class State implements Comparable<State>, Cloneable {
         for (Storage s: storages) {
             for (Electrolyzer e: s.getElectrolyzers()) {
                 if (e.getId() != null) {
-                    maxId = Math.max(maxId, s.getId());
+                    maxId = Math.max(maxId, e.getId());
                 }
             }
         }
-        return maxId;
+        return maxId+1;
     }
 
     public long nextEnergySourceId() {
@@ -189,12 +190,12 @@ public class State implements Comparable<State>, Cloneable {
             for (Electrolyzer e: s.getElectrolyzers()) {
                 for (EnergySource p: e.getSources()) {
                     if (p.getId() != null) {
-                        maxId = Math.max(maxId, s.getId());
+                        maxId = Math.max(maxId, p.getId());
                     }
                 }
             }
         }
-        return maxId;
+        return maxId+1;
     }
 
 }
