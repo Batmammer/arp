@@ -171,7 +171,7 @@ public class BroadFirstSearchAlgorithmTest {
         gridConstants.setTransmissionLoss(0.d);
         gridConstants.setPvDailyProduction(createTableOfValue(1.0));
         gridConstants.setWindDailyProduction(createTableOfValue(1.0));
-        gridConstants.setElectrolizerEfficiency(1.0);
+        gridConstants.setElectrolyzerEfficiency(1.0);
         return gridConstants;
     }
 }
