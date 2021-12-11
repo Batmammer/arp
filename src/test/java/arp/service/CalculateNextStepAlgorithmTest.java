@@ -153,6 +153,102 @@ class CalculateNextStepAlgorithmTest {
         assertEquals(expectedStep.toString(), resultStep.toString());
     }
 
+    @Test
+    public void loadStorageToHalf() {
+        // given
+        double storageMaxCapacity = 2.0d;
+        double[] consumption = {2.0};
+
+        Electrolyzer electrolyzer = new Electrolyzer();
+        electrolyzer.maxPower = 100d;
+        electrolyzer.efficiency = 1.0d;
+        electrolyzer.accumulatorMaxSize = 0.d;
+        electrolyzer.summaryEnergyProduction = new double[]{1.0};
+        Data data = buildData(electrolyzer, storageMaxCapacity, consumption);
+
+        Step step = initStep(electrolyzer, 0, 0d, 0d);
+
+        // when
+        CalculateNextStepAlgorithm algorithm = new CalculateNextStepAlgorithm(data);
+        Step resultStep = algorithm.calculate(step);
+
+        // then
+        Step expectedStep = initStep(electrolyzer, 1, 1d, 0d);
+        assertEquals(expectedStep.toString(), resultStep.toString());
+    }
+
+    @Test
+    public void shouldUseEfficiency() {
+        // given
+        double storageMaxCapacity = 2.0d;
+        double[] consumption = {2.0};
+
+        Electrolyzer electrolyzer = new Electrolyzer();
+        electrolyzer.maxPower = 100d;
+        electrolyzer.efficiency = 2.0d;
+        electrolyzer.accumulatorMaxSize = 0.d;
+        electrolyzer.summaryEnergyProduction = new double[]{1.0};
+        Data data = buildData(electrolyzer, storageMaxCapacity, consumption);
+
+        Step step = initStep(electrolyzer, 0, 2d, 0d);
+
+        // when
+        CalculateNextStepAlgorithm algorithm = new CalculateNextStepAlgorithm(data);
+        Step resultStep = algorithm.calculate(step);
+
+        // then
+        Step expectedStep = initStep(electrolyzer, 1, 1d, 0d);
+        assertEquals(expectedStep.toString(), resultStep.toString());
+    }
+
+    @Test
+    public void shouldUseStorageLimit() {
+        // given
+        double storageMaxCapacity = 2.0d;
+        double[] consumption = {2.0};
+
+        Electrolyzer electrolyzer = new Electrolyzer();
+        electrolyzer.maxPower = 100d;
+        electrolyzer.efficiency = 3.0d;
+        electrolyzer.accumulatorMaxSize = 0.d;
+        electrolyzer.summaryEnergyProduction = new double[]{1.0};
+        Data data = buildData(electrolyzer, storageMaxCapacity, consumption);
+
+        Step step = initStep(electrolyzer, 0, 2d, 0d);
+
+        // when
+        CalculateNextStepAlgorithm algorithm = new CalculateNextStepAlgorithm(data);
+        Step resultStep = algorithm.calculate(step);
+
+        // then
+        Step expectedStep = initStep(electrolyzer, 1, 1d, 0d);
+        assertEquals(expectedStep.toString(), resultStep.toString());
+    }
+
+    @Test
+    public void shouldUseAccumulator() {
+        // given
+        double storageMaxCapacity = 1.0d;
+        double[] consumption = {1.0};
+
+        Electrolyzer electrolyzer = new Electrolyzer();
+        electrolyzer.maxPower = 100d;
+        electrolyzer.efficiency = 1.0d;
+        electrolyzer.accumulatorMaxSize = 1.d;
+        electrolyzer.summaryEnergyProduction = new double[]{1.0};
+        Data data = buildData(electrolyzer, storageMaxCapacity, consumption);
+
+        Step step = initStep(electrolyzer, 0, 0d, 1d);
+
+        // when
+        CalculateNextStepAlgorithm algorithm = new CalculateNextStepAlgorithm(data);
+        Step resultStep = algorithm.calculate(step);
+
+        // then
+        Step expectedStep = initStep(electrolyzer, 1, 0d, 0d);
+        assertEquals(expectedStep.toString(), resultStep.toString());
+    }
+
     private Step initStep(Electrolyzer electrolyzer, int hour, double storageState, double accumulatorState) {
         Step step = new Step();
         step.hour = hour;
