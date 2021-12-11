@@ -19,10 +19,10 @@ public class Step {
         StringBuilder b = new StringBuilder();
         b.append("[hour=" + hour + ", electorizersStates=");
         b.append(acumulatorsStates.entrySet().stream()
-                .map(e -> e.getKey() + " => " + e.getValue().getAccumulatorCurrentLevel())
+                .map(e -> e.getKey() + " => " + toString(e.getValue().getAccumulatorCurrentLevel()))
                 .collect(Collectors.joining(", ", "{", "},")));
         b.append(storageStates.entrySet().stream()
-                .map(e -> e.getKey() + " => " + e.getValue().getCurrentLevel())
+                .map(e -> e.getKey() + " => " + toString(e.getValue().getCurrentLevel()))
                 .collect(Collectors.joining(", ", "{", "},")));
         b.append("overflowHydrogenProduction = " + toString(overflowHydrogenProduction) + ",");
         b.append("overflowPowerProduction = " + toString(overflowPowerProduction) + "]");
