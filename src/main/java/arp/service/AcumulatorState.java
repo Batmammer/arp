@@ -1,9 +1,9 @@
 package arp.service;
 
-public class ElectrolyzerState {
+public class AcumulatorState {
     public double accumulatorCurrentLevel;
 
-    public ElectrolyzerState(double accumulatorCurrentLevel) {
+    public AcumulatorState(double accumulatorCurrentLevel) {
         this.accumulatorCurrentLevel = accumulatorCurrentLevel;
     }
 }

@@ -7,13 +7,13 @@ public class AbstractAlgorithmTest {
     protected Step initStep(Electrolyzer electrolyzer, int hour, double storageState, double accumulatorState) {
         Step step = new Step();
         step.hour = hour;
-        step.electorizersStates.put(electrolyzer, buildInitialState(accumulatorState));
+        step.acumulatorsStates.put(electrolyzer, buildInitialState(accumulatorState));
         step.storageStates = new StorageState(storageState);
         return step;
     }
 
-    protected ElectrolyzerState buildInitialState(double accumulatorState) {
-        return new ElectrolyzerState(accumulatorState);
+    protected AcumulatorState buildInitialState(double accumulatorState) {
+        return new AcumulatorState(accumulatorState);
     }
 
     protected Data buildData(Electrolyzer electrolyzer, double storageMaxCapacity, double[] consumption) {

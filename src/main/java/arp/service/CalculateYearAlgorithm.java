@@ -63,10 +63,10 @@ public class CalculateYearAlgorithm {
     private Step initializeFirstStep() {
         Step firstStep = new Step();
         firstStep.hour = 0;
-        firstStep.electorizersStates = new HashMap<>();
+        firstStep.acumulatorsStates = new HashMap<>();
         for (Storage storage: data.storages)
         for (Electrolyzer electrolyzer : storage.getElectrolyzers()) {
-            firstStep.electorizersStates.put(electrolyzer.getId(), new ElectrolyzerState(0));
+            firstStep.acumulatorsStates.put(electrolyzer.getId(), new AcumulatorState(0));
         }
         firstStep.storageStates =  data.storages.stream().collect(Collectors.toMap(storage -> storage.getId(), storage -> new StorageState(0)));
         firstStep.overflowHydrogenProduction = 0;

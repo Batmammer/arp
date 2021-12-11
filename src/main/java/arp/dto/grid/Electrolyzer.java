@@ -17,6 +17,10 @@ public class Electrolyzer implements Cloneable {
     private double efficiency;
     private double maxPower;
 
+    public double getMinPower() {
+        return 0.1 * maxPower;
+    }
+
     public Electrolyzer clone() {
         List<EnergySource> newSources = new ArrayList<>();
         for (EnergySource energySource: sources)
