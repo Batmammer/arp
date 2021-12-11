@@ -1,9 +1,8 @@
 package arp.service;
 
-import arp.dto.*;
+import arp.dto.GridInput;
 import arp.dto.grid.Electrolyzer;
 import arp.dto.grid.EnergySource;
-import arp.dto.grid.Storage;
 import arp.dto.grid.Vehicle;
 import arp.dto.util.WeeklyPeriod;
 import arp.enums.EnergySourceType;
@@ -13,7 +12,6 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.function.Function;
 import java.util.stream.Collectors;
 
 @Service
@@ -32,12 +30,12 @@ public class GridService {
                 calculateElectrolyzers(gridInput.getGrid().getStorages().stream()
                         .map(s -> s.getElectrolyzers()).collect(Collectors.toList()).stream().flatMap(List::stream).collect(Collectors.toList()),
                         gridInput.getConstants().getTransmissionLoss())
-                );
+                ));
         return calculateYearAlgorithm.calculate();
     }
 
     private Map<Long, double[]> calculateElectrolyzers(List<Electrolyzer> input, double transmissionLoss) {
-        return input.stream().collect(Collectors.toMap(Electrolyzer::getId, e -> calculateSummaryEnergyProduction(e, transmissionLoss));
+        return input.stream().collect(Collectors.toMap(Electrolyzer::getId, e -> calculateSummaryEnergyProduction(e, transmissionLoss)));
     }
 
     private double[] calculateSummaryEnergyProduction(Electrolyzer electrolyzer, double transmissionLoss) {
@@ -87,7 +85,6 @@ public class GridService {
                     weekly[i * 7 + j] = true;
                 }
             }
-
         }
         return weekly;
     }
