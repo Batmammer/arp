@@ -2,7 +2,9 @@ package arp.controller;
 
 import arp.dto.GridInput;
 import arp.dto.GridResult;
+import arp.search.State;
 import arp.service.GridService;
+import arp.service.YearResult;
 import io.swagger.v3.oas.annotations.Operation;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -19,21 +21,28 @@ public class GridController {
     @Operation(summary = "Validate grid given as an input")
     @PostMapping("/validateGrid")
     public GridResult validateGrid(@RequestBody GridInput gridInput) {
-        gridService.runSimulation(gridInput);
-        return new GridResult();
+        YearResult yearResult = gridService.runSimulation(gridInput);
+        GridResult gridResult = new GridResult();
+        gridResult.setGrid(gridInput.getGrid());
+        return gridResult;
     }
 
     @Operation(summary = "Calculate minimal hydrogen production during year")
     @PostMapping("/hydrogenProduction")
     public GridResult hydrogenProduction(@RequestBody GridInput gridInput) {
-        gridService.runSimulation(gridInput);
-        return new GridResult();
+        Double minHydrogenProduction = gridService.calculateHydrogen(gridInput);
+        GridResult gridResult = new GridResult();
+        gridResult.setGrid(gridInput.getGrid());
+        gridResult.setMinHydrogenProduction(minHydrogenProduction);
+        return gridResult;
     }
 
     @Operation(summary = "Calculate minimal CAPEX (grid investment cost)")
     @PostMapping("/minCapex")
     public GridResult minCapex(@RequestBody GridInput gridInput) {
-        gridService.runSimulation(gridInput);
-        return new GridResult();
+        State state = gridService.calculateCapex(gridInput);
+        GridResult gridResult = new GridResult();
+        gridResult.setGrid(gridInput.getGrid());
+        return gridResult;
     }
 }

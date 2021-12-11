@@ -7,6 +7,8 @@ import arp.dto.grid.EnergySource;
 import arp.dto.grid.Vehicle;
 import arp.dto.util.WeeklyPeriod;
 import arp.enums.EnergySourceType;
+import arp.search.BroadFirstSearchAlgorithm;
+import arp.search.State;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.core.io.Resource;
 import org.springframework.stereotype.Service;
@@ -23,6 +25,8 @@ import java.util.stream.Collectors;
 public class GridService {
 
     private CalculateYearAlgorithm calculateYearAlgorithm;
+    private BroadFirstSearchAlgorithm broadFirstSearchAlgorithm;
+    private CalculateMaximumConsumption calculateMaximumConsumption;
     private static Double pvMultiplier[] = null;
     private static Double windMultiplier[] = null;
 
@@ -39,6 +43,36 @@ public class GridService {
                         gridInput.getConstants())
                 ));
         return calculateYearAlgorithm.calculate();
+    }
+
+    public State calculateCapex(GridInput gridInput) {
+        broadFirstSearchAlgorithm = new BroadFirstSearchAlgorithm(
+                new Data(
+                        gridInput.getConstants(),
+                        gridInput.getCosts(),
+                        gridInput.getGrid().getStorages(),
+                        calculateYearlyConsumption(gridInput.getGrid().getVehicles(),
+                                gridInput.getConstants().getHydrogenTransportLoss()),
+                        calculateElectrolyzers(gridInput.getGrid().getStorages().stream()
+                                        .map(s -> s.getElectrolyzers()).collect(Collectors.toList()).stream().flatMap(List::stream).collect(Collectors.toList()),
+                                gridInput.getConstants())
+                ));
+        return broadFirstSearchAlgorithm.calculate();
+    }
+
+    public Double calculateHydrogen(GridInput gridInput) {
+        calculateMaximumConsumption = new CalculateMaximumConsumption(
+                new Data(
+                        gridInput.getConstants(),
+                        gridInput.getCosts(),
+                        gridInput.getGrid().getStorages(),
+                        calculateYearlyConsumption(gridInput.getGrid().getVehicles(),
+                                gridInput.getConstants().getHydrogenTransportLoss()),
+                        calculateElectrolyzers(gridInput.getGrid().getStorages().stream()
+                                        .map(s -> s.getElectrolyzers()).collect(Collectors.toList()).stream().flatMap(List::stream).collect(Collectors.toList()),
+                                gridInput.getConstants())
+                ));
+        return calculateMaximumConsumption.calculate();
     }
 
     private Map<Long, double[]> calculateElectrolyzers(List<Electrolyzer> input, GridConstants constants) {
