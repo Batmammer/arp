@@ -31,7 +31,7 @@ public class BroadFirstSearchAlgorithmTest {
 
         Data data = new Data();
         data.setGridConstants(gridConstants);
-        data.setSummaryStorage(storage;
+        data.getStorages().add(storage);
         data.setVehiclesConsumption(createTableOfValue(consumption));
 
         // when
@@ -61,7 +61,7 @@ public class BroadFirstSearchAlgorithmTest {
 
         Data data = new Data();
         data.setGridConstants(gridConstants);
-        data.setSummaryStorage(storage);
+        data.getStorages().add(storage);
         data.setVehiclesConsumption(createTableOfValue(consumption));
 
         // when
@@ -92,7 +92,7 @@ public class BroadFirstSearchAlgorithmTest {
 
         Data data = new Data();
         data.setGridConstants(gridConstants);
-        data.setSummaryStorage(storage);
+        data.getStorages().add(storage);
         data.setVehiclesConsumption(createTableOfValue(consumption));
 
         // when
@@ -121,7 +121,7 @@ public class BroadFirstSearchAlgorithmTest {
         Data data = new Data();
         data.setGridCosts(gridCosts);
         data.setGridConstants(gridConstants);
-        data.setSummaryStorage(storage);
+        data.getStorages().add(storage);
 
         gridConstants.setPvDailyProduction(createOneHalfTable());
         data.setVehiclesConsumption(createOneTwoTable());

@@ -7,11 +7,11 @@ import arp.dto.grid.Storage;
 import org.assertj.core.util.Lists;
 
 public class AbstractAlgorithmTest {
-    protected Step initStep(Accumulator accumulator, int hour, double storageState, double accumulatorState) {
+    protected Step initStep(Storage storage, Accumulator accumulator, int hour, double storageState, double accumulatorState) {
         Step step = new Step();
         step.hour = hour;
         step.acumulatorsStates.put(accumulator, buildInitialState(accumulatorState));
-        step.storageStates = new StorageState(storageState);
+        step.storageStates.put(storage, new StorageState(storageState));
         return step;
     }
 
