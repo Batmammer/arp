@@ -3,7 +3,7 @@ package arp.dto;
 import java.util.List;
 
 public class Storage {
-    public Double capacity;
-    public Double currentCapacity;
+    public Double maxCapacity;
+    public Double currentLevel;
     public List<Electrolyzer> electrolyzers;
 }

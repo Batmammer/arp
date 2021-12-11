@@ -4,7 +4,7 @@ import java.util.List;
 
 public class Electrolyzer {
     public List<EnergySource> sources;
-    public Double accumulatorSize;
+    public Double accumulatorMaxSize;
     public Double accumulatorCurrentLevel;
     public Double efficiency;
 }
