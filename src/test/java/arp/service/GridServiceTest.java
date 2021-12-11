@@ -35,7 +35,7 @@ class GridServiceTest {
 
     private Grid getGrid() {
         return new Grid(Collections.singletonList(
-                new Vehicle(11L, 100L, getWeeklyWork(), 1.0, 0L)),
+                new Vehicle(11L, 50L, getWeeklyWork(), 1.0, 0L)),
                 Collections.singletonList(getStorage()));
     }
 
@@ -57,7 +57,7 @@ class GridServiceTest {
         Electrolyzer e = new Electrolyzer();
         e.setId(41L);
         e.setMaxPower(10d);
-        e.setEfficiency(10d);
+        e.setEfficiency(50d);
         e.setAccumulator(new Accumulator(100d));
         e.setSources(Lists.newArrayList(energySource));
         return e;

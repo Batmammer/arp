@@ -1,25 +1,58 @@
 {
   "grid": {
-    "vehicles": [],
-    "storages": [{
-      "id": 1,
-      "maxCapacity" : 0,
-      "electrolyzers": []
-    }]
+    "vehicles": [
+      {
+        "id": 11,
+        "count": 100,
+        "weeklyWork": [
+          {
+            "dayFrom": 0,
+            "dayTo": 6,
+            "hourFrom": 0,
+            "hourTo": 23
+          }
+        ],
+        "fuelConsumption": 4.5,
+        "distance": 30
+      }
+    ],
+    "storages": [
+      {
+        "id": 21,
+        "maxCapacity": 300,
+        "electrolyzers": [
+          {
+            "id": 31,
+            "sources": [
+              {
+                "id": 41,
+                "type": "PV",
+                "maxPower": 50,
+                "distance": 10
+              }
+            ],
+            "accumulator": {
+              "accumulatorMaxSize": 200
+            },
+            "efficiency": 25,
+            "minPower": 25,
+            "maxPower": 5
+          }
+        ]
+      }
+    ]
   },
   "constants": {
-    "hydrogenTransportLoss": 0.0,
-    "storageLoss": 0.0,
-    "transmissionLoss": 0.0,
-    "electrolizerEfficiency": 0.0,
-    "pvDailyProduction": null,
-    "windDailyProduction": null
+    "hydrogenTransportLoss": 0.1,
+    "storageLoss": 0.1,
+    "transmissionLoss": 0.1,
+    "electrolyzerEfficiency": 25
   },
   "costs": {
-    "pvCost" : 0,
-    "windCost" : 0,
-    "storagePowerCost" : 0,
-    "electrolyzerCost" : 0,
-    "storageHydrogenCost" : 0
+    "pvCost": 5,
+    "windCost": 3,
+    "storagePowerCost": 2,
+    "electrolyzerCost": 5,
+    "storageHydrogenCost": 2
   }
 }

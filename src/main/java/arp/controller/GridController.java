@@ -4,7 +4,7 @@ import arp.dto.GridInput;
 import arp.dto.GridResult;
 import arp.service.GridService;
 import io.swagger.v3.oas.annotations.Operation;
-import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -17,21 +17,21 @@ public class GridController {
     }
 
     @Operation(summary = "Validate grid given as an input")
-    @PutMapping("/validateGrid")
+    @PostMapping("/validateGrid")
     public GridResult validateGrid(@RequestBody GridInput gridInput) {
         gridService.runSimulation(gridInput);
         return new GridResult();
     }
 
     @Operation(summary = "Calculate minimal hydrogen production during year")
-    @PutMapping("/hydrogenProduction")
+    @PostMapping("/hydrogenProduction")
     public GridResult hydrogenProduction(@RequestBody GridInput gridInput) {
         gridService.runSimulation(gridInput);
         return new GridResult();
     }
 
     @Operation(summary = "Calculate minimal CAPEX (grid investment cost)")
-    @PutMapping("/minCapex")
+    @PostMapping("/minCapex")
     public GridResult minCapex(@RequestBody GridInput gridInput) {
         gridService.runSimulation(gridInput);
         return new GridResult();
