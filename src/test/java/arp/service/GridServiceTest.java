@@ -23,7 +23,7 @@ class GridServiceTest {
         YearResult result = gridService.runSimulation(inputGrid);
 
         //then
-        assertEquals(result.good, true);
+        assertEquals(result.isGood(), true);
     }
 
     private InputGrid getInputGrid() {
