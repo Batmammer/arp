@@ -56,7 +56,7 @@ public class BroadFirstSearchAlgorithm {
     private State initialState() {
         CalculateYearAlgorithm calculateYearAlgorithm = new CalculateYearAlgorithm(data);
         YearResult yearResult = calculateYearAlgorithm.calculate();
-        return new State(data.storages, yearResult.isGood(), yearResult.minHourHydrogenLevel, null, null, 0, 0);
+        return new State(data.getStorages(), yearResult.isGood(), yearResult.minHourHydrogenLevel, null, null, 0, 0);
     }
 
     private State getNextState(State state, ActionType actionType) {
@@ -64,7 +64,7 @@ public class BroadFirstSearchAlgorithm {
         double totalCost = state.totalCost;
         double actionCost = 0;
         Map<Long, double[]> newSummaryEnergyProduction = new HashMap<>();
-        for (Map.Entry<Long, double[]> entry : data.summaryEnergyProduction.entrySet()) {
+        for (Map.Entry<Long, double[]> entry : data.getSummaryEnergyProduction().entrySet()) {
             newSummaryEnergyProduction.put(entry.getKey(), Arrays.copyOf(entry.getValue(), entry.getValue().length));
         }
 

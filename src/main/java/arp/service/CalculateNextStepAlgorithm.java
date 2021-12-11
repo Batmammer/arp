@@ -24,11 +24,11 @@ public class CalculateNextStepAlgorithm {
         Map<Accumulator, AcumulatorState> newAcumulatorStates = new HashMap<>();
         Map<Storage, StorageState> newStorageStates = new HashMap<>();
         double overflowPowerProduction = 0;
-        for (Storage storage : data.storages) {
+        for (Storage storage : data.getStorages()) {
             double hydrogenLevel = Math.max(step.storageStates.get(storage).currentLevel, 0);
-            hydrogenLevel = calculateStorageLoss(hydrogenLevel, data.gridConstants.getStorageLoss());
+            hydrogenLevel = calculateStorageLoss(hydrogenLevel, data.getGridConstants().getStorageLoss());
             for (Electrolyzer electrolyzer : storage.getElectrolyzers()) {
-                double newAccumulatorCurrentLevel = step.acumulatorsStates.get(electrolyzer.getAccumulator()).accumulatorCurrentLevel + data.summaryEnergyProduction.get(electrolyzer.getId())[step.hour];
+                double newAccumulatorCurrentLevel = step.acumulatorsStates.get(electrolyzer.getAccumulator()).accumulatorCurrentLevel + data.getSummaryEnergyProduction().get(electrolyzer.getId())[step.hour];
                 if (newAccumulatorCurrentLevel < electrolyzer.getMinPower()) {
                     throw new BusinessException("Luck of power on Electrolyzer: " + hour + " power: " + newAccumulatorCurrentLevel, FailureReason.LUCK_OF_POWER_ON_ELECTROLIZER);
                 }
@@ -46,13 +46,13 @@ public class CalculateNextStepAlgorithm {
         newStep.acumulatorsStates = newAcumulatorStates;
         newStep.storageStates = newStorageStates;
         newStep.overflowPowerProduction = overflowPowerProduction;
-        double neededHydrogen = data.vehiclesConsumption[hour];
+        double neededHydrogen = data.getVehiclesConsumption()[hour];
         double currentHydrogen = newStorageStates.values().stream().mapToDouble(storageState -> storageState.currentLevel).sum();
         double ratio = 1 - neededHydrogen / currentHydrogen;
         newStorageStates.values().forEach(storageState -> storageState.setCurrentLevel(ratio * storageState.getCurrentLevel()));
 
         double overFlowHydrogenProduction = 0;
-        for (Storage storage: data.storages) {
+        for (Storage storage: data.getStorages()) {
             StorageState newStorageState = newStorageStates.get(storage);
             if (newStorageState.getCurrentLevel() > storage.getMaxCapacity()) {
                 overFlowHydrogenProduction += newStorageState.getCurrentLevel() - storage.getMaxCapacity();

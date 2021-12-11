@@ -54,11 +54,17 @@ public class GridService {
     }
 
     private double getPowerMultiplier(int hour, EnergySourceType type, GridConstants constants) {
-        if (type == EnergySourceType.PV && constants.getPvDailyProduction() != null) {
-            return constants.getPvDailyProduction()[hour];
+        if (type == EnergySourceType.PV) {
+            if (constants.getPvDailyProduction() != null && hour < constants.getPvDailyProduction().length)
+                return constants.getPvDailyProduction()[hour];
+            else
+                return Utils.getPvMultiplier(hour);
         }
-        if (type == EnergySourceType.WIND && constants.getWindDailyProduction() != null) {
-            return constants.getWindDailyProduction()[hour];
+        if (type == EnergySourceType.WIND) {
+            if (constants.getWindDailyProduction() != null && hour < constants.getWindDailyProduction().length)
+                return constants.getWindDailyProduction()[hour];
+            else
+                return Utils.getWindMultiplier(hour);
         }
         return 1.0;
     }

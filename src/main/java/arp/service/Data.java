@@ -15,16 +15,16 @@ import java.util.Map;
 @AllArgsConstructor
 @NoArgsConstructor
 public class Data {
-    public GridConstants gridConstants;
-    public GridCosts gridCosts;
-    public List<Storage> storages = new ArrayList<>();
-    public double[] vehiclesConsumption; // godzina w roku
+    private GridConstants gridConstants;
+    private GridCosts gridCosts;
+    private List<Storage> storages = new ArrayList<>();
+    private double[] vehiclesConsumption; // godzina w roku
 
     /**
      * rzeczywista moc dostarczona przez wszyskie źródła energii
      * z uwzględnieniem charakterystyki rocznej produkcji i straty przesyłowej
      */
-    public Map<Long, double[]> summaryEnergyProduction = new HashMap<>(); // godzina w roku
+    private Map<Long, double[]> summaryEnergyProduction = new HashMap<>(); // godzina w roku
 
 
 }

@@ -44,7 +44,7 @@ public class CalculateMaximumConsumption {
 
     private double getMax() {
         double max = 0;
-        for (Storage storage : data.storages) {
+        for (Storage storage : data.getStorages()) {
             for (Electrolyzer e : storage.getElectrolyzers()) {
                 max += e.getMaxPower() * e.getEfficiency();
             }
@@ -54,8 +54,10 @@ public class CalculateMaximumConsumption {
 
     private Data cloneDataWithConsumption(double consumption) {
         Data newData = new Data();
-        newData.gridConstants = data.gridConstants;
-        newData.storages = data.storages;
+        newData.setGridCosts(data.getGridCosts());
+        newData.setGridConstants(data.getGridConstants());
+        newData.setStorages(data.getStorages());
+        newData.setSummaryEnergyProduction(data.getSummaryEnergyProduction());
         newData.setVehiclesConsumption(createTableOfValue(consumption));
         return newData;
     }

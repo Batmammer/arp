@@ -431,7 +431,7 @@ class CalculateNextStepAlgorithmTest extends AbstractAlgorithmTest {
         electrolyzer.getAccumulator().setAccumulatorMaxSize(0.0d);
         Data data = buildData(electrolyzer, storageMaxCapacity, consumption);
         data.getSummaryEnergyProduction().put(1l, new double[]{1.0});
-        data.gridConstants.setStorageLoss( 0.2 * 24);
+        data.getGridConstants().setStorageLoss( 0.2 * 24);
 
         Storage storage = data.getStorages().get(0);
         Step step = initStep(storage, electrolyzer.getAccumulator(), 0, 1d, 0d);
