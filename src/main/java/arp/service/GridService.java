@@ -4,6 +4,7 @@ import arp.dto.GridConstants;
 import arp.dto.GridInput;
 import arp.dto.grid.Electrolyzer;
 import arp.dto.grid.EnergySource;
+import arp.dto.grid.Storage;
 import arp.dto.grid.Vehicle;
 import arp.dto.util.WeeklyPeriod;
 import arp.enums.EnergySourceType;
@@ -19,7 +20,6 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.stream.Collectors;
 
 @Service
 public class GridService {
@@ -46,44 +46,39 @@ public class GridService {
     }
 
     public YearResult runSimulation(GridInput gridInput) {
-        calculateYearAlgorithm = new CalculateYearAlgorithm(
-                new Data(
-                        gridInput.getConstants(),
-                        gridInput.getCosts(),
-                        gridInput.getGrid().getStorages(),
-                calculateYearlyConsumption(gridInput.getGrid().getVehicles(),
-                        gridInput.getConstants().getHydrogenTransportLoss())
-                ));
+        Data data = getDataAndInit(gridInput);
+        calculateYearAlgorithm = new CalculateYearAlgorithm(data);
         return calculateYearAlgorithm.calculate();
     }
 
     public State calculateCapex(GridInput gridInput) {
-        broadFirstSearchAlgorithm = new BroadFirstSearchAlgorithm(
-                new Data(
-                        gridInput.getConstants(),
-                        gridInput.getCosts(),
-                        gridInput.getGrid().getStorages(),
-                        calculateYearlyConsumption(gridInput.getGrid().getVehicles(),
-                                gridInput.getConstants().getHydrogenTransportLoss()))
-                );
+        Data data = getDataAndInit(gridInput);
+        broadFirstSearchAlgorithm = new BroadFirstSearchAlgorithm(data);
         return broadFirstSearchAlgorithm.calculate();
     }
 
     public MaxConsumptionYearResult calculateHydrogen(GridInput gridInput) {
-        calculateMaximumConsumption = new CalculateMaximumConsumption(
-                new Data(
-                        gridInput.getConstants(),
-                        gridInput.getCosts(),
-                        gridInput.getGrid().getStorages(),
-                        calculateYearlyConsumption(gridInput.getGrid().getVehicles(),
-                                gridInput.getConstants().getHydrogenTransportLoss())
-                ));
+        Data data = getDataAndInit(gridInput);
+        calculateMaximumConsumption = new CalculateMaximumConsumption(data);
         return calculateMaximumConsumption.calculate();
     }
 
-    private Map<Long, double[]> calculateElectrolyzers(List<Electrolyzer> input, GridConstants constants) {
-        return input.stream().collect(Collectors.toMap(Electrolyzer::getId, e ->
-                calculateSummaryEnergyProduction(e, constants)));
+    private Data getDataAndInit(GridInput gridInput) {
+        Data data = new Data(
+                gridInput.getConstants(),
+                gridInput.getCosts(),
+                gridInput.getGrid().getStorages(),
+                calculateYearlyConsumption(gridInput.getGrid().getVehicles(),
+                        gridInput.getConstants().getHydrogenTransportLoss())
+        );
+        recalculateElectrolyzers(gridInput.getGrid().getStorages(), data);
+        return data;
+    }
+
+    private void recalculateElectrolyzers(List<Storage> storages, Data data) {
+        for (Storage storage : storages)
+            for (Electrolyzer electrolyzer : storage.getElectrolyzers())
+                electrolyzer.recalculateSummaryEnergyProduction(data);
     }
 
     private double[] calculateSummaryEnergyProduction(Electrolyzer electrolyzer, GridConstants constants) {
@@ -137,11 +132,11 @@ public class GridService {
         boolean[] weekly = new boolean[24 * 7];
         Arrays.fill(weekly, false);
         for (WeeklyPeriod p : periods) {
-           if (p.getDayFrom() < 0 || p.getDayTo() > 6 || p.getDayFrom() > p.getDayTo())
-               continue;
+            if (p.getDayFrom() < 0 || p.getDayTo() > 6 || p.getDayFrom() > p.getDayTo())
+                continue;
             if (p.getHourFrom() < 0 || p.getHourTo() > 23 || p.getHourFrom() > p.getHourTo())
                 continue;
-            for(int i = p.getDayFrom(); i <= p.getDayTo(); i++) {
+            for (int i = p.getDayFrom(); i <= p.getDayTo(); i++) {
                 for (int j = p.getHourFrom(); j <= p.getHourTo(); j++) {
                     weekly[i * 7 + j] = true;
                 }
