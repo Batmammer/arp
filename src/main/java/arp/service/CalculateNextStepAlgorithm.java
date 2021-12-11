@@ -35,8 +35,7 @@ public class CalculateNextStepAlgorithm {
             for (Electrolyzer electrolyzer : storage.getElectrolyzers()) {
                 double newAccumulatorCurrentLevel = step.getAccumulatorsStates().get(electrolyzer.getAccumulator()).getAccumulatorCurrentLevel() +
                         electrolyzer.getSummaryEnergyProduction(data, step.getHour());
-                        electrolyzer.getSummaryEnergyProduction(step.getHour());
-                totalElectricityProduction += electrolyzer.getSummaryEnergyProduction(step.getHour());
+                totalElectricityProduction += electrolyzer.getSummaryEnergyProduction(data, step.getHour());
                 if (newAccumulatorCurrentLevel < electrolyzer.getMinPower()) {
                     throw new BusinessException("Lack of power on Electrolyzer: " + hour + " power: " + newAccumulatorCurrentLevel, FailureReason.LUCK_OF_POWER_ON_ELECTROLIZER);
                 }
