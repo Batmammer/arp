@@ -64,7 +64,7 @@ public class BroadFirstSearchAlgorithm {
         double actionCost = 0;
 
         if (nextStorage.electrolyzers.isEmpty()) {
-            createNewElectorlyzer();
+            nextStorage.electrolyzers.add(createNewElectorlyzer());
             actionCost = data.gridConstants.electrolizerCost;
         } else {
             Electrolyzer electrolyzer = nextStorage.electrolyzers.get(0);
@@ -99,11 +99,12 @@ public class BroadFirstSearchAlgorithm {
         return newState;
     }
 
-    private void createNewElectorlyzer() {
+    private Electrolyzer createNewElectorlyzer() {
         Electrolyzer electrolyzer = new Electrolyzer();
-        electrolyzer.efficiency = 1.0; // TODO
+        electrolyzer.efficiency = data.gridConstants.electrolizerEfficiency;
         electrolyzer.summaryEnergyProduction = createTableOfValue(0.0);
         electrolyzer.maxPower = 1.0;
+        return electrolyzer;
     }
 
     private double addPv(Electrolyzer electrolyzer) {
@@ -113,7 +114,7 @@ public class BroadFirstSearchAlgorithm {
         energySource.maxPower += 1.0;
 
         for (int hour = 0; hour < Utils.HOURS_OF_YEAR; ++hour) {
-            electrolyzer.summaryEnergyProduction[hour] += 1.0;
+            electrolyzer.summaryEnergyProduction[hour] += data.gridConstants.pvDailyProduction[hour];
         }
         return actionCost;
     }
@@ -125,7 +126,7 @@ public class BroadFirstSearchAlgorithm {
         energySource.maxPower += 1.0;
 
         for (int hour = 0; hour < Utils.HOURS_OF_YEAR; ++hour) {
-            electrolyzer.summaryEnergyProduction[hour] += 1.0;
+            electrolyzer.summaryEnergyProduction[hour] += data.gridConstants.windDailyProduction[hour];
         }
         return actionCost;
     }

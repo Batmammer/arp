@@ -45,6 +45,7 @@ public class BroadFirstSearchAlgorithmTest {
     private double calculate(Data data) {
         BroadFirstSearchAlgorithm broadFirstSearchAlgorithm = new BroadFirstSearchAlgorithm(data);
         State state  = broadFirstSearchAlgorithm.calculate();
+        System.out.println(state);
         return state.totalCost;
     }
 
@@ -55,6 +56,7 @@ public class BroadFirstSearchAlgorithmTest {
         gridConstants.transmissionLoss = 0.d;
         gridConstants.pvDailyProduction = createTableOfValue(1.0);
         gridConstants.windDailyProduction = createTableOfValue(1.0);
+        gridConstants.electrolizerEfficiency = 1.0;
         return gridConstants;
     }
 }
