@@ -1,5 +1,47 @@
 {
-  "grid": null,
+  "grid": {
+    "vehicles": [
+      {
+        "id": 11,
+        "count": 1,
+        "weeklyWork": [
+          {
+            "dayFrom": 0,
+            "dayTo": 6,
+            "hourFrom": 0,
+            "hourTo": 23
+          }
+        ],
+        "fuelConsumption": 1,
+        "distance": 0
+      }
+    ],
+    "storages": [
+      {
+        "id": 21,
+        "maxCapacity": 0,
+        "electrolyzers": [
+          {
+            "id": 31,
+            "efficiency": 1,
+            "minPower": 0,
+            "maxPower": 1,
+            "accumulator": {
+              "accumulatorMaxSize": 0
+            },
+            "sources": [
+              {
+                "id": 41,
+                "type": "PV",
+                "maxPower": 1,
+                "distance": 0
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  },
   "electricityProduction": null,
   "hydrogenProduction": null,
   "hydrogenLevel": null,
