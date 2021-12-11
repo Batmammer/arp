@@ -1,5 +1,6 @@
 package arp.service;
 
+import arp.dto.grid.Accumulator;
 import arp.dto.grid.Electrolyzer;
 import arp.dto.grid.Storage;
 import arp.exception.BusinessException;
@@ -20,14 +21,14 @@ public class CalculateNextStepAlgorithm {
         int hour = step.hour;
         Step newStep = new Step();
         newStep.hour = hour + 1;
-        Map<Long, AcumulatorState> newAcumulatorStates = new HashMap<>();
+        Map<Accumulator, AcumulatorState> newAcumulatorStates = new HashMap<>();
         Map<Long, StorageState> newStorageStates = new HashMap<>();
         double overflowPowerProduction = 0;
         for (Storage storage : data.storages) {
             double hydrogenLevel = Math.max(step.storageStates.get(storage.getId()).currentLevel, 0);
             hydrogenLevel = calculateStorageLoss(hydrogenLevel, data.gridConstants.getStorageLoss());
             for (Electrolyzer electrolyzer : storage.getElectrolyzers()) {
-                double newAccumulatorCurrentLevel = step.acumulatorsStates.get(electrolyzer.getId()).accumulatorCurrentLevel + data.summaryEnergyProduction.get(electrolyzer.getId())[step.hour];
+                double newAccumulatorCurrentLevel = step.acumulatorsStates.get(electrolyzer.getAccumulator()).accumulatorCurrentLevel + data.summaryEnergyProduction.get(electrolyzer.getId())[step.hour];
                 if (newAccumulatorCurrentLevel < electrolyzer.getMinPower()) {
                     throw new BusinessException("Luck of power on Electrolyzer: " + hour + " power: " + newAccumulatorCurrentLevel, FailureReason.LUCK_OF_POWER_ON_ELECTROLIZER);
                 }
@@ -38,7 +39,7 @@ public class CalculateNextStepAlgorithm {
                     newAccumulatorCurrentLevel = electrolyzer.getAccumulator().getAccumulatorMaxSize();
                 }
                 hydrogenLevel += usedPower * electrolyzer.getEfficiency();
-                newAcumulatorStates.put(electrolyzer.getId(), new AcumulatorState(newAccumulatorCurrentLevel));
+                newAcumulatorStates.put(electrolyzer.getAccumulator(), new AcumulatorState(newAccumulatorCurrentLevel));
             }
             newStorageStates.put(storage.getId(), new StorageState(hydrogenLevel));
         }
