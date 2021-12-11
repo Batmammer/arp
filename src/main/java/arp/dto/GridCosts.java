@@ -1,5 +1,6 @@
 package arp.dto;
 
+import arp.service.Utils;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -24,4 +25,24 @@ public class GridCosts {
 
     @Schema(description = "Cost of 1MWh hydrogen storage", example = "2.0", required = true)
     private double storageHydrogenCost;
+
+    public void setPvCost(double pvCost) {
+        this.pvCost = Utils.standardRound(pvCost);
+    }
+
+    public void setWindCost(double windCost) {
+        this.windCost = Utils.standardRound(windCost);
+    }
+
+    public void setStoragePowerCost(double storagePowerCost) {
+        this.storagePowerCost = Utils.standardRound(storagePowerCost);
+    }
+
+    public void setElectrolyzerCost(double electrolyzerCost) {
+        this.electrolyzerCost = Utils.standardRound(electrolyzerCost);
+    }
+
+    public void setStorageHydrogenCost(double storageHydrogenCost) {
+        this.storageHydrogenCost = Utils.standardRound(storageHydrogenCost);
+    }
 }

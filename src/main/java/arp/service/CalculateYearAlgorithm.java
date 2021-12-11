@@ -12,7 +12,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import static arp.service.Utils.HOURS_OF_YEAR;
 import static arp.service.Utils.getHoursOfSimulation;
 
 public class CalculateYearAlgorithm {
@@ -20,6 +19,7 @@ public class CalculateYearAlgorithm {
     private final CalculateNextStepAlgorithm calculateNextStepAlgorithm;
     private List<Warning> warnings;
     private List<BusinessError> errors;
+
 
     public CalculateYearAlgorithm(Data data) {
         this.data = data;
@@ -30,36 +30,48 @@ public class CalculateYearAlgorithm {
 
     public YearResult calculate() {
         Step step = initializeFirstStep();
-        double minHourHydrogenLevel = step.getStorageStates().values().stream().mapToDouble(storageState -> storageState.getCurrentLevel()).sum();
+        double minHourHydrogenLevel = step.getStorageStates().values().stream().mapToDouble(StorageState::getCurrentLevel).sum();
         double sumHydrogenOverflow = 0;
         double sumPowerOverflow = 0;
         List<Step> steps = new ArrayList<>();
         steps.add(step);
+
         for (int hour = 1; hour < getHoursOfSimulation(data); ++hour) {
             try {
                 Step newStep = calculateNextStepAlgorithm.calculate(step);
                 steps.add(newStep);
-                minHourHydrogenLevel = Math.min(minHourHydrogenLevel, newStep.getStorageStates().values().stream().mapToDouble(storageState -> storageState.getCurrentLevel()).sum());
+                minHourHydrogenLevel = Math.min(minHourHydrogenLevel, newStep.getStorageStates().values().stream().mapToDouble(StorageState::getCurrentLevel).sum());
                 sumHydrogenOverflow += newStep.getOverflowHydrogenProduction();
                 sumPowerOverflow += newStep.getOverflowPowerProduction();
                 step = newStep;
             } catch (BusinessException exception) {
                 switch (exception.type) {
                     case LUCK_OF_POWER_ON_ELECTROLIZER:
-                        errors.add(new BusinessError(FailureReason.LUCK_OF_POWER_ON_ELECTROLIZER));
+                        errors.add(new BusinessError(FailureReason.LUCK_OF_POWER_ON_ELECTROLIZER, "Luck of power on electrolizer: failure"));
                         break;
                 }
+                break;
             }
         }
-        finalValidation(minHourHydrogenLevel, sumHydrogenOverflow, sumPowerOverflow);
-        return new YearResult(minHourHydrogenLevel, steps, sumHydrogenOverflow, sumPowerOverflow, warnings, errors);
+        finalValidation(minHourHydrogenLevel, sumHydrogenOverflow, sumPowerOverflow, step.getTotalHydrogenWasted());
+        return new YearResult(minHourHydrogenLevel, steps, sumHydrogenOverflow, sumPowerOverflow, warnings, errors, step.getTotalHydrogenWasted());
     }
 
-
-
-    private void finalValidation(double minHourHydrogenLevel, double sumHydrogenOverflow, double sumPowerOverflow) {
+    private void finalValidation(double minHourHydrogenLevel, double sumHydrogenOverflow, double sumPowerOverflow, double totalHydrogenWasted) {
         if (minHourHydrogenLevel < 0) {
-
+            warnings.add(new Warning("During the year lowest hydrogen level during was: " + Utils.standardRound(-minHourHydrogenLevel)));
+        }
+        if (minHourHydrogenLevel > 10) {
+            warnings.add(new Warning("During the year there was at least: " + Utils.standardRound(minHourHydrogenLevel) + " kg of hydrogen in storage"));
+        }
+        if (sumHydrogenOverflow > 0) {
+            warnings.add(new Warning("During the year grid lost: " + Utils.standardRound(sumHydrogenOverflow) + " kg of hydrogen because of low storage capacity"));
+        }
+        if (sumPowerOverflow > 0) {
+            warnings.add(new Warning("During the year grid lost: " + Utils.standardRound(sumPowerOverflow) + " MWh because low accumulator capacity"));
+        }
+        if (totalHydrogenWasted > 0) {
+            warnings.add(new Warning("During the year grid lost: " +  Utils.standardRound(totalHydrogenWasted) + " kg of hydrogen in evaporation process"));
         }
     }
 
@@ -67,7 +79,7 @@ public class CalculateYearAlgorithm {
         Step firstStep = new Step();
         firstStep.setHour(0);
         firstStep.setAcumulatorsStates(new HashMap<>());
-        for (Storage storage: data.getStorages()) {
+        for (Storage storage : data.getStorages()) {
             for (Electrolyzer electrolyzer : storage.getElectrolyzers()) {
                 firstStep.getAcumulatorsStates().put(electrolyzer.getAccumulator(), new AcumulatorState(0));
             }
@@ -75,8 +87,7 @@ public class CalculateYearAlgorithm {
         firstStep.setStorageStates(data.getStorages().stream().collect(Collectors.toMap(storage -> storage, storage -> new StorageState(0))));
         firstStep.setOverflowHydrogenProduction(0);
         firstStep.setOverflowPowerProduction(0);
+        firstStep.setTotalHydrogenWasted(0);
         return firstStep;
     }
-
-
 }

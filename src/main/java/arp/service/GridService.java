@@ -54,7 +54,7 @@ public class GridService {
         return broadFirstSearchAlgorithm.calculate();
     }
 
-    public Double calculateHydrogen(GridInput gridInput) {
+    public MaxConsumptionYearResult calculateHydrogen(GridInput gridInput) {
         calculateMaximumConsumption = new CalculateMaximumConsumption(
                 new Data(
                         gridInput.getConstants(),
@@ -92,7 +92,7 @@ public class GridService {
                 pvMultiplier = Arrays.stream(pvString.split(",")).map(s -> Double.valueOf(s)).toArray(Double[]::new);
                 resource = new ClassPathResource("wind.txt");
                 String windString = new String(Files.readAllBytes(resource.getFile().toPath()));
-                windMultiplier = Arrays.stream(pvString.split(",")).map(s -> Double.valueOf(s)).toArray(Double[]::new);
+                windMultiplier = Arrays.stream(windString.split(",")).map(s -> Double.valueOf(s)).toArray(Double[]::new);
             } catch (IOException e) {
                 e.printStackTrace();
             } finally {
@@ -114,7 +114,7 @@ public class GridService {
         return 1.0;
     }
 
-    private double[] calculateYearlyConsumption(List<Vehicle> vehicles, Double hydrogenTransportLoss) {
+    public double[] calculateYearlyConsumption(List<Vehicle> vehicles, Double hydrogenTransportLoss) {
         double[] consumption = new double[365 * 24];
         Map<Long, boolean[]> weeklyWork = new HashMap<>();
         for (Vehicle v : vehicles) {

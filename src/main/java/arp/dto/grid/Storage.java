@@ -1,5 +1,6 @@
 package arp.dto.grid;
 
+import arp.service.Utils;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -27,5 +28,9 @@ public class Storage implements Cloneable {
         for (Electrolyzer electrolyzer: electrolyzers)
             newElectrolyzers.add(electrolyzer.clone());
         return new Storage(id, maxCapacity, newElectrolyzers);
+    }
+
+    public void setMaxCapacity(double maxCapacity) {
+        this.maxCapacity = Utils.standardRound(maxCapacity);
     }
 }
