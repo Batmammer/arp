@@ -1,5 +1,6 @@
 package arp.search;
 
+import arp.dto.grid.Accumulator;
 import arp.dto.grid.Electrolyzer;
 import arp.dto.grid.EnergySource;
 import arp.dto.grid.Storage;
@@ -115,6 +116,8 @@ public class BroadFirstSearchAlgorithm {
             electrolyzer.setId(newSummaryEnergyProduction.keySet().stream().mapToLong(l -> l).max().getAsLong() + 1L);
         electrolyzer.setEfficiency(data.getGridConstants().getElectrolizerEfficiency());
         newSummaryEnergyProduction.put(electrolyzer.getId(), createTableOfValue(0.0));
+        electrolyzer.setAccumulator(new Accumulator(0.0));
+        electrolyzer.setSources(new ArrayList<>());
         electrolyzer.setMaxPower(1.0);
         return electrolyzer;
     }
