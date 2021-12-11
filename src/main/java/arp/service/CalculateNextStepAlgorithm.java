@@ -21,14 +21,14 @@ public class CalculateNextStepAlgorithm {
         int hour = step.getHour();
         Step newStep = new Step();
         newStep.setHour(hour + 1);
-        Map<Accumulator, AcumulatorState> newAcumulatorStates = new HashMap<>();
+        Map<Accumulator, AccumulatorState> newAcumulatorStates = new HashMap<>();
         Map<Storage, StorageState> newStorageStates = new HashMap<>();
         double overflowPowerProduction = 0;
         for (Storage storage : data.getStorages()) {
             double hydrogenLevel = Math.max(step.getStorageStates().get(storage).getCurrentLevel(), 0);
             hydrogenLevel = calculateStorageLoss(hydrogenLevel, data.getGridConstants().getStorageLoss());
             for (Electrolyzer electrolyzer : storage.getElectrolyzers()) {
-                double newAccumulatorCurrentLevel = step.getAcumulatorsStates().get(electrolyzer.getAccumulator()).getAccumulatorCurrentLevel() +
+                double newAccumulatorCurrentLevel = step.getAccumulatorsStates().get(electrolyzer.getAccumulator()).getAccumulatorCurrentLevel() +
                         electrolyzer.getSummaryEnergyProduction(step.getHour());
                 if (newAccumulatorCurrentLevel < electrolyzer.getMinPower()) {
                     throw new BusinessException("Luck of power on Electrolyzer: " + hour + " power: " + newAccumulatorCurrentLevel, FailureReason.LUCK_OF_POWER_ON_ELECTROLIZER);
@@ -40,11 +40,11 @@ public class CalculateNextStepAlgorithm {
                     newAccumulatorCurrentLevel = electrolyzer.getAccumulator().getAccumulatorMaxSize();
                 }
                 hydrogenLevel += usedPower * electrolyzer.getEfficiency();
-                newAcumulatorStates.put(electrolyzer.getAccumulator(), new AcumulatorState(newAccumulatorCurrentLevel));
+                newAcumulatorStates.put(electrolyzer.getAccumulator(), new AccumulatorState(newAccumulatorCurrentLevel));
             }
             newStorageStates.put(storage, new StorageState(hydrogenLevel));
         }
-        newStep.setAcumulatorsStates(newAcumulatorStates);
+        newStep.setAccumulatorsStates(newAcumulatorStates);
         newStep.setStorageStates(newStorageStates);
         newStep.setOverflowPowerProduction(overflowPowerProduction);
         double neededHydrogen = data.getVehiclesConsumption()[hour];

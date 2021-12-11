@@ -78,10 +78,10 @@ public class CalculateYearAlgorithm {
     private Step initializeFirstStep() {
         Step firstStep = new Step();
         firstStep.setHour(0);
-        firstStep.setAcumulatorsStates(new HashMap<>());
+        firstStep.setAccumulatorsStates(new HashMap<>());
         for (Storage storage : data.getStorages()) {
             for (Electrolyzer electrolyzer : storage.getElectrolyzers()) {
-                firstStep.getAcumulatorsStates().put(electrolyzer.getAccumulator(), new AcumulatorState(0));
+                firstStep.getAccumulatorsStates().put(electrolyzer.getAccumulator(), new AccumulatorState(0));
             }
         }
         firstStep.setStorageStates(data.getStorages().stream().collect(Collectors.toMap(storage -> storage, storage -> new StorageState(0))));
