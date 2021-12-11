@@ -30,6 +30,21 @@ public class GridService {
     private static Double pvMultiplier[] = null;
     private static Double windMultiplier[] = null;
 
+    public GridService() {
+        if (pvMultiplier == null) {
+            try {
+                Resource resource = new ClassPathResource("irradiance.txt");
+                String pvString = new String(Files.readAllBytes(resource.getFile().toPath()));
+                pvMultiplier = Arrays.stream(pvString.split(",")).map(s -> Double.valueOf(s)).toArray(Double[]::new);
+                resource = new ClassPathResource("wind.txt");
+                String windString = new String(Files.readAllBytes(resource.getFile().toPath()));
+                windMultiplier = Arrays.stream(windString.split(",")).map(s -> Double.valueOf(s)).toArray(Double[]::new);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
     public YearResult runSimulation(GridInput gridInput) {
         calculateYearAlgorithm = new CalculateYearAlgorithm(
                 new Data(
@@ -85,29 +100,15 @@ public class GridService {
     }
 
     private double getPowerMultiplier(int hour, EnergySourceType type, GridConstants constants) {
-        if (pvMultiplier == null) {
-            try {
-                Resource resource = new ClassPathResource("irradiance.txt");
-                String pvString = new String(Files.readAllBytes(resource.getFile().toPath()));
-                pvMultiplier = Arrays.stream(pvString.split(",")).map(s -> Double.valueOf(s)).toArray(Double[]::new);
-                resource = new ClassPathResource("wind.txt");
-                String windString = new String(Files.readAllBytes(resource.getFile().toPath()));
-                windMultiplier = Arrays.stream(windString.split(",")).map(s -> Double.valueOf(s)).toArray(Double[]::new);
-            } catch (IOException e) {
-                e.printStackTrace();
-            } finally {
-                return 1;
-            }
-        }
         if (type == EnergySourceType.PV) {
-            if (constants.getPvDailyProduction() != null && hour < constants.getPvDailyProduction().length)
-                return constants.getPvDailyProduction()[hour];
+            if (constants.getPvDailyProduction() != null)
+                return constants.getPvDailyProduction()[hour % constants.getPvDailyProduction().length];
             else
                 return pvMultiplier[hour];
         }
         if (type == EnergySourceType.WIND) {
-            if (constants.getWindDailyProduction() != null && hour < constants.getWindDailyProduction().length)
-                return constants.getWindDailyProduction()[hour];
+            if (constants.getWindDailyProduction() != null)
+                return constants.getWindDailyProduction()[hour % constants.getWindDailyProduction().length];
             else
                 return windMultiplier[hour];
         }
