@@ -1,6 +1,9 @@
 package arp.dto;
 
+import lombok.Data;
+
+@Data
 public class InputGrid {
-    Grid grid;
-    GridConstants constants;
+    public Grid grid;
+    public GridConstants constants;
 }

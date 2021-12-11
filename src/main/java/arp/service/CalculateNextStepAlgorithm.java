@@ -7,6 +7,7 @@ import java.util.Map;
 
 public class CalculateNextStepAlgorithm {
     private final Data data;
+    private Electrolyzer electrolyzer;
 
     CalculateNextStepAlgorithm(Data data) {
         this.data = data;

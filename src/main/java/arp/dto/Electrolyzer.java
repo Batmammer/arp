@@ -1,7 +1,14 @@
 package arp.dto;
 
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
 import java.util.List;
 
+@Data
+@AllArgsConstructor
+@NoArgsConstructor
 public class Electrolyzer {
     public List<EnergySource> sources; // w algorytmie korzystamy tylko z summary
 

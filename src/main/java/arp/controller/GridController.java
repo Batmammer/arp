@@ -15,7 +15,7 @@ public class GridController {
 
     @GetMapping("/validate")
     public String validateGrid(InputGrid inputGrid) {
-        gridService.runSimulation();
+        gridService.runSimulation(inputGrid);
         return "ok";
     }
 }
