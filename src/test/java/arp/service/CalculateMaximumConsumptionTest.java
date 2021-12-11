@@ -1,5 +1,6 @@
 package arp.service;
 
+import arp.dto.grid.Electrolyzer;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
@@ -13,8 +14,8 @@ class CalculateMaximumConsumptionTest extends AbstractAlgorithmTest {
         double storageMaxCapacity = 0.0d;
 
         Electrolyzer electrolyzer = new Electrolyzer();
-        electrolyzer.maxPower = 2d;
-        electrolyzer.efficiency = 3.0d;
+        electrolyzer.setMaxPower(2d);
+        electrolyzer.setEfficiency(3.0d);
         electrolyzer.accumulatorMaxSize = 0.d;
         electrolyzer.summaryEnergyProduction = createTableOfValue(3.0);
         Data data = buildData(electrolyzer, storageMaxCapacity, null);
@@ -32,8 +33,8 @@ class CalculateMaximumConsumptionTest extends AbstractAlgorithmTest {
         // given
         double storageMaxCapacity = 0.0d;
         Electrolyzer electrolyzer = new Electrolyzer();
-        electrolyzer.maxPower = 2d;
-        electrolyzer.efficiency = 3.0d;
+        electrolyzer.setMaxPower(2d);
+        electrolyzer.setEfficiency(3.0d);
         electrolyzer.accumulatorMaxSize = 0.d;
         electrolyzer.summaryEnergyProduction = createTableOfValue(2.0);
         Data data = buildData(electrolyzer, storageMaxCapacity, null);
@@ -52,8 +53,8 @@ class CalculateMaximumConsumptionTest extends AbstractAlgorithmTest {
         double storageMaxCapacity = 0.0d;
 
         Electrolyzer electrolyzer = new Electrolyzer();
-        electrolyzer.maxPower = 2d;
-        electrolyzer.efficiency = 3.0d;
+        electrolyzer.setMaxPower(2d);
+        electrolyzer.setEfficiency(3.0d);
         electrolyzer.accumulatorMaxSize = 0.d;
         electrolyzer.summaryEnergyProduction = createTableOfValue(1.0);
         Data data = buildData(electrolyzer, storageMaxCapacity, null);
@@ -72,8 +73,8 @@ class CalculateMaximumConsumptionTest extends AbstractAlgorithmTest {
         double storageMaxCapacity = 0.0d;
 
         Electrolyzer electrolyzer = new Electrolyzer();
-        electrolyzer.maxPower = 0d;
-        electrolyzer.efficiency = 3.0d;
+        electrolyzer.setMaxPower(0d);
+        electrolyzer.setEfficiency(3.0d);
         electrolyzer.accumulatorMaxSize = 0.d;
         electrolyzer.summaryEnergyProduction = createTableOfValue(1.0);
         Data data = buildData(electrolyzer, storageMaxCapacity, null);

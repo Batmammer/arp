@@ -1,5 +1,8 @@
 package arp.service;
 
+import arp.dto.grid.Electrolyzer;
+import arp.dto.grid.Storage;
+
 import static arp.service.Utils.createTableOfValue;
 
 public class CalculateMaximumConsumption {
@@ -41,8 +44,10 @@ public class CalculateMaximumConsumption {
 
     private double getMax() {
         double max = 0;
-        for (Electrolyzer e : data.summaryStorage.electrolyzers) {
-            max += e.maxPower * e.efficiency;
+        for (Storage storage : data.storages) {
+            for (Electrolyzer e : storage.getElectrolyzers()) {
+                max += e.getMaxPower() * e.getEfficiency();
+            }
         }
         return max;
     }
@@ -50,11 +55,10 @@ public class CalculateMaximumConsumption {
     private Data cloneDataWithConsumption(double consumption) {
         Data newData = new Data();
         newData.gridConstants = data.gridConstants;
-        newData.summaryStorage = data.summaryStorage;
+        newData.storages = data.storages;
         newData.vehiclesConsumption = createTableOfValue(consumption);
         return newData;
     }
-
 
 
 }
