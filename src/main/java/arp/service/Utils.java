@@ -10,4 +10,8 @@ public class Utils {
         Arrays.fill(table, value);
         return table;
     }
+
+    public static String roundDouble(double d) {
+        return "" + Math.round(1000 * d) / 1000.0;
+    }
 }

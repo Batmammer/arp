@@ -15,8 +15,16 @@ public class YearResult {
         this.sumPowerOverflow = sumPowerOverflow;
     }
 
-    boolean isGood() {
+    public boolean isGood() {
         return minHourHydrogenLevel >= 0;
     }
 
+    @Override
+    public String toString() {
+        return "YearResult{" +
+                "minHourHydrogenLevel=" + minHourHydrogenLevel +
+                ", sumHydrogenOverflow=" + sumHydrogenOverflow +
+                ", sumPowerOverflow=" + sumPowerOverflow +
+                '}';
+    }
 }
