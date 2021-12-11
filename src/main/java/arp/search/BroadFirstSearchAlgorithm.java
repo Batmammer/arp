@@ -45,10 +45,12 @@ public class BroadFirstSearchAlgorithm {
         List<State> result = new ArrayList<>();
         System.out.println("@@@: PROCESSING STATE: " + state);
         for (ActionType actionType : ActionType.values()) {
-            State nextState = getNextState(state, actionType);
-            if (!visitedStates.contains(nextState.toString())) {
-                visitedStates.add(nextState.toString());
-                result.add(nextState);
+            List<State> nextStates = getNextState(state, actionType);
+            for (State nextState : nextStates) {
+                if (!visitedStates.contains(nextState.toString())) {
+                    visitedStates.add(nextState.toString());
+                    result.add(nextState);
+                }
             }
         }
         return result;
@@ -60,7 +62,8 @@ public class BroadFirstSearchAlgorithm {
         return new State(data.getStorages(), yearResult.isGood(), yearResult.minHourHydrogenLevel, null, null, 0, 0, data);
     }
 
-    private State getNextState(State state, ActionType actionType) {
+    private List<State> getNextState(State state, ActionType actionType) {
+        List<State> results = new ArrayList<>();
         List<Storage> nextStorages = state.storages.stream().map(storage -> storage.clone()).collect(Collectors.toList());
         double totalCost = state.totalCost;
         double actionCost = 0;
@@ -99,16 +102,16 @@ public class BroadFirstSearchAlgorithm {
                         break;
                 }
             }
+            totalCost += actionCost;
+            Data newData = new Data(state.data.getGridConstants(), state.data.getGridCosts(), nextStorages, state.data.getVehiclesConsumption(), newSummaryEnergyProduction);
+            CalculateYearAlgorithm calculateYearAlgorithm = new CalculateYearAlgorithm(newData);
+            YearResult yearResult = calculateYearAlgorithm.calculate();
+            State newState = new State(nextStorages, yearResult.isGood(), yearResult.minHourHydrogenLevel, state, actionType, actionCost, totalCost, newData);
+            System.out.println("\tADDING NEW STATE: " + yearResult.isGood() + ": " + yearResult + ": " + newState.toString());
+            results.add(newState);
         }
 
-
-        totalCost += actionCost;
-        Data newData = new Data(state.data.getGridConstants(), state.data.getGridCosts(), nextStorages, state.data.getVehiclesConsumption(), newSummaryEnergyProduction);
-        CalculateYearAlgorithm calculateYearAlgorithm = new CalculateYearAlgorithm(newData);
-        YearResult yearResult = calculateYearAlgorithm.calculate();
-        State newState = new State(nextStorages, yearResult.isGood(), yearResult.minHourHydrogenLevel, state, actionType, actionCost, totalCost, newData);
-        System.out.println("\tADDING NEW STATE: " + yearResult.isGood() + ": " + yearResult + ": " + newState.toString());
-        return newState;
+        return results;
     }
 
     private Electrolyzer createNewElectorlyzer(Map<Long, double[]> newSummaryEnergyProduction) {
