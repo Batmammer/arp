@@ -78,7 +78,7 @@ public class BroadFirstSearchAlgorithmTest extends AbstractAlgorithmTest{
         String state = calculate(data);
 
         // then
-        String expectedStateString = "8.0: WIND, ELECTROLYZER";
+        String expectedStateString = "8.0: ELECTROLYZER, WIND";
         assertEquals(expectedStateString, state);
     }
 
@@ -110,7 +110,7 @@ public class BroadFirstSearchAlgorithmTest extends AbstractAlgorithmTest{
         String state = calculate(data);
 
         // then
-        String expectedStateString = "12.0: PV, ELECTROLYZER, ELECTROLYZER";
+        String expectedStateString = "12.0: ELECTROLYZER, ELECTROLYZER, PV";
         assertEquals(expectedStateString, state);
     }
 
@@ -142,7 +142,7 @@ public class BroadFirstSearchAlgorithmTest extends AbstractAlgorithmTest{
         String state = calculate(data);
 
         // then
-        String expectedStateString = "9.0: PV, ELECTROLYZER";
+        String expectedStateString = "9.0: ELECTROLYZER, PV";
         assertEquals(expectedStateString, state);
     }
 
@@ -173,7 +173,7 @@ public class BroadFirstSearchAlgorithmTest extends AbstractAlgorithmTest{
         String state = calculate(data);
 
         // then
-        String expectedStateString = "15.0: PV, PV, ELECTROLYZER, ACCUMULATOR, ACCUMULATOR";
+        String expectedStateString = "15.0: ACCUMULATOR, ACCUMULATOR, ELECTROLYZER, PV, PV";
         assertEquals(expectedStateString, state);
     }
 
@@ -204,8 +204,39 @@ public class BroadFirstSearchAlgorithmTest extends AbstractAlgorithmTest{
         String state = calculate(data);
 
         // then
-        String expectedStateString = "20.0: STORAGE, PV, PV, ELECTROLYZER";
+        String expectedStateString = "20.0: ELECTROLYZER, PV, PV, STORAGE";
         assertEquals(expectedStateString, state);
+    }
+
+    @Test
+    public void shouldNotAddAnything() {
+        // given
+        double consumption = 4.0;
+
+        GridConstants gridConstants = buildGridConstants();
+
+        GridCosts gridCosts = new GridCosts();
+        gridCosts.setPvCost(2.0d);
+        gridCosts.setElectrolyzerCost(5.0d);
+        gridCosts.setWindCost(1000.0d);
+        gridCosts.setStoragePowerCost(1000.0d);
+        gridCosts.setStorageHydrogenCost(1000.0d);
+
+        List<Storage> storages = buildFullTreeOfStorages(2, 1, 2);
+
+        Data data = new Data();
+        data.setGridCosts(gridCosts);
+        data.setGridConstants(gridConstants);
+        data.setStorages(storages);
+        data.setVehiclesConsumption(createTableOfValue(consumption));
+
+        // when
+        BroadFirstSearchAlgorithm broadFirstSearchAlgorithm = new BroadFirstSearchAlgorithm(data);
+        State state = broadFirstSearchAlgorithm.calculate();
+
+        // then
+        String expectedStateString = "0.0: ";
+        assertEquals(expectedStateString, state.toString());
     }
 
     @Test
@@ -273,9 +304,9 @@ public class BroadFirstSearchAlgorithmTest extends AbstractAlgorithmTest{
     }
 
     @Test
-    public void shouldAddElectrolyzerToFirstPathOfTwo() {
+    public void shouldAddPvToTwoOfEightPaths() {
         // given
-        double consumption = 4.0;
+        double consumption = 8.0;
 
         GridConstants gridConstants = buildGridConstants();
 
@@ -286,8 +317,9 @@ public class BroadFirstSearchAlgorithmTest extends AbstractAlgorithmTest{
         gridCosts.setStoragePowerCost(1000.0d);
         gridCosts.setStorageHydrogenCost(1000.0d);
 
-        List<Storage> storages = buildFullTreeOfStorages(2, 1, 2);
+        List<Storage> storages = buildFullTreeOfStorages(2, 2, 2);
         storages.get(0).getElectrolyzers().get(0).getSources().remove(0);
+        storages.get(1).getElectrolyzers().get(1).getSources().remove(1);
 
         Data data = new Data();
         data.setGridCosts(gridCosts);
@@ -300,9 +332,80 @@ public class BroadFirstSearchAlgorithmTest extends AbstractAlgorithmTest{
         State state = broadFirstSearchAlgorithm.calculate();
 
         // then
-        String expectedStateString = "2.0: PV";
+        String expectedStateString = "4.0: PV, PV";
         assertEquals(expectedStateString, state.toString());
     }
+
+    @Test
+    public void shouldAddElectrolyzerToFirstPathOfFour() {
+        // given
+        double consumption = 4.0;
+
+        GridConstants gridConstants = buildGridConstants();
+
+        GridCosts gridCosts = new GridCosts();
+        gridCosts.setPvCost(2.0d);
+        gridCosts.setElectrolyzerCost(5.0d);
+        gridCosts.setWindCost(1000.0d);
+        gridCosts.setStoragePowerCost(1000.0d);
+        gridCosts.setStorageHydrogenCost(1000.0d);
+
+        List<Storage> storages = buildFullTreeOfStorages(2, 2, 1);
+        storages.get(0).getElectrolyzers().get(0).setEfficiency(0.5);
+
+        Data data = new Data();
+        data.setGridCosts(gridCosts);
+        data.setGridConstants(gridConstants);
+        data.setStorages(storages);
+        data.setVehiclesConsumption(createTableOfValue(consumption));
+
+        // when
+        BroadFirstSearchAlgorithm broadFirstSearchAlgorithm = new BroadFirstSearchAlgorithm(data);
+        State state = broadFirstSearchAlgorithm.calculate();
+
+        // then
+        String expectedStateString = "5.0: ELECTROLYZER";
+        assertEquals(expectedStateString, state.toString());
+    }
+
+    @Test
+    public void bigTest666add7Pvs() {
+        // given
+        double consumption = 216.0;
+
+        GridConstants gridConstants = buildGridConstants();
+
+        GridCosts gridCosts = new GridCosts();
+        gridCosts.setPvCost(2.0d);
+        gridCosts.setElectrolyzerCost(5.0d);
+        gridCosts.setWindCost(1000.0d);
+        gridCosts.setStoragePowerCost(1000.0d);
+        gridCosts.setStorageHydrogenCost(1000.0d);
+
+        List<Storage> storages = buildFullTreeOfStorages(6, 6, 6);
+        storages.get(0).getElectrolyzers().get(0).getSources().remove(5);
+        storages.get(0).getElectrolyzers().get(0).getSources().remove(4);
+        storages.get(0).getElectrolyzers().get(0).getSources().remove(3);
+        storages.get(0).getElectrolyzers().get(0).getSources().remove(2);
+        storages.get(0).getElectrolyzers().get(0).getSources().remove(1);
+        storages.get(0).getElectrolyzers().get(0).getSources().remove(0);
+        storages.get(0).getElectrolyzers().get(1).getSources().remove(5);
+
+        Data data = new Data();
+        data.setGridCosts(gridCosts);
+        data.setGridConstants(gridConstants);
+        data.setStorages(storages);
+        data.setVehiclesConsumption(createTableOfValue(consumption));
+
+        // when
+        BroadFirstSearchAlgorithm broadFirstSearchAlgorithm = new BroadFirstSearchAlgorithm(data);
+        State state = broadFirstSearchAlgorithm.calculate();
+
+        // then
+        String expectedStateString = "14.0: PV, PV, PV, PV, PV, PV, PV";
+        assertEquals(expectedStateString, state.toString());
+    }
+
     private List<Storage> buildFullTreeOfStorages(int storagesAmount, int electrolizersPerStorage, int powersPerElectorizer) {
         List<Storage> storages = new ArrayList<>();
 
