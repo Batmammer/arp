@@ -38,7 +38,7 @@ public class GridService {
         for (int i = 0; i < 365 * 24; i++) {
             double current = 0;
             for (EnergySource es : electrolyzer.getSources()) {
-                current += es.getMaxPower() * getPowerMultiplier(i, es.getType()) * transmissionLoss;
+                current += es.getMaxPower() * getPowerMultiplier(i, es.getType()) * (1.0 - transmissionLoss);
             }
             production[i] = current;
         }
