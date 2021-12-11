@@ -9,6 +9,7 @@ import arp.enums.EnergySourceType;
 import arp.search.BroadFirstSearchAlgorithm;
 import arp.search.State;
 import org.assertj.core.util.Lists;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;
@@ -374,6 +375,7 @@ public class BroadFirstSearchAlgorithmTest extends AbstractAlgorithmTest{
         assertEquals(expectedStateString, state.toString());
     }
 
+    @Disabled
     @Test
     public void bigTest666add7Pvs() {
         // given

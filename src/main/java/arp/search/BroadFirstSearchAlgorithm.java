@@ -31,6 +31,7 @@ public class BroadFirstSearchAlgorithm {
         visitedStates.add(initialState.toString());
         while (!priorityQueue.isEmpty()) {
             State state = priorityQueue.poll();
+            state.updateMetrics(data);
             if (state.getMetrics().isGood())
                 return state;
             priorityQueue.addAll(processState(state));
@@ -95,7 +96,6 @@ public class BroadFirstSearchAlgorithm {
         storage.setMaxCapacity(1.0);
 
         nextState.getStorages().add(storage);
-        nextState.updateMetrics(this.data);
 
         results.add(nextState);
     }
@@ -107,7 +107,6 @@ public class BroadFirstSearchAlgorithm {
         State nextState = state.buildNextState(action);
         Storage storage = nextState.findStorageById(id);
         storage.setMaxCapacity(storage.getMaxCapacity() + 1.0);
-        nextState.updateMetrics(this.data);
 
         results.add(nextState);
     }
@@ -136,7 +135,6 @@ public class BroadFirstSearchAlgorithm {
 
         Storage storage = nextState.findStorageById(parentId);
         storage.getElectrolyzers().add(electrolyzer);
-        nextState.updateMetrics(this.data);
 
         results.add(nextState);
     }
@@ -146,7 +144,6 @@ public class BroadFirstSearchAlgorithm {
         State nextState = state.buildNextState(action);
         Electrolyzer electrolyzer = nextState.findElectrolyzerById(id);
         electrolyzer.setMaxPower(electrolyzer.getMaxPower() + 1.0);
-        nextState.updateMetrics(this.data);
 
         results.add(nextState);
     }
@@ -167,7 +164,6 @@ public class BroadFirstSearchAlgorithm {
         State nextState = state.buildNextState(action);
         Accumulator accumulator = nextState.findAccumulatorById(id);
         accumulator.setAccumulatorMaxSize(accumulator.getAccumulatorMaxSize() + 1.0);
-        nextState.updateMetrics(this.data);
 
         results.add(nextState);
     }
@@ -197,8 +193,6 @@ public class BroadFirstSearchAlgorithm {
         electrolyzer.getSources().add(energySource);
         electrolyzer.recalculateSummaryEnergyProduction(data);
 
-        nextState.updateMetrics(this.data);
-
         results.add(nextState);
     }
 
@@ -212,14 +206,6 @@ public class BroadFirstSearchAlgorithm {
         Electrolyzer electrolyzer = nextState.findElectrolyzerById(parentId);
         electrolyzer.getSources().add(energySource);
         electrolyzer.recalculateSummaryEnergyProduction(data);
-
-        nextState.updateMetrics(this.data);
-
-
-        //        // TODO
-//        for (int hour = 0; hour < Utils.HOURS_OF_YEAR; ++hour) {
-//            newSummaryEnergyProduction.get(electrolyzer.getId())[hour] += data.getGridConstants().getWindDailyProduction()[hour];
-//        }
 
         results.add(nextState);
     }
@@ -250,8 +236,6 @@ public class BroadFirstSearchAlgorithm {
         electrolyzer.getSources().add(energySource);
         electrolyzer.recalculateSummaryEnergyProduction(data);
 
-        nextState.updateMetrics(this.data);
-
         results.add(nextState);
     }
 
@@ -261,7 +245,6 @@ public class BroadFirstSearchAlgorithm {
         State nextState = state.buildNextState(action);
         EnergySource energySource = nextState.findEnergySourceById(id);
         energySource.setMaxPower(energySource.getMaxPower() + 1.0);
-        nextState.updateMetrics(this.data);
 
         Electrolyzer electrolyzer = nextState.findElectrolyzerById(parentId);
         electrolyzer.getSources().add(energySource);

@@ -16,9 +16,6 @@ public class Metrics implements Comparable<Metrics> {
 
     @Override
     public int compareTo(Metrics o) {
-        int result = Double.compare(totalCost, o.totalCost);
-        if (result != 0)
-            return result;
-        return -Double.compare(minHourHydrogenLevel, o.minHourHydrogenLevel);
+        return Double.compare(totalCost, o.totalCost);
     }
 }
