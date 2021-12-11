@@ -14,8 +14,8 @@ public class GridController {
         this.gridService = gridService;
     }
 
-    @GetMapping("/validate")
-    public GridResult validateGrid(InputGrid inputGrid) {
+    @GetMapping("/calculate")
+    public GridResult calculateGrid(InputGrid inputGrid) {
         gridService.runSimulation(inputGrid);
         return new GridResult();
     }
