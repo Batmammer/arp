@@ -79,6 +79,14 @@ public class State implements Comparable<State>, Cloneable {
         State state = this.clone();
         state.previousState = this;
         state.action = action;
+
+        Metrics metrics = new Metrics();
+        metrics.setGood(false);
+        metrics.setTotalCost(this.metrics.getTotalCost() + (action != null ? action.getActionCost(): 0));
+
+        state.metrics = metrics;
+        state.key = state.updateKey();
+
         return state;
     }
 
