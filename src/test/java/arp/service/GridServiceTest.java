@@ -1,12 +1,15 @@
 package arp.service;
 
 import arp.dto.*;
+import arp.dto.grid.*;
+import arp.dto.util.WeeklyPeriod;
 import arp.enums.EnergySourceType;
 import org.assertj.core.util.Lists;
 import org.junit.jupiter.api.Test;
 
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -27,53 +30,54 @@ class GridServiceTest {
     }
 
     private GridInput getInputGrid() {
-        return new GridInput(getGrid(), getConstants());
+        return new GridInput(getGrid(), getConstants(), getCosts());
     }
 
     private Grid getGrid() {
-        return new Grid(getWatSide(), getHydrogenSide());
+        return new Grid(Collections.singletonList(
+                new Vehicle(11L, 100L, getWeeklyWork(), 1.0, 0L)),
+                Collections.singletonList(getStorage()));
     }
 
-    private HydrogenSide getHydrogenSide() {
-        return new HydrogenSide(
-                Collections.singletonList(
-                        new Vehicle("Truck", 100L, getWeeklyWork(), 1.0, 0L)));
-    }
-
-    private boolean[] getWeeklyWork() {
-        boolean weeklyWork[] = new boolean[24 * 7];
-        Arrays.fill(weeklyWork, true);
-        return weeklyWork;
-    }
-
-    private WatSide getWatSide() {
-        return new WatSide(getStorage());
+    private List<WeeklyPeriod> getWeeklyWork() {
+        return Collections.singletonList(new WeeklyPeriod(0, 6, 0, 23));
     }
 
     private Storage getStorage() {
-        return new Storage(1000.0, Collections.singletonList(getElectrolyzer()));
+        return new Storage(21L, 1000.0, Collections.singletonList(getElectrolyzer()));
     }
 
     private Electrolyzer getElectrolyzer() {
         EnergySource energySource = new EnergySource();
-        energySource.type = EnergySourceType.WIND;
-        energySource.maxPower = 100d;
-        energySource.distance = 0d;
+        energySource.setId(31L);
+        energySource.setType(EnergySourceType.WIND);
+        energySource.setMaxPower(100d);
+        energySource.setDistance(0d);
 
         Electrolyzer e = new Electrolyzer();
-        e.maxPower = 10d;
-        e.minPower = 1d;
-        e.setEfficiency(10;
-        e.setAccumulatorMaxSize(100d;
-        e.sources = Lists.newArrayList(energySource);
+        e.setId(41L);
+        e.setMaxPower(10d);
+        e.setEfficiency(10d);
+        e.setAccumulator(new Accumulator(100d));
+        e.setSources(Lists.newArrayList(energySource));
         return e;
     }
 
     private GridConstants getConstants() {
         GridConstants gridConstants = new GridConstants();
-        gridConstants.setHydrogenTransportLoss( = 0.d;
-        gridConstants.setStorageLoss( 0.d;
-        gridConstants.setTransmissionLoss(0.d;
+        gridConstants.setHydrogenTransportLoss(0d);
+        gridConstants.setStorageLoss(0d);
+        gridConstants.setTransmissionLoss(0d);
         return gridConstants;
+    }
+
+    private GridCosts getCosts() {
+        GridCosts gridCosts = new GridCosts();
+        gridCosts.setPvCost(10d);
+        gridCosts.setWindCost(10d);
+        gridCosts.setElectrolyzerCost(20d);
+        gridCosts.setStorageHydrogenCost(20d);
+        gridCosts.setStoragePowerCost(20d);
+        return gridCosts;
     }
 }
