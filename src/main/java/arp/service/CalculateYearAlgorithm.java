@@ -56,10 +56,18 @@ public class CalculateYearAlgorithm {
     }
 
 
-
     private void finalValidation(double minHourHydrogenLevel, double sumHydrogenOverflow, double sumPowerOverflow) {
         if (minHourHydrogenLevel < 0) {
-
+            warnings.add(new Warning("There biggest luck of hydrogen was: " + (-minHourHydrogenLevel)));
+        }
+        if (minHourHydrogenLevel > 10) {
+            warnings.add(new Warning("For whole year there was at least: " + minHourHydrogenLevel + " kg of hydroxen in storage"));
+        }
+        if (sumHydrogenOverflow > 0) {
+            warnings.add(new Warning("In whole year we lost: " + sumHydrogenOverflow + " kg of hydroxen because luck of storage"));
+        }
+        if (sumPowerOverflow > 0) {
+            warnings.add(new Warning("In whole year we lost: " + sumPowerOverflow + " MWh because luck on accumulator size"));
         }
     }
 
@@ -67,7 +75,7 @@ public class CalculateYearAlgorithm {
         Step firstStep = new Step();
         firstStep.setHour(0);
         firstStep.setAcumulatorsStates(new HashMap<>());
-        for (Storage storage: data.getStorages()) {
+        for (Storage storage : data.getStorages()) {
             for (Electrolyzer electrolyzer : storage.getElectrolyzers()) {
                 firstStep.getAcumulatorsStates().put(electrolyzer.getAccumulator(), new AcumulatorState(0));
             }
