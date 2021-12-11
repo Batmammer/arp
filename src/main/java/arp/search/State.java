@@ -31,16 +31,6 @@ public class State implements Comparable<State> {
 
     @Override
     public int compareTo(State o) {
-        if (good && o.good) {
-            int result = Double.compare(totalCost, o.totalCost);
-            if (result != 0)
-                return result;
-            return -Double.compare(minHourHydrogenLevel, o.minHourHydrogenLevel);
-        }
-        if (good)
-            return -1;
-        if (o.good)
-            return 1;
         int result = Double.compare(totalCost, o.totalCost);
         if (result != 0)
             return result;

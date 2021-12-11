@@ -19,4 +19,12 @@ public class YearResult {
         return minHourHydrogenLevel >= 0;
     }
 
+    @Override
+    public String toString() {
+        return "YearResult{" +
+                "minHourHydrogenLevel=" + minHourHydrogenLevel +
+                ", sumHydrogenOverflow=" + sumHydrogenOverflow +
+                ", sumPowerOverflow=" + sumPowerOverflow +
+                '}';
+    }
 }

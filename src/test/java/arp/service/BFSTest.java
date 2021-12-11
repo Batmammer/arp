@@ -6,6 +6,7 @@ import arp.dto.GridConstants;
 import arp.dto.Storage;
 import arp.enums.EnergySourceType;
 import arp.search.BroadFirstSearchAlgorithm;
+import arp.search.State;
 
 import java.util.List;
 
@@ -18,8 +19,9 @@ class BFSTest {
         storage.maxCapacity = 0.0;
         List<EnergySource> sources = List.of(new EnergySource(EnergySourceType.WIND, 0.0, 0.0), new EnergySource(EnergySourceType.PV, 0.0, 0.0));
         storage.electrolyzers = List.of(new Electrolyzer(sources, 0, 0.0, 1.0, 0.0, 0.0, Utils.createTableOfValue(0.0)));
-        Data data = new Data(gridConstants, storage, Utils.createTableOfValue(1.0));
+        Data data = new Data(gridConstants, storage, Utils.createTableOfValue(0.9));
         broadFirstSearchAlgorithm = new BroadFirstSearchAlgorithm(data);
-        broadFirstSearchAlgorithm.calculate();
+        State state = broadFirstSearchAlgorithm.calculate();
+        System.out.println("FOUND SOLUTION: " + state);
     }
 }
