@@ -1,9 +1,8 @@
 package arp.service;
 
-import arp.dto.*;
+import arp.dto.GridInput;
 import arp.dto.grid.Electrolyzer;
 import arp.dto.grid.EnergySource;
-import arp.dto.grid.Storage;
 import arp.dto.grid.Vehicle;
 import arp.dto.util.WeeklyPeriod;
 import arp.enums.EnergySourceType;
@@ -13,7 +12,6 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.function.Function;
 import java.util.stream.Collectors;
 
 @Service
@@ -27,17 +25,17 @@ public class GridService {
                         gridInput.getConstants(),
                         gridInput.getCosts(),
                         gridInput.getGrid().getStorages(),
-                calculateYearlyConsumption(gridInput.getGrid().getVehicles(),
-                        gridInput.getConstants().getHydrogenTransportLoss()),
-                calculateElectrolyzers(gridInput.getGrid().getStorages().stream()
-                        .map(s -> s.getElectrolyzers()).collect(Collectors.toList()).stream().flatMap(List::stream).collect(Collectors.toList()),
-                        gridInput.getConstants().getTransmissionLoss())
+                        calculateYearlyConsumption(gridInput.getGrid().getVehicles(),
+                                gridInput.getConstants().getHydrogenTransportLoss()),
+                        calculateElectrolyzers(gridInput.getGrid().getStorages().stream()
+                                        .map(s -> s.getElectrolyzers()).collect(Collectors.toList()).stream().flatMap(List::stream).collect(Collectors.toList()),
+                                gridInput.getConstants().getTransmissionLoss())
                 );
         return calculateYearAlgorithm.calculate();
     }
 
     private Map<Long, double[]> calculateElectrolyzers(List<Electrolyzer> input, double transmissionLoss) {
-        return input.stream().collect(Collectors.toMap(Electrolyzer::getId, e -> calculateSummaryEnergyProduction(e, transmissionLoss));
+        return input.stream().collect(Collectors.toMap(Electrolyzer::getId, e -> calculateSummaryEnergyProduction(e, transmissionLoss)));
     }
 
     private double[] calculateSummaryEnergyProduction(Electrolyzer electrolyzer, double transmissionLoss) {
@@ -78,11 +76,11 @@ public class GridService {
         boolean[] weekly = new boolean[24 * 7];
         Arrays.fill(weekly, false);
         for (WeeklyPeriod p : periods) {
-           if (p.getDayFrom() < 0 || p.getDayTo() > 6 || p.getDayFrom() > p.getDayTo())
-               continue;
+            if (p.getDayFrom() < 0 || p.getDayTo() > 6 || p.getDayFrom() > p.getDayTo())
+                continue;
             if (p.getHourFrom() < 0 || p.getHourTo() > 23 || p.getHourFrom() > p.getHourTo())
                 continue;
-            for(int i = p.getDayFrom(); i <= p.getDayTo(); i++) {
+            for (int i = p.getDayFrom(); i <= p.getDayTo(); i++) {
                 for (int j = p.getHourFrom(); j <= p.getHourTo(); j++) {
                     weekly[i * 7 + j] = true;
                 }

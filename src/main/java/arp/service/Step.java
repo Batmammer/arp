@@ -7,7 +7,7 @@ import java.util.stream.Collectors;
 public class Step {
     public int hour;
     public Map<Long, AcumulatorState> acumulatorsStates = new HashMap<>();
-    public Map<Long, StorageState> storageStates;
+    public Map<Long, StorageState> storageStates = new HashMap<>();
     public double overflowHydrogenProduction;
     public double overflowPowerProduction;
 
