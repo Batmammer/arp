@@ -123,9 +123,9 @@ public class GridController {
         double[] hydrogenArray = new double[compressedChartSize];
 
         for (int i = 0; i < compressedChartSize; i++) {
-            var elecricityPoint = electricityProduction.get(i) + electricityProduction.get(i + 1) + electricityProduction.get(i + 2) + electricityProduction.get(i + 3);
+            var electricityPoint = electricityProduction.get(i) + electricityProduction.get(i + 1) + electricityProduction.get(i + 2) + electricityProduction.get(i + 3);
             var hydrogenPoint = hydrogenProduction.get(i) + hydrogenProduction.get(i + 1) + hydrogenProduction.get(i + 2) + hydrogenProduction.get(i + 3);
-            electricityArray[i] = elecricityPoint / 4;
+            electricityArray[i] = electricityPoint / 4;
             hydrogenArray[i] = hydrogenPoint / 4;
         }
 
