@@ -455,6 +455,57 @@ class CalculateNextStepAlgorithmTest extends AbstractAlgorithmTest {
         // then
         assertTrue(wasException);
     }
+
+    @Test
+    public void shouldNotUseAccumulatorWhenThereisNoConsumption() {
+        // given
+        double storageMaxCapacity = 0.0d;
+        double[] consumption = {0.0};
+
+        Electrolyzer electrolyzer = new Electrolyzer();
+        electrolyzer.maxPower = 1d;
+        electrolyzer.minPower = 0d;
+        electrolyzer.efficiency = 1.0d;
+        electrolyzer.accumulatorMaxSize = 1.0d;
+        electrolyzer.summaryEnergyProduction = new double[]{0.0};
+        Data data = buildData(electrolyzer, storageMaxCapacity, consumption);
+
+        Step step = initStep(electrolyzer, 0, 0d, 1d);
+
+        // when
+        CalculateNextStepAlgorithm algorithm = new CalculateNextStepAlgorithm(data);
+        Step resultStep = algorithm.calculate(step);
+
+        // then
+        Step expectedStep = initStep(electrolyzer, 1, 0d, 1d);
+        assertEquals(expectedStep.toString(), resultStep.toString());
+    }
+
+    @Test
+    public void shouldUseAccumulatorWhenThereisNoConsumptionButIsMinimumPower() {
+        // given
+        double storageMaxCapacity = 0.0d;
+        double[] consumption = {0.0};
+
+        Electrolyzer electrolyzer = new Electrolyzer();
+        electrolyzer.maxPower = 1d;
+        electrolyzer.minPower = 0.2d;
+        electrolyzer.efficiency = 1.0d;
+        electrolyzer.accumulatorMaxSize = 1.0d;
+        electrolyzer.summaryEnergyProduction = new double[]{0.0};
+        Data data = buildData(electrolyzer, storageMaxCapacity, consumption);
+
+        Step step = initStep(electrolyzer, 0, 0d, 1d);
+
+        // when
+        CalculateNextStepAlgorithm algorithm = new CalculateNextStepAlgorithm(data);
+        Step resultStep = algorithm.calculate(step);
+
+        // then
+        Step expectedStep = initStep(electrolyzer, 1, 0d, 0.8d);
+        assertEquals(expectedStep.toString(), resultStep.toString());
+    }
+
     @Test
     public void comboProductions() {
         // given
