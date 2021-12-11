@@ -1,0 +1,11 @@
+{
+  "grid": null,
+  "electricityProduction": null,
+  "hydrogenProduction": null,
+  "hydrogenLevel": null,
+  "maxVehicleConsumption": null,
+  "minHydrogenProduction": null,
+  "minCapex": null,
+  "resMaxPower": null,
+  "resAnnualCapacity": null
+}
