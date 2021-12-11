@@ -22,8 +22,8 @@ class CalculateNextStepAlgorithmTest extends AbstractAlgorithmTest {
         electrolyzer.setMaxPower(100d);
         electrolyzer.setEfficiency(1.0d);
         electrolyzer.getAccumulator().setAccumulatorMaxSize(0.d);
+        electrolyzer.setSummaryEnergyProduction(new double[]{1.0});
         Data data = buildData(electrolyzer, storageMaxCapacity, consumption);
-        data.getSummaryEnergyProduction().put(electrolyzer.getId(), new double[]{1.0});
 
         Storage storage = data.getStorages().get(0);
         Step step = initStep(storage, electrolyzer.getAccumulator(), 0, 0d, 0d);
@@ -47,8 +47,8 @@ class CalculateNextStepAlgorithmTest extends AbstractAlgorithmTest {
         electrolyzer.setMaxPower(0d);
         electrolyzer.setEfficiency(1.0d);
         electrolyzer.getAccumulator().setAccumulatorMaxSize(0.d);
+        electrolyzer.setSummaryEnergyProduction(new double[]{1.0});
         Data data = buildData(electrolyzer, storageMaxCapacity, consumption);
-        data.getSummaryEnergyProduction().put(electrolyzer.getId(), new double[]{1.0});
 
         Storage storage = data.getStorages().get(0);
         Step step = initStep(storage, electrolyzer.getAccumulator(), 0, 1d, 0d);
@@ -73,8 +73,8 @@ class CalculateNextStepAlgorithmTest extends AbstractAlgorithmTest {
         electrolyzer.setMaxPower(1d);
         electrolyzer.setEfficiency(1.0d);
         electrolyzer.getAccumulator().setAccumulatorMaxSize(0.d);
+        electrolyzer.setSummaryEnergyProduction(new double[]{1.0});
         Data data = buildData(electrolyzer, storageMaxCapacity, consumption);
-        data.getSummaryEnergyProduction().put(electrolyzer.getId(), new double[]{1.0});
 
         Storage storage = data.getStorages().get(0);
         Step step = initStep(storage, electrolyzer.getAccumulator(), 0, 1d, 0d);
@@ -98,8 +98,8 @@ class CalculateNextStepAlgorithmTest extends AbstractAlgorithmTest {
         electrolyzer.setMaxPower(1d);
         electrolyzer.setEfficiency(1.0d);
         electrolyzer.getAccumulator().setAccumulatorMaxSize(0.d);
+        electrolyzer.setSummaryEnergyProduction(new double[]{1.0});
         Data data = buildData(electrolyzer, storageMaxCapacity, consumption);
-        data.getSummaryEnergyProduction().put(electrolyzer.getId(), new double[]{1.0});
 
         Storage storage = data.getStorages().get(0);
         Step step = initStep(storage, electrolyzer.getAccumulator(), 0, 0d, 0d);
@@ -123,8 +123,8 @@ class CalculateNextStepAlgorithmTest extends AbstractAlgorithmTest {
         electrolyzer.setMaxPower(0d);
         electrolyzer.setEfficiency(1.0d);
         electrolyzer.getAccumulator().setAccumulatorMaxSize(0.d);
+        electrolyzer.setSummaryEnergyProduction(new double[]{0.0});
         Data data = buildData(electrolyzer, storageMaxCapacity, consumption);
-        data.getSummaryEnergyProduction().put(electrolyzer.getId(), new double[]{0.0});
 
         Storage storage = data.getStorages().get(0);
         Step step = initStep(storage, electrolyzer.getAccumulator(), 0, 1d, 0d);
@@ -148,8 +148,8 @@ class CalculateNextStepAlgorithmTest extends AbstractAlgorithmTest {
         electrolyzer.setMaxPower(2d);
         electrolyzer.setEfficiency(1.0d);
         electrolyzer.getAccumulator().setAccumulatorMaxSize(0.d);
+        electrolyzer.setSummaryEnergyProduction(new double[]{98.0});
         Data data = buildData(electrolyzer, storageMaxCapacity, consumption);
-        data.getSummaryEnergyProduction().put(electrolyzer.getId(), new double[]{98.0});
 
         Storage storage = data.getStorages().get(0);
         Step step = initStep(storage, electrolyzer.getAccumulator(), 0, 0d, 0d);
@@ -174,8 +174,8 @@ class CalculateNextStepAlgorithmTest extends AbstractAlgorithmTest {
         electrolyzer.setMaxPower(0d);
         electrolyzer.setEfficiency(1.0d);
         electrolyzer.getAccumulator().setAccumulatorMaxSize(0.d);
+        electrolyzer.setSummaryEnergyProduction(new double[]{1.0});
         Data data = buildData(electrolyzer, storageMaxCapacity, consumption);
-        data.getSummaryEnergyProduction().put(electrolyzer.getId(), new double[]{1.0});
 
         Storage storage = data.getStorages().get(0);
         Step step = initStep(storage, electrolyzer.getAccumulator(), 0, -1d, 0d);
@@ -200,8 +200,8 @@ class CalculateNextStepAlgorithmTest extends AbstractAlgorithmTest {
         electrolyzer.setMaxPower(100d);
         electrolyzer.setEfficiency(1.0d);
         electrolyzer.getAccumulator().setAccumulatorMaxSize(0.d);
+        electrolyzer.setSummaryEnergyProduction(new double[]{1.0});
         Data data = buildData(electrolyzer, storageMaxCapacity, consumption);
-        data.getSummaryEnergyProduction().put(electrolyzer.getId(), new double[]{1.0});
 
         Storage storage = data.getStorages().get(0);
         Step step = initStep(storage, electrolyzer.getAccumulator(), 0, 0d, 0d);
@@ -225,8 +225,8 @@ class CalculateNextStepAlgorithmTest extends AbstractAlgorithmTest {
         electrolyzer.setMaxPower(100d);
         electrolyzer.setEfficiency(2.0d);
         electrolyzer.getAccumulator().setAccumulatorMaxSize(0.d);
+        electrolyzer.setSummaryEnergyProduction(new double[]{1.0});
         Data data = buildData(electrolyzer, storageMaxCapacity, consumption);
-        data.getSummaryEnergyProduction().put(electrolyzer.getId(), new double[]{1.0});
 
         Storage storage = data.getStorages().get(0);
         Step step = initStep(storage, electrolyzer.getAccumulator(), 0, 2d, 0d);
@@ -251,8 +251,8 @@ class CalculateNextStepAlgorithmTest extends AbstractAlgorithmTest {
         electrolyzer.setMaxPower(100d);
         electrolyzer.setEfficiency(3.0d);
         electrolyzer.getAccumulator().setAccumulatorMaxSize(0.d);
+        electrolyzer.setSummaryEnergyProduction(new double[]{1.0});
         Data data = buildData(electrolyzer, storageMaxCapacity, consumption);
-        data.getSummaryEnergyProduction().put(1l, new double[]{1.0});
 
         Storage storage = data.getStorages().get(0);
         Step step = initStep(storage, electrolyzer.getAccumulator(), 0, 0d, 0d);
@@ -277,8 +277,8 @@ class CalculateNextStepAlgorithmTest extends AbstractAlgorithmTest {
         electrolyzer.setMaxPower(100d);
         electrolyzer.setEfficiency(1.0d);
         electrolyzer.getAccumulator().setAccumulatorMaxSize(1.0d);
+        electrolyzer.setSummaryEnergyProduction(new double[]{0.0});
         Data data = buildData(electrolyzer, storageMaxCapacity, consumption);
-        data.getSummaryEnergyProduction().put(1l, new double[]{0.0});
 
         Storage storage = data.getStorages().get(0);
         Step step = initStep(storage, electrolyzer.getAccumulator(), 0, 0d, 1d);
@@ -302,8 +302,8 @@ class CalculateNextStepAlgorithmTest extends AbstractAlgorithmTest {
         electrolyzer.setMaxPower(100d);
         electrolyzer.setEfficiency(1.0d);
         electrolyzer.getAccumulator().setAccumulatorMaxSize(1.0d);
+        electrolyzer.setSummaryEnergyProduction(new double[]{1.0});
         Data data = buildData(electrolyzer, storageMaxCapacity, consumption);
-        data.getSummaryEnergyProduction().put(1l, new double[]{1.0});
 
         Storage storage = data.getStorages().get(0);
         Step step = initStep(storage, electrolyzer.getAccumulator(), 0, 0d, 1d);
@@ -327,8 +327,8 @@ class CalculateNextStepAlgorithmTest extends AbstractAlgorithmTest {
         electrolyzer.setMaxPower(100d);
         electrolyzer.setEfficiency(1.0d);
         electrolyzer.getAccumulator().setAccumulatorMaxSize(0.0d);
+        electrolyzer.setSummaryEnergyProduction(new double[]{5.0, 1.0});
         Data data = buildData(electrolyzer, storageMaxCapacity, consumption);
-        data.getSummaryEnergyProduction().put(1l, new double[]{5.0, 1.0});
 
         Storage storage = data.getStorages().get(0);
         Step step = initStep(storage, electrolyzer.getAccumulator(), 1, 0d, 0d);
@@ -352,8 +352,8 @@ class CalculateNextStepAlgorithmTest extends AbstractAlgorithmTest {
         electrolyzer.setMaxPower(100d);
         electrolyzer.setEfficiency(1.0d);
         electrolyzer.getAccumulator().setAccumulatorMaxSize(1.0d);
+        electrolyzer.setSummaryEnergyProduction(new double[]{0.0});
         Data data = buildData(electrolyzer, storageMaxCapacity, consumption);
-        data.getSummaryEnergyProduction().put(1l, new double[]{0.0});
 
         Storage storage = data.getStorages().get(0);
         Step step = initStep(storage, electrolyzer.getAccumulator(), 0, 0d, 1d);
@@ -377,8 +377,8 @@ class CalculateNextStepAlgorithmTest extends AbstractAlgorithmTest {
         electrolyzer.setMaxPower(100d);
         electrolyzer.setEfficiency(1.0d);
         electrolyzer.getAccumulator().setAccumulatorMaxSize(0.0d);
+        electrolyzer.setSummaryEnergyProduction(new double[]{1.0});
         Data data = buildData(electrolyzer, storageMaxCapacity, consumption);
-        data.getSummaryEnergyProduction().put(1l, new double[]{1.0});
 
         Storage storage = data.getStorages().get(0);
         Step step = initStep(storage, electrolyzer.getAccumulator(), 0, 0d, 0d);
@@ -402,8 +402,8 @@ class CalculateNextStepAlgorithmTest extends AbstractAlgorithmTest {
         electrolyzer.setMaxPower(1d);
         electrolyzer.setEfficiency(1.0d);
         electrolyzer.getAccumulator().setAccumulatorMaxSize(0.0d);
+        electrolyzer.setSummaryEnergyProduction(new double[]{2.0});
         Data data = buildData(electrolyzer, storageMaxCapacity, consumption);
-        data.getSummaryEnergyProduction().put(1l, new double[]{2.0});
 
         Storage storage = data.getStorages().get(0);
         Step step = initStep(storage, electrolyzer.getAccumulator(), 0, 0d, 0d);
@@ -429,8 +429,8 @@ class CalculateNextStepAlgorithmTest extends AbstractAlgorithmTest {
         electrolyzer.setMaxPower(100d);
         electrolyzer.setEfficiency(1.0d);
         electrolyzer.getAccumulator().setAccumulatorMaxSize(0.0d);
+        electrolyzer.setSummaryEnergyProduction(new double[]{1.0});
         Data data = buildData(electrolyzer, storageMaxCapacity, consumption);
-        data.getSummaryEnergyProduction().put(1l, new double[]{1.0});
         data.getGridConstants().setStorageLoss( 0.2 * 24);
 
         Storage storage = data.getStorages().get(0);
@@ -456,8 +456,8 @@ class CalculateNextStepAlgorithmTest extends AbstractAlgorithmTest {
         electrolyzer.setMinPower(1d);
         electrolyzer.setEfficiency(1.0d);
         electrolyzer.getAccumulator().setAccumulatorMaxSize(0.0d);
+        electrolyzer.setSummaryEnergyProduction(new double[]{0.0});
         Data data = buildData(electrolyzer, storageMaxCapacity, consumption);
-        data.getSummaryEnergyProduction().put(1l, new double[]{0.0});
 
         Storage storage = data.getStorages().get(0);
         Step step = initStep(storage, electrolyzer.getAccumulator(), 0, 0d, 0d);
@@ -487,8 +487,8 @@ class CalculateNextStepAlgorithmTest extends AbstractAlgorithmTest {
         electrolyzer.setMinPower(0d);
         electrolyzer.setEfficiency(1.0d);
         electrolyzer.getAccumulator().setAccumulatorMaxSize(1.0d);
+        electrolyzer.setSummaryEnergyProduction(new double[]{0.0});
         Data data = buildData(electrolyzer, storageMaxCapacity, consumption);
-        data.getSummaryEnergyProduction().put(1l, new double[]{0.0});
 
         Storage storage = data.getStorages().get(0);
         Step step = initStep(storage, electrolyzer.getAccumulator(), 0, 0d, 1d);
@@ -514,8 +514,8 @@ class CalculateNextStepAlgorithmTest extends AbstractAlgorithmTest {
         electrolyzer.setMinPower(0.2d);
         electrolyzer.setEfficiency(1.0d);
         electrolyzer.getAccumulator().setAccumulatorMaxSize(1.0d);
+        electrolyzer.setSummaryEnergyProduction(new double[]{0.0});
         Data data = buildData(electrolyzer, storageMaxCapacity, consumption);
-        data.getSummaryEnergyProduction().put(1l, new double[]{0.0});
 
         Storage storage = data.getStorages().get(0);
         Step step = initStep(storage, electrolyzer.getAccumulator(), 0, 0d, 1d);
@@ -541,12 +541,14 @@ class CalculateNextStepAlgorithmTest extends AbstractAlgorithmTest {
         e1.setMaxPower(2d);
         e1.setEfficiency(1.0d);
         e1.getAccumulator().setAccumulatorMaxSize(0.0d);
+        e1.setSummaryEnergyProduction(new double[]{10.0});
 
         Electrolyzer e2 = buildElectrolyzerWithAccumulator();
         e2.setId(2l);
         e2.setMaxPower(3d);
         e2.setEfficiency(2.0d);
         e2.getAccumulator().setAccumulatorMaxSize(0.0d);
+        e2.setSummaryEnergyProduction(new double[]{20.0});
 
         Storage storage = new Storage();
         storage.setMaxCapacity(5.d);
@@ -556,8 +558,6 @@ class CalculateNextStepAlgorithmTest extends AbstractAlgorithmTest {
         data.setGridConstants(gridConstants);
         data.getStorages().add(storage);
         data.setVehiclesConsumption(new double[]{11.0});
-        data.getSummaryEnergyProduction().put(e1.getId(), new double[]{10.0});
-        data.getSummaryEnergyProduction().put(e2.getId(), new double[]{20.0});
 
         Step step = new Step();
         step.setHour(0);

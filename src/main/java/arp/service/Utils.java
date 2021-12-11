@@ -6,7 +6,11 @@ public class Utils {
     public static final int HOURS_OF_YEAR = 24 * 365;
 
     public static double[] createTableOfValue(double value) {
-        double[] table = new double[HOURS_OF_YEAR];
+        return createTableOfValue(value, HOURS_OF_YEAR);
+    }
+
+    public static double[] createTableOfValue(double value, int size) {
+        double[] table = new double[size];
         Arrays.fill(table, value);
         return table;
     }

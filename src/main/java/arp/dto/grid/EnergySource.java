@@ -23,7 +23,20 @@ public class EnergySource implements Cloneable {
     @Schema(description = "Energy source distance from electrolyzer", example = "10", required = true)
     private Double distance;
 
+
+    public double[] getDailyProduction(arp.service.Data data) {
+        if (EnergySourceType.WIND.equals(getType())) {
+            return data.getGridConstants().getWindDailyProduction();
+        } else {
+            return data.getGridConstants().getPvDailyProduction();
+        }
+    }
+
     public EnergySource clone() {
-        return new EnergySource(id, type, maxPower, distance);
+        try {
+            return (EnergySource)super.clone();
+        } catch (Exception ex) {
+            throw new RuntimeException(ex);
+        }
     }
 }

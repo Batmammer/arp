@@ -34,6 +34,7 @@ public class BroadFirstSearchAlgorithmTest extends AbstractAlgorithmTest{
         gridCosts.setStorageHydrogenCost(10.0d);
 
         Storage storage = new Storage();
+        storage.setId(1l);
         storage.setMaxCapacity(0.0);
 
         Data data = new Data();
@@ -65,6 +66,7 @@ public class BroadFirstSearchAlgorithmTest extends AbstractAlgorithmTest{
         gridCosts.setStorageHydrogenCost(10.0d);
 
         Storage storage = new Storage();
+        storage.setId(1l);
         storage.setMaxCapacity(0.0);
 
         Data data = new Data();
@@ -98,6 +100,7 @@ public class BroadFirstSearchAlgorithmTest extends AbstractAlgorithmTest{
         gridCosts.setStorageHydrogenCost(10.0d);
 
         Storage storage = new Storage();
+        storage.setId(1l);
         storage.setMaxCapacity(0.0);
 
         Data data = new Data();
@@ -130,6 +133,7 @@ public class BroadFirstSearchAlgorithmTest extends AbstractAlgorithmTest{
         gridConstants.getWindDailyProduction()[0] = 0;
 
         Storage storage = new Storage();
+        storage.setId(1l);
         storage.setMaxCapacity(0.0);
 
         Data data = new Data();
@@ -159,6 +163,7 @@ public class BroadFirstSearchAlgorithmTest extends AbstractAlgorithmTest{
         gridCosts.setStorageHydrogenCost(10.0d);
 
         Storage storage = new Storage();
+        storage.setId(1l);
         storage.setMaxCapacity(0.0);
 
         Data data = new Data();
@@ -190,6 +195,7 @@ public class BroadFirstSearchAlgorithmTest extends AbstractAlgorithmTest{
         gridCosts.setStorageHydrogenCost(2.0d);
 
         Storage storage = new Storage();
+        storage.setId(1l);
         storage.setMaxCapacity(0.0);
 
         Data data = new Data();
