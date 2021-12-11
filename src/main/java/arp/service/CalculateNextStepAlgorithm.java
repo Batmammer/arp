@@ -18,7 +18,7 @@ public class CalculateNextStepAlgorithm {
         int hour = step.hour;
         Step newStep = new Step();
         newStep.hour = hour + 1;
-        double hydrogenLevel = Math.max(step.storageState.currentLevel, 0);
+        double hydrogenLevel = Math.max(step.storageStates.currentLevel, 0);
         hydrogenLevel = calculateStorageLoss(hydrogenLevel, data.gridConstants.storageLoss);
         Map<Electrolyzer, ElectrolyzerState> newElectrolyzerStates = new HashMap<>();
         double overflowPowerProduction = 0;
@@ -48,7 +48,7 @@ public class CalculateNextStepAlgorithm {
         }
         newStep.overflowHydrogenProduction = overFlowHydrogenProduction;
 
-        newStep.storageState = new StorageState(hydrogenLevel);
+        newStep.storageStates = new StorageState(hydrogenLevel);
 
         return newStep;
     }
