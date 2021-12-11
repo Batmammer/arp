@@ -60,7 +60,7 @@ public class GridService {
         return broadFirstSearchAlgorithm.calculate();
     }
 
-    public Double calculateHydrogen(GridInput gridInput) {
+    public MaxConsumptionYearResult calculateHydrogen(GridInput gridInput) {
         calculateMaximumConsumption = new CalculateMaximumConsumption(
                 new Data(
                         gridInput.getConstants(),
@@ -72,7 +72,7 @@ public class GridService {
                                         .map(s -> s.getElectrolyzers()).collect(Collectors.toList()).stream().flatMap(List::stream).collect(Collectors.toList()),
                                 gridInput.getConstants())
                 ));
-        return calculateMaximumConsumption.calculate().getMaxConsumption();
+        return calculateMaximumConsumption.calculate();
     }
 
     private Map<Long, double[]> calculateElectrolyzers(List<Electrolyzer> input, GridConstants constants) {

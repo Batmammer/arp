@@ -5,6 +5,7 @@ import arp.dto.GridResult;
 import arp.dto.ValidationResult;
 import arp.search.State;
 import arp.service.GridService;
+import arp.service.MaxConsumptionYearResult;
 import arp.service.Step;
 import arp.service.YearResult;
 import io.swagger.v3.oas.annotations.Operation;
@@ -58,12 +59,34 @@ public class GridController {
 
     @Operation(summary = "Calculate minimal hydrogen production during year")
     @PostMapping("/hydrogenProduction")
-    public GridResult hydrogenProduction(@RequestBody GridInput gridInput) {
-        Double minHydrogenProduction = gridService.calculateHydrogen(gridInput);
-        GridResult gridResult = new GridResult();
-        gridResult.setGrid(gridInput.getGrid());
-        gridResult.setMinHydrogenProduction(minHydrogenProduction);
-        return gridResult;
+    public ValidationResult hydrogenProduction(@RequestBody GridInput gridInput) {
+        MaxConsumptionYearResult minHydrogenProduction = gridService.calculateHydrogen(gridInput);
+        YearResult yearResult = minHydrogenProduction.getYearResult();
+        ValidationResult validationResult = new ValidationResult();
+        validationResult.setGrid(gridInput.getGrid());
+        validationResult.setIsValid(yearResult.isGood());
+        double[] vehicleConsumption = gridService.calculateYearlyConsumption(gridInput.getGrid().getVehicles(),
+                gridInput.getConstants().getHydrogenTransportLoss());
+        validationResult.setMaxVehicleConsumption(Arrays.stream(vehicleConsumption).max().getAsDouble());
+        List<Double> electricityProduction = new ArrayList<>();
+        List<Double> hydrogenProduction = new ArrayList<>();
+        List<Double> hydrogenLevel = new ArrayList<>();
+        for (Step s : yearResult.getSteps()) {
+            hydrogenProduction.add(s.getHydrogenProduction());
+            electricityProduction.add(s.getElectricityProduction());
+            hydrogenLevel.add(s.getStorageStates().values().stream().map(ss ->
+                    ss.getCurrentLevel()).collect(Collectors.summingDouble(Double::doubleValue)));
+        }
+        validationResult.setMinHydrogenProduction(minHydrogenProduction.getMaxConsumption());
+        validationResult.setResMaxPower(electricityProduction.stream().max(Double::compareTo).get());
+        validationResult.setResAnnualCapacity(electricityProduction.stream()
+                .collect(Collectors.summingDouble(Double::doubleValue)));
+        validationResult.setHydrogenProduction(hydrogenProduction);
+        validationResult.setElectricityProduction(electricityProduction);
+        validationResult.setErrors(yearResult.getErrors());
+        validationResult.setWarnings(yearResult.getWarnings());
+        validationResult.setHydrogenLevel(hydrogenLevel);
+        return validationResult;
     }
 
     @Operation(summary = "Calculate minimal CAPEX (grid investment cost)")
