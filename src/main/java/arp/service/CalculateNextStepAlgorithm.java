@@ -40,35 +40,25 @@ public class CalculateNextStepAlgorithm {
                 hydrogenLevel += usedPower * electrolyzer.getEfficiency();
                 newAcumulatorStates.put(electrolyzer.getId(), new AcumulatorState(newAccumulatorCurrentLevel));
             }
-            newStorageStates.put(storage.getId(), new StorageState());
+            newStorageStates.put(storage.getId(), new StorageState(hydrogenLevel));
         }
-//        for (Map.Entry<Long, ElectrolyzerState> entry : step.electorizersStates.entrySet()) {
-//            Electrolyzer electrolyzer = entry.getKey();
-//            double newAccumulatorCurrentLevel = entry.getValue().accumulatorCurrentLevel + electrolyzer.summaryEnergyProduction[step.hour];
-//            if (newAccumulatorCurrentLevel < electrolyzer.minPower) {
-//                throw new BusinessException("Luck of power on Electrolyzer: " + hour + " power: " + newAccumulatorCurrentLevel, FailureReason.LUCK_OF_POWER_ON_ELECTROLIZER);
-//            }
-//            double usedPower = Math.min(electrolyzer.maxPower, newAccumulatorCurrentLevel);
-//            newAccumulatorCurrentLevel -= usedPower;
-//            if (newAccumulatorCurrentLevel > electrolyzer.accumulatorMaxSize) {
-//                overflowPowerProduction += newAccumulatorCurrentLevel - electrolyzer.accumulatorMaxSize;
-//                newAccumulatorCurrentLevel = electrolyzer.accumulatorMaxSize;
-//            }
-//            hydrogenLevel += usedPower * electrolyzer.efficiency;
-//            newElectrolyzerStates.put(electrolyzer, new ElectrolyzerState(newAccumulatorCurrentLevel));
-//        }
-//        newStep.overflowPowerProduction = overflowPowerProduction;
-//        newStep.electorizersStates = newElectrolyzerStates;
-//        hydrogenLevel -= data.vehiclesConsumption[hour];
+        newStep.acumulatorsStates = newAcumulatorStates;
+        newStep.storageStates = newStorageStates;
+        newStep.overflowPowerProduction = overflowPowerProduction;
+        double neededHydrogen = data.vehiclesConsumption[hour];
+        double currentHydrogen = newStorageStates.values().stream().mapToDouble(storageState -> storageState.currentLevel).sum();
+        double ratio = 1 - neededHydrogen / currentHydrogen;
+        newStorageStates.values().forEach(storageState -> storageState.setCurrentLevel(ratio * storageState.getCurrentLevel()));
 
         double overFlowHydrogenProduction = 0;
-        if (hydrogenLevel > data.summaryStorage.maxCapacity) {
-            overFlowHydrogenProduction += hydrogenLevel - data.summaryStorage.maxCapacity;
-            hydrogenLevel = data.summaryStorage.maxCapacity;
+        for (Storage storage: data.storages) {
+            if (newStorageStates.get(storage.getId()).getCurrentLevel() > storage.getMaxCapacity()) {
+                overFlowHydrogenProduction += newStorageStates.get(storage.getId()).getCurrentLevel() - storage.getMaxCapacity();
+                newStorageStates.get(storage.getId()).setCurrentLevel(storage.getMaxCapacity());
+            }
         }
         newStep.overflowHydrogenProduction = overFlowHydrogenProduction;
-
-        newStep.storageStates = new StorageState(hydrogenLevel);
+        newStep.storageStates = newStorageStates;
 
         return newStep;
     }
