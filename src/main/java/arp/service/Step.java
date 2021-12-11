@@ -32,4 +32,20 @@ public class Step {
         b.append("setOverflowPowerProduction(" + Utils.toString(overflowPowerProduction) + "]");
         return b.toString();
     }
+
+    public void setOverflowHydrogenProduction(double overflowHydrogenProduction) {
+        this.overflowHydrogenProduction = Utils.standardRound(overflowHydrogenProduction);
+    }
+
+    public void setOverflowPowerProduction(double overflowPowerProduction) {
+        this.overflowPowerProduction = Utils.standardRound(overflowPowerProduction);
+    }
+
+    public void setHydrogenProduction(double hydrogenProduction) {
+        this.hydrogenProduction = Utils.standardRound(hydrogenProduction);
+    }
+
+    public void setElectricityProduction(double electricityProduction) {
+        this.electricityProduction = Utils.standardRound(electricityProduction);
+    }
 }
