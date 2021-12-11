@@ -24,15 +24,8 @@ public class BroadFirstSearchAlgorithmTest {
         gridConstants.electrolizerCost = 5.0d;
         gridConstants.storageHydrogenCost = 10.0d;
 
-        Electrolyzer electrolyzer = new Electrolyzer();
-        electrolyzer.maxPower = 1.0d;
-        electrolyzer.efficiency = 1.0d;
-        electrolyzer.accumulatorMaxSize = 0.0d;
-        electrolyzer.summaryEnergyProduction = createTableOfValue(0.0);
-
         Storage storage = new Storage();
         storage.maxCapacity = 0.0;
-        storage.electrolyzers = Lists.newArrayList(electrolyzer);
 
         Data data = new Data();
         data.gridConstants = gridConstants;
@@ -43,13 +36,14 @@ public class BroadFirstSearchAlgorithmTest {
         double cost = calculate(data);
 
         // then
-        double expectedCost = 2.0;
+        double expectedCost = 7.0d;
         assertEquals(expectedCost, cost);
     }
 
     private double calculate(Data data) {
         BroadFirstSearchAlgorithm broadFirstSearchAlgorithm = new BroadFirstSearchAlgorithm(data);
         State state  = broadFirstSearchAlgorithm.calculate();
+        System.out.println(state);
         return state.totalCost;
     }
 
@@ -60,6 +54,7 @@ public class BroadFirstSearchAlgorithmTest {
         gridConstants.transmissionLoss = 0.d;
         gridConstants.pvDailyProduction = createTableOfValue(1.0);
         gridConstants.windDailyProduction = createTableOfValue(1.0);
+        gridConstants.electrolizerEfficiency = 1.0;
         return gridConstants;
     }
 }
