@@ -54,6 +54,7 @@ class CalculateNextStepAlgorithmTest {
 
         // then
         Step expectedStep = initStep(electrolyzer, 1, 0d, 0d);
+        expectedStep.overflowPowerProduction = 1.0d;
         assertEquals(expectedStep.toString(), resultStep.toString());
     }
 
@@ -115,7 +116,7 @@ class CalculateNextStepAlgorithmTest {
         electrolyzer.maxPower = 0d;
         electrolyzer.efficiency = 1.0d;
         electrolyzer.accumulatorMaxSize = 0.d;
-        electrolyzer.summaryEnergyProduction = new double[]{1.0};
+        electrolyzer.summaryEnergyProduction = new double[]{0.0};
         Data data = buildData(electrolyzer, storageMaxCapacity, consumption);
 
         Step step = initStep(electrolyzer, 0, 1d, 0d);
@@ -126,6 +127,31 @@ class CalculateNextStepAlgorithmTest {
 
         // then
         Step expectedStep = initStep(electrolyzer, 1, -1d, 0d);
+        assertEquals(expectedStep.toString(), resultStep.toString());
+    }
+
+    @Test
+    public void exceedMaxPowerAndOverproduction() {
+        // given
+        double storageMaxCapacity = 0.0d;
+        double[] consumption = {4.0};
+
+        Electrolyzer electrolyzer = new Electrolyzer();
+        electrolyzer.maxPower = 2d;
+        electrolyzer.efficiency = 1.0d;
+        electrolyzer.accumulatorMaxSize = 0.d;
+        electrolyzer.summaryEnergyProduction = new double[]{98.0};
+        Data data = buildData(electrolyzer, storageMaxCapacity, consumption);
+
+        Step step = initStep(electrolyzer, 0, 0d, 0d);
+
+        // when
+        CalculateNextStepAlgorithm algorithm = new CalculateNextStepAlgorithm(data);
+        Step resultStep = algorithm.calculate(step);
+
+        // then
+        Step expectedStep = initStep(electrolyzer, 1, -2d, 0d);
+        expectedStep.overflowPowerProduction = 96;
         assertEquals(expectedStep.toString(), resultStep.toString());
     }
 
@@ -150,6 +176,7 @@ class CalculateNextStepAlgorithmTest {
 
         // then
         Step expectedStep = initStep(electrolyzer, 1, 0d, 0d);
+        expectedStep.overflowPowerProduction = 1.0;
         assertEquals(expectedStep.toString(), resultStep.toString());
     }
 
@@ -198,11 +225,12 @@ class CalculateNextStepAlgorithmTest {
 
         // then
         Step expectedStep = initStep(electrolyzer, 1, 2d, 0d);
+        expectedStep.overflowHydrogenProduction = 2.0;
         assertEquals(expectedStep.toString(), resultStep.toString());
     }
 
     @Test
-    public void shouldUseStorageLimit() {
+    public void shouldUseStorageLimitAndTestOverFlowHydrogenProduction() {
         // given
         double storageMaxCapacity = 2.0d;
         double[] consumption = {0.0};
@@ -222,6 +250,7 @@ class CalculateNextStepAlgorithmTest {
 
         // then
         Step expectedStep = initStep(electrolyzer, 1, 2d, 0d);
+        expectedStep.overflowHydrogenProduction = 1.0d;
         assertEquals(expectedStep.toString(), resultStep.toString());
     }
 
@@ -246,6 +275,105 @@ class CalculateNextStepAlgorithmTest {
 
         // then
         Step expectedStep = initStep(electrolyzer, 1, 0d, 0d);
+        assertEquals(expectedStep.toString(), resultStep.toString());
+    }
+
+    @Test
+    public void shouldUseBothAccumulatorAndProduction() {
+        // given
+        double storageMaxCapacity = 0.0d;
+        double[] consumption = {2.0};
+
+        Electrolyzer electrolyzer = new Electrolyzer();
+        electrolyzer.maxPower = 100d;
+        electrolyzer.efficiency = 1.0d;
+        electrolyzer.accumulatorMaxSize = 1.0d;
+        electrolyzer.summaryEnergyProduction = new double[]{1.0};
+        Data data = buildData(electrolyzer, storageMaxCapacity, consumption);
+
+        Step step = initStep(electrolyzer, 0, 0d, 1d);
+
+        // when
+        CalculateNextStepAlgorithm algorithm = new CalculateNextStepAlgorithm(data);
+        Step resultStep = algorithm.calculate(step);
+
+        // then
+        Step expectedStep = initStep(electrolyzer, 1, 0d, 0d);
+        assertEquals(expectedStep.toString(), resultStep.toString());
+    }
+
+    @Test
+    public void exceedAculumulator() {
+        // given
+        double storageMaxCapacity = 0.0d;
+        double[] consumption = {2.0};
+
+        Electrolyzer electrolyzer = new Electrolyzer();
+        electrolyzer.maxPower = 100d;
+        electrolyzer.efficiency = 1.0d;
+        electrolyzer.accumulatorMaxSize = 1.0d;
+        electrolyzer.summaryEnergyProduction = new double[]{0.0};
+        Data data = buildData(electrolyzer, storageMaxCapacity, consumption);
+
+        Step step = initStep(electrolyzer, 0, 0d, 1d);
+
+        // when
+        CalculateNextStepAlgorithm algorithm = new CalculateNextStepAlgorithm(data);
+        Step resultStep = algorithm.calculate(step);
+
+        // then
+        Step expectedStep = initStep(electrolyzer, 1, -1d, 0d);
+        assertEquals(expectedStep.toString(), resultStep.toString());
+    }
+
+    @Test
+    public void exceedProduction() {
+        // given
+        double storageMaxCapacity = 0.0d;
+        double[] consumption = {2.0};
+
+        Electrolyzer electrolyzer = new Electrolyzer();
+        electrolyzer.maxPower = 100d;
+        electrolyzer.efficiency = 1.0d;
+        electrolyzer.accumulatorMaxSize = 0.0d;
+        electrolyzer.summaryEnergyProduction = new double[]{1.0};
+        Data data = buildData(electrolyzer, storageMaxCapacity, consumption);
+
+        Step step = initStep(electrolyzer, 0, 0d, 0d);
+
+        // when
+        CalculateNextStepAlgorithm algorithm = new CalculateNextStepAlgorithm(data);
+        Step resultStep = algorithm.calculate(step);
+
+        // then
+        Step expectedStep = initStep(electrolyzer, 1, -1d, 0d);
+        assertEquals(expectedStep.toString(), resultStep.toString());
+    }
+
+    @Test
+    public void overflowPowerProduction() {
+        // given
+        double storageMaxCapacity = 0.0d;
+        double[] consumption = {0.0};
+
+        Electrolyzer electrolyzer = new Electrolyzer();
+        electrolyzer.maxPower = 1d;
+        electrolyzer.efficiency = 1.0d;
+        electrolyzer.accumulatorMaxSize = 0.0d;
+        electrolyzer.summaryEnergyProduction = new double[]{2.0};
+        Data data = buildData(electrolyzer, storageMaxCapacity, consumption);
+
+        Step step = initStep(electrolyzer, 0, 0d, 0d);
+        step.overflowPowerProduction = 1;
+
+        // when
+        CalculateNextStepAlgorithm algorithm = new CalculateNextStepAlgorithm(data);
+        Step resultStep = algorithm.calculate(step);
+
+        // then
+        Step expectedStep = initStep(electrolyzer, 1, 0d, 0d);
+        expectedStep.overflowPowerProduction = 1;
+        expectedStep.overflowHydrogenProduction = 1;
         assertEquals(expectedStep.toString(), resultStep.toString());
     }
 

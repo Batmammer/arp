@@ -21,7 +21,9 @@ public class Step {
         b.append(electorizersStates.entrySet().stream()
                 .map(e -> e.getKey().lp + " => " + e.getValue().accumulatorCurrentLevel)
                 .collect(Collectors.joining(", ", "{", "},")));
-        b.append("storageState = " + storageState.currentLevel + "]");
+        b.append("storageState = " + storageState.currentLevel + ",");
+        b.append("overflowHydrogenProduction = " + overflowHydrogenProduction + ",");
+        b.append("overflowPowerProduction = " + overflowPowerProduction + "]");
         return b.toString();
     }
 }
