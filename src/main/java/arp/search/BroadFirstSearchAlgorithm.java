@@ -98,7 +98,7 @@ public class BroadFirstSearchAlgorithm {
 
     private Electrolyzer createNewElectorlyzer() {
         Electrolyzer electrolyzer = new Electrolyzer();
-        electrolyzer.efficiency = data.gridConstants.electrolizerEfficiency;
+        electrolyzer.setEfficiency(data.gridConstants.electrolizerEfficiency;
         electrolyzer.summaryEnergyProduction = createTableOfValue(0.0);
         electrolyzer.maxPower = 1.0;
         return electrolyzer;

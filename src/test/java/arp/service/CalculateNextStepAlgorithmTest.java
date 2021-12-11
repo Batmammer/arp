@@ -18,8 +18,8 @@ class CalculateNextStepAlgorithmTest extends AbstractAlgorithmTest {
 
         Electrolyzer electrolyzer = new Electrolyzer();
         electrolyzer.maxPower = 100d;
-        electrolyzer.efficiency = 1.0d;
-        electrolyzer.accumulatorMaxSize = 0.d;
+        electrolyzer.setEfficiency(1.0d;
+        electrolyzer.setAccumulatorMaxSize(0.d;
         electrolyzer.summaryEnergyProduction = new double[]{1.0};
         Data data = buildData(electrolyzer, storageMaxCapacity, consumption);
 
@@ -42,8 +42,8 @@ class CalculateNextStepAlgorithmTest extends AbstractAlgorithmTest {
 
         Electrolyzer electrolyzer = new Electrolyzer();
         electrolyzer.maxPower = 0d;
-        electrolyzer.efficiency = 1.0d;
-        electrolyzer.accumulatorMaxSize = 0.d;
+        electrolyzer.setEfficiency(1.0d;
+        electrolyzer.setAccumulatorMaxSize(0.d;
         electrolyzer.summaryEnergyProduction = new double[]{1.0};
         Data data = buildData(electrolyzer, storageMaxCapacity, consumption);
 
@@ -67,8 +67,8 @@ class CalculateNextStepAlgorithmTest extends AbstractAlgorithmTest {
 
         Electrolyzer electrolyzer = new Electrolyzer();
         electrolyzer.maxPower = 1d;
-        electrolyzer.efficiency = 1.0d;
-        electrolyzer.accumulatorMaxSize = 0.d;
+        electrolyzer.setEfficiency(1.0d;
+        electrolyzer.setAccumulatorMaxSize(0.d;
         electrolyzer.summaryEnergyProduction = new double[]{1.0};
         Data data = buildData(electrolyzer, storageMaxCapacity, consumption);
 
@@ -91,8 +91,8 @@ class CalculateNextStepAlgorithmTest extends AbstractAlgorithmTest {
 
         Electrolyzer electrolyzer = new Electrolyzer();
         electrolyzer.maxPower = 1d;
-        electrolyzer.efficiency = 1.0d;
-        electrolyzer.accumulatorMaxSize = 0.d;
+        electrolyzer.setEfficiency(1.0d;
+        electrolyzer.setAccumulatorMaxSize(0.d;
         electrolyzer.summaryEnergyProduction = new double[]{1.0};
         Data data = buildData(electrolyzer, storageMaxCapacity, consumption);
 
@@ -115,8 +115,8 @@ class CalculateNextStepAlgorithmTest extends AbstractAlgorithmTest {
 
         Electrolyzer electrolyzer = new Electrolyzer();
         electrolyzer.maxPower = 0d;
-        electrolyzer.efficiency = 1.0d;
-        electrolyzer.accumulatorMaxSize = 0.d;
+        electrolyzer.setEfficiency(1.0d;
+        electrolyzer.setAccumulatorMaxSize(0.d;
         electrolyzer.summaryEnergyProduction = new double[]{0.0};
         Data data = buildData(electrolyzer, storageMaxCapacity, consumption);
 
@@ -139,8 +139,8 @@ class CalculateNextStepAlgorithmTest extends AbstractAlgorithmTest {
 
         Electrolyzer electrolyzer = new Electrolyzer();
         electrolyzer.maxPower = 2d;
-        electrolyzer.efficiency = 1.0d;
-        electrolyzer.accumulatorMaxSize = 0.d;
+        electrolyzer.setEfficiency(1.0d;
+        electrolyzer.setAccumulatorMaxSize(0.d;
         electrolyzer.summaryEnergyProduction = new double[]{98.0};
         Data data = buildData(electrolyzer, storageMaxCapacity, consumption);
 
@@ -164,8 +164,8 @@ class CalculateNextStepAlgorithmTest extends AbstractAlgorithmTest {
 
         Electrolyzer electrolyzer = new Electrolyzer();
         electrolyzer.maxPower = 0d;
-        electrolyzer.efficiency = 1.0d;
-        electrolyzer.accumulatorMaxSize = 0.d;
+        electrolyzer.setEfficiency(1.0d;
+        electrolyzer.setAccumulatorMaxSize(0.d;
         electrolyzer.summaryEnergyProduction = new double[]{1.0};
         Data data = buildData(electrolyzer, storageMaxCapacity, consumption);
 
@@ -189,8 +189,8 @@ class CalculateNextStepAlgorithmTest extends AbstractAlgorithmTest {
 
         Electrolyzer electrolyzer = new Electrolyzer();
         electrolyzer.maxPower = 100d;
-        electrolyzer.efficiency = 1.0d;
-        electrolyzer.accumulatorMaxSize = 0.d;
+        electrolyzer.setEfficiency(1.0d;
+        electrolyzer.setAccumulatorMaxSize(0.d;
         electrolyzer.summaryEnergyProduction = new double[]{1.0};
         Data data = buildData(electrolyzer, storageMaxCapacity, consumption);
 
@@ -213,8 +213,8 @@ class CalculateNextStepAlgorithmTest extends AbstractAlgorithmTest {
 
         Electrolyzer electrolyzer = new Electrolyzer();
         electrolyzer.maxPower = 100d;
-        electrolyzer.efficiency = 2.0d;
-        electrolyzer.accumulatorMaxSize = 0.d;
+        electrolyzer.setEfficiency(2.0d;
+        electrolyzer.setAccumulatorMaxSize(0.d;
         electrolyzer.summaryEnergyProduction = new double[]{1.0};
         Data data = buildData(electrolyzer, storageMaxCapacity, consumption);
 
@@ -238,8 +238,8 @@ class CalculateNextStepAlgorithmTest extends AbstractAlgorithmTest {
 
         Electrolyzer electrolyzer = new Electrolyzer();
         electrolyzer.maxPower = 100d;
-        electrolyzer.efficiency = 3.0d;
-        electrolyzer.accumulatorMaxSize = 0.d;
+        electrolyzer.setEfficiency(3.0d;
+        electrolyzer.setAccumulatorMaxSize(0.d;
         electrolyzer.summaryEnergyProduction = new double[]{1.0};
         Data data = buildData(electrolyzer, storageMaxCapacity, consumption);
 
@@ -263,8 +263,8 @@ class CalculateNextStepAlgorithmTest extends AbstractAlgorithmTest {
 
         Electrolyzer electrolyzer = new Electrolyzer();
         electrolyzer.maxPower = 100d;
-        electrolyzer.efficiency = 1.0d;
-        electrolyzer.accumulatorMaxSize = 1.0d;
+        electrolyzer.setEfficiency(1.0d;
+        electrolyzer.setAccumulatorMaxSize(1.0d;
         electrolyzer.summaryEnergyProduction = new double[]{0.0};
         Data data = buildData(electrolyzer, storageMaxCapacity, consumption);
 
@@ -287,8 +287,8 @@ class CalculateNextStepAlgorithmTest extends AbstractAlgorithmTest {
 
         Electrolyzer electrolyzer = new Electrolyzer();
         electrolyzer.maxPower = 100d;
-        electrolyzer.efficiency = 1.0d;
-        electrolyzer.accumulatorMaxSize = 1.0d;
+        electrolyzer.setEfficiency(1.0d;
+        electrolyzer.setAccumulatorMaxSize(1.0d;
         electrolyzer.summaryEnergyProduction = new double[]{1.0};
         Data data = buildData(electrolyzer, storageMaxCapacity, consumption);
 
@@ -311,8 +311,8 @@ class CalculateNextStepAlgorithmTest extends AbstractAlgorithmTest {
 
         Electrolyzer electrolyzer = new Electrolyzer();
         electrolyzer.maxPower = 100d;
-        electrolyzer.efficiency = 1.0d;
-        electrolyzer.accumulatorMaxSize = 0.0d;
+        electrolyzer.setEfficiency(1.0d;
+        electrolyzer.setAccumulatorMaxSize(0.0d;
         electrolyzer.summaryEnergyProduction = new double[]{5.0, 1.0};
         Data data = buildData(electrolyzer, storageMaxCapacity, consumption);
 
@@ -335,8 +335,8 @@ class CalculateNextStepAlgorithmTest extends AbstractAlgorithmTest {
 
         Electrolyzer electrolyzer = new Electrolyzer();
         electrolyzer.maxPower = 100d;
-        electrolyzer.efficiency = 1.0d;
-        electrolyzer.accumulatorMaxSize = 1.0d;
+        electrolyzer.setEfficiency(1.0d;
+        electrolyzer.setAccumulatorMaxSize(1.0d;
         electrolyzer.summaryEnergyProduction = new double[]{0.0};
         Data data = buildData(electrolyzer, storageMaxCapacity, consumption);
 
@@ -359,8 +359,8 @@ class CalculateNextStepAlgorithmTest extends AbstractAlgorithmTest {
 
         Electrolyzer electrolyzer = new Electrolyzer();
         electrolyzer.maxPower = 100d;
-        electrolyzer.efficiency = 1.0d;
-        electrolyzer.accumulatorMaxSize = 0.0d;
+        electrolyzer.setEfficiency(1.0d;
+        electrolyzer.setAccumulatorMaxSize(0.0d;
         electrolyzer.summaryEnergyProduction = new double[]{1.0};
         Data data = buildData(electrolyzer, storageMaxCapacity, consumption);
 
@@ -383,8 +383,8 @@ class CalculateNextStepAlgorithmTest extends AbstractAlgorithmTest {
 
         Electrolyzer electrolyzer = new Electrolyzer();
         electrolyzer.maxPower = 1d;
-        electrolyzer.efficiency = 1.0d;
-        electrolyzer.accumulatorMaxSize = 0.0d;
+        electrolyzer.setEfficiency(1.0d;
+        electrolyzer.setAccumulatorMaxSize(0.0d;
         electrolyzer.summaryEnergyProduction = new double[]{2.0};
         Data data = buildData(electrolyzer, storageMaxCapacity, consumption);
 
@@ -409,11 +409,11 @@ class CalculateNextStepAlgorithmTest extends AbstractAlgorithmTest {
 
         Electrolyzer electrolyzer = new Electrolyzer();
         electrolyzer.maxPower = 100d;
-        electrolyzer.efficiency = 1.0d;
-        electrolyzer.accumulatorMaxSize = 0.0d;
+        electrolyzer.setEfficiency(1.0d;
+        electrolyzer.setAccumulatorMaxSize(0.0d;
         electrolyzer.summaryEnergyProduction = new double[]{1.0};
         Data data = buildData(electrolyzer, storageMaxCapacity, consumption);
-        data.gridConstants.storageLoss = 0.2 * 24;
+        data.gridConstants.setStorageLoss( 0.2 * 24;
 
         Step step = initStep(electrolyzer, 0, 1d, 0d);
 
@@ -435,8 +435,8 @@ class CalculateNextStepAlgorithmTest extends AbstractAlgorithmTest {
         Electrolyzer electrolyzer = new Electrolyzer();
         electrolyzer.maxPower = 100d;
         electrolyzer.minPower = 1d;
-        electrolyzer.efficiency = 1.0d;
-        electrolyzer.accumulatorMaxSize = 0.0d;
+        electrolyzer.setEfficiency(1.0d;
+        electrolyzer.setAccumulatorMaxSize(0.0d;
         electrolyzer.summaryEnergyProduction = new double[]{0.0};
         Data data = buildData(electrolyzer, storageMaxCapacity, consumption);
 
@@ -465,8 +465,8 @@ class CalculateNextStepAlgorithmTest extends AbstractAlgorithmTest {
         Electrolyzer electrolyzer = new Electrolyzer();
         electrolyzer.maxPower = 1d;
         electrolyzer.minPower = 0d;
-        electrolyzer.efficiency = 1.0d;
-        electrolyzer.accumulatorMaxSize = 1.0d;
+        electrolyzer.setEfficiency(1.0d;
+        electrolyzer.setAccumulatorMaxSize(1.0d;
         electrolyzer.summaryEnergyProduction = new double[]{0.0};
         Data data = buildData(electrolyzer, storageMaxCapacity, consumption);
 
@@ -491,8 +491,8 @@ class CalculateNextStepAlgorithmTest extends AbstractAlgorithmTest {
         Electrolyzer electrolyzer = new Electrolyzer();
         electrolyzer.maxPower = 1d;
         electrolyzer.minPower = 0.2d;
-        electrolyzer.efficiency = 1.0d;
-        electrolyzer.accumulatorMaxSize = 1.0d;
+        electrolyzer.setEfficiency(1.0d;
+        electrolyzer.setAccumulatorMaxSize(1.0d;
         electrolyzer.summaryEnergyProduction = new double[]{0.0};
         Data data = buildData(electrolyzer, storageMaxCapacity, consumption);
 
@@ -511,20 +511,20 @@ class CalculateNextStepAlgorithmTest extends AbstractAlgorithmTest {
     public void comboProductions() {
         // given
         GridConstants gridConstants = new GridConstants();
-        gridConstants.hydrogenTransportLoss = 0d;
-        gridConstants.storageLoss = 0d;
-        gridConstants.transmissionLoss = 0d;
+        gridConstants.setHydrogenTransportLoss( = 0d;
+        gridConstants.setStorageLoss( 0d;
+        gridConstants.setTransmissionLoss(0d;
 
         Electrolyzer e1 = new Electrolyzer();
         e1.maxPower = 2d;
-        e1.efficiency = 1.0d;
-        e1.accumulatorMaxSize = 0.0d;
+        e1.setEfficiency(1.0d;
+        e1.setAccumulatorMaxSize(0.0d;
         e1.summaryEnergyProduction = new double[]{10.0};
 
         Electrolyzer e2 = new Electrolyzer();
         e2.maxPower = 3d;
-        e2.efficiency = 2.0d;
-        e2.accumulatorMaxSize = 0.0d;
+        e2.setEfficiency(2.0d;
+        e2.setAccumulatorMaxSize(0.0d;
         e2.summaryEnergyProduction = new double[]{20.0};
 
         Storage storage = new Storage();
@@ -540,7 +540,7 @@ class CalculateNextStepAlgorithmTest extends AbstractAlgorithmTest {
         step.hour = 0;
         step.electorizersStates.put(e1, buildInitialState(0));
         step.electorizersStates.put(e2, buildInitialState(0));
-        step.storageState = new StorageState(5);
+        step.storageStates = new StorageState(5);
 
         // when
         CalculateNextStepAlgorithm algorithm = new CalculateNextStepAlgorithm(data);
@@ -551,7 +551,7 @@ class CalculateNextStepAlgorithmTest extends AbstractAlgorithmTest {
         expectedStep.hour = 1;
         expectedStep.electorizersStates.put(e1, buildInitialState(0));
         expectedStep.electorizersStates.put(e2, buildInitialState(0));
-        expectedStep.storageState = new StorageState(2);
+        expectedStep.storageStates = new StorageState(2);
         expectedStep.overflowPowerProduction = 25;
         expectedStep.overflowHydrogenProduction = 0;
         assertEquals(expectedStep.toString(), resultStep.toString());

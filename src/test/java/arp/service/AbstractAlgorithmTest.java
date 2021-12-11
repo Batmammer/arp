@@ -8,7 +8,7 @@ public class AbstractAlgorithmTest {
         Step step = new Step();
         step.hour = hour;
         step.electorizersStates.put(electrolyzer, buildInitialState(accumulatorState));
-        step.storageState = new StorageState(storageState);
+        step.storageStates = new StorageState(storageState);
         return step;
     }
 
@@ -18,9 +18,9 @@ public class AbstractAlgorithmTest {
 
     protected Data buildData(Electrolyzer electrolyzer, double storageMaxCapacity, double[] consumption) {
         GridConstants gridConstants = new GridConstants();
-        gridConstants.hydrogenTransportLoss = 0d;
-        gridConstants.storageLoss = 0d;
-        gridConstants.transmissionLoss = 0d;
+        gridConstants.setHydrogenTransportLoss( = 0d;
+        gridConstants.setStorageLoss( 0d;
+        gridConstants.setTransmissionLoss(0d;
 
         Storage storage = new Storage();
         storage.maxCapacity = storageMaxCapacity;
