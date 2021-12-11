@@ -1,10 +1,12 @@
 package arp.dto;
 
+import arp.service.Utils;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 @Data
@@ -29,6 +31,7 @@ public class Electrolyzer implements Cloneable {
         List<EnergySource> newSources = new ArrayList<>();
         for (EnergySource energySource: sources)
             newSources.add(energySource.clone());
-        return new Electrolyzer(newSources, no, accumulatorMaxSize, efficiency, maxPower, minPower, summaryEnergyProduction);
+        double[] newSummaryEnergyProduction = Arrays.copyOf(summaryEnergyProduction, summaryEnergyProduction.length);
+        return new Electrolyzer(newSources, no, accumulatorMaxSize, efficiency, maxPower, minPower, newSummaryEnergyProduction);
     }
 }

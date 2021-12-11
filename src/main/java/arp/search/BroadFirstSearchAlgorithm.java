@@ -25,15 +25,14 @@ public class BroadFirstSearchAlgorithm {
         this.visitedStates = new HashSet<>();
     }
 
-    public double calculate() {
+    public State calculate() {
         State initialState = initialState();
         priorityQueue.add(initialState);
         visitedStates.add(initialState.toString());
         while (!priorityQueue.isEmpty()) {
             State state = priorityQueue.poll();
-            System.out.println("@@@: PROCESSING: " + state.toString());
             if (state.good)
-                return state.totalCost;
+                return state;
             priorityQueue.addAll(processState(state));
         }
         throw new BusinessException("BroadSearchAlgorithm has no state to process", SOLUTION_NOT_FOUND);
@@ -41,6 +40,7 @@ public class BroadFirstSearchAlgorithm {
 
     private List<State> processState(State state) {
         List<State> result = new ArrayList<>();
+        System.out.println("@@@: PROCESSING STATE: " + state);
         for (ActionType actionType : ActionType.values()) {
             State nextState = getNextState(state, actionType);
             if (!visitedStates.contains(nextState.toString())) {
@@ -87,7 +87,9 @@ public class BroadFirstSearchAlgorithm {
         Data newData = new Data(data.gridConstants, nextStorage, data.vehiclesConsumption);
         CalculateYearAlgorithm calculateYearAlgorithm = new CalculateYearAlgorithm(newData);
         YearResult yearResult = calculateYearAlgorithm.calculate();
-        return new State(nextStorage, yearResult.isGood(), yearResult.minHourHydrogenLevel, state, actionType, actionCost, totalCost);
+        State newState = new State(nextStorage, yearResult.isGood(), yearResult.minHourHydrogenLevel, state, actionType, actionCost, totalCost);
+//        System.out.println("\tADDING NEW STATE: " + yearResult.isGood() + ": " + yearResult + ": " + newState.toString());
+        return newState;
     }
 
     private double addPv(Electrolyzer electrolyzer) {
