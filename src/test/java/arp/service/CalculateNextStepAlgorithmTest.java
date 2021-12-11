@@ -10,16 +10,17 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 class CalculateNextStepAlgorithmTest {
     @Test
-    public void xx() {
+    public void checkIfUsingProductionFromElectrolizerWhenStorageInEmpty() {
         // given
         double storageMaxCapacity = 1.0d;
-        double[] cosumption = {1.0};
+        double[] consumption = {1.0};
 
         Electrolyzer electrolyzer = new Electrolyzer();
+        electrolyzer.maxPower = 100d;
         electrolyzer.efficiency = 1.0d;
         electrolyzer.accumulatorMaxSize = 0.d;
         electrolyzer.summaryEnergyProduction = new double[]{1.0};
-        Data data = buildData(electrolyzer, storageMaxCapacity, cosumption);
+        Data data = buildData(electrolyzer, storageMaxCapacity, consumption);
 
         Step step = initStep(electrolyzer, 0, 0d, 0d);
 
