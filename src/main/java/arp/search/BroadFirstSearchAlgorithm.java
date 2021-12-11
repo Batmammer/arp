@@ -1,5 +1,8 @@
 package arp.search;
 
+import arp.dto.grid.Electrolyzer;
+import arp.dto.grid.EnergySource;
+import arp.dto.grid.Storage;
 import arp.enums.EnergySourceType;
 import arp.exception.BusinessException;
 import arp.service.CalculateYearAlgorithm;
@@ -8,6 +11,7 @@ import arp.service.Utils;
 import arp.service.YearResult;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 import static arp.exception.FailureReason.SOLUTION_NOT_FOUND;
 import static arp.service.Utils.createTableOfValue;
@@ -52,78 +56,89 @@ public class BroadFirstSearchAlgorithm {
     private State initialState() {
         CalculateYearAlgorithm calculateYearAlgorithm = new CalculateYearAlgorithm(data);
         YearResult yearResult = calculateYearAlgorithm.calculate();
-        return new State(data.summaryStorage, yearResult.isGood(), yearResult.minHourHydrogenLevel, null, null, 0, 0);
+        return new State(data.storages, yearResult.isGood(), yearResult.minHourHydrogenLevel, null, null, 0, 0);
     }
 
     private State getNextState(State state, ActionType actionType) {
-        Storage nextStorage = state.storage.clone();
+        List<Storage> nextStorages = state.storages.stream().map(storage -> storage.clone()).collect(Collectors.toList());
         double totalCost = state.totalCost;
         double actionCost = 0;
+        Map<Long, double[]> newSummaryEnergyProduction = new HashMap<>();
+        for (Map.Entry<Long, double[]> entry : data.summaryEnergyProduction.entrySet()) {
+            newSummaryEnergyProduction.put(entry.getKey(), Arrays.copyOf(entry.getValue(), entry.getValue().length));
+        }
 
-        if (nextStorage.electrolyzers.isEmpty()) {
-            nextStorage.electrolyzers.add(createNewElectorlyzer());
-            actionCost = data.gridConstants.electrolizerCost;
-        } else {
-            Electrolyzer electrolyzer = nextStorage.electrolyzers.get(0);
-            switch (actionType) {
-                case WIND:
-                    actionCost = addWind(electrolyzer);
-                    break;
-                case PV:
-                    actionCost = addPv(electrolyzer);
-                    break;
-                case ELECTROLIZER:
-                    actionCost = data.gridConstants.electrolizerCost;
-                    electrolyzer.maxPower += 1.0;
-                    break;
-                case STORAGE_POWER:
-                    actionCost = data.gridConstants.storagePowerCost;
-                    electrolyzer.accumulatorMaxSize += 1.0;
-                    break;
-                case STORAGE_HYDROGEN:
-                    actionCost = data.gridConstants.storageHydrogenCost;
-                    nextStorage.maxCapacity += 1.0;
-                    break;
+        for (Storage storage : nextStorages) {
+            if (storage.getElectrolyzers().isEmpty()) {
+                storage.getElectrolyzers().add(createNewElectorlyzer(newSummaryEnergyProduction));
+                actionCost = data.getGridCosts().getElectrolyzerCost();
+            } else {
+                Electrolyzer electrolyzer = storage.getElectrolyzers().get(0);
+                switch (actionType) {
+                    case WIND:
+                        actionCost = addWind(electrolyzer, newSummaryEnergyProduction);
+                        break;
+                    case PV:
+                        actionCost = addPv(electrolyzer, newSummaryEnergyProduction);
+                        break;
+                    case ELECTROLIZER:
+                        actionCost = data.getGridCosts().getElectrolyzerCost();
+                        electrolyzer.setMaxPower(electrolyzer.getMaxPower() + 1.0);
+                        break;
+                    case STORAGE_POWER:
+                        actionCost = data.getGridCosts().getStoragePowerCost();
+                        electrolyzer.getAccumulator().setAccumulatorMaxSize(electrolyzer.getAccumulator().getAccumulatorMaxSize() + 1.0);
+                        break;
+                    case STORAGE_HYDROGEN:
+                        actionCost = data.getGridCosts().getStorageHydrogenCost();
+                        storage.setMaxCapacity(storage.getMaxCapacity() + 1.0);
+                        break;
+                }
             }
         }
 
+
         totalCost += actionCost;
-        Data newData = new Data(data.gridConstants, nextStorage, data.vehiclesConsumption);
+        Data newData = new Data(data.getGridConstants(), data.getGridCosts(), nextStorages, data.getVehiclesConsumption(), newSummaryEnergyProduction);
         CalculateYearAlgorithm calculateYearAlgorithm = new CalculateYearAlgorithm(newData);
         YearResult yearResult = calculateYearAlgorithm.calculate();
-        State newState = new State(nextStorage, yearResult.isGood(), yearResult.minHourHydrogenLevel, state, actionType, actionCost, totalCost);
+        State newState = new State(nextStorages, yearResult.isGood(), yearResult.minHourHydrogenLevel, state, actionType, actionCost, totalCost);
         System.out.println("\tADDING NEW STATE: " + yearResult.isGood() + ": " + yearResult + ": " + newState.toString());
         return newState;
     }
 
-    private Electrolyzer createNewElectorlyzer() {
+    private Electrolyzer createNewElectorlyzer(Map<Long, double[]> newSummaryEnergyProduction) {
         Electrolyzer electrolyzer = new Electrolyzer();
-        electrolyzer.setEfficiency(data.gridConstants.electrolizerEfficiency;
-        electrolyzer.summaryEnergyProduction = createTableOfValue(0.0);
-        electrolyzer.setMaxPower(1.0;
+        if (newSummaryEnergyProduction.isEmpty())
+            electrolyzer.setId(1L);
+        else
+            electrolyzer.setId(newSummaryEnergyProduction.keySet().stream().mapToLong(l -> l).max().getAsLong() + 1L);
+        electrolyzer.setEfficiency(data.getGridConstants().getElectrolizerEfficiency());
+        newSummaryEnergyProduction.put(electrolyzer.getId(), createTableOfValue(0.0));
+        electrolyzer.setMaxPower(1.0);
         return electrolyzer;
     }
 
-    private double addPv(Electrolyzer electrolyzer) {
-        double actionCost = data.gridConstants.pvCost;
+    private double addPv(Electrolyzer electrolyzer, Map<Long, double[]> newSummaryEnergyProduction) {
+        double actionCost = data.getGridCosts().getPvCost();
 
         EnergySource energySource = getOrCreate(electrolyzer, EnergySourceType.PV);
-        energySource.maxPower += 1.0;
+        energySource.setMaxPower(energySource.getMaxPower() + 1.0);
 
         for (int hour = 0; hour < Utils.HOURS_OF_YEAR; ++hour) {
-            electrolyzer.summaryEnergyProduction[hour] += data.gridConstants.pvDailyProduction[hour];
+            newSummaryEnergyProduction.get(electrolyzer.getId())[hour] += data.getGridConstants().getWindDailyProduction()[hour];
         }
         return actionCost;
     }
 
-    private double addWind(Electrolyzer electrolyzer) {
-        double actionCost = data.gridConstants.windCost;
+    private double addWind(Electrolyzer electrolyzer, Map<Long, double[]> newSummaryEnergyProduction) {
+        double actionCost = data.getGridCosts().getWindCost();
 
         EnergySource energySource = getOrCreate(electrolyzer, EnergySourceType.WIND);
-        energySource.maxPower += 1.0;
+        energySource.setMaxPower(energySource.getMaxPower() + 1.0);
 
         for (int hour = 0; hour < Utils.HOURS_OF_YEAR; ++hour) {
-            electrolyzer.summaryEnergyProduction[hour] += data.gridConstants.windDailyProduction[hour];
+            newSummaryEnergyProduction.get(electrolyzer.getId())[hour] += data.getGridConstants().getWindDailyProduction()[hour];
         }
         return actionCost;
     }
@@ -132,17 +147,17 @@ public class BroadFirstSearchAlgorithm {
         EnergySource energySource = findEnergySource(electrolyzer, pv);
         if (energySource == null) {
             energySource = new EnergySource();
-            energySource.type = pv;
-            energySource.distance = 0.d;
-            energySource.setMaxPower(0.d;
-            electrolyzer.sources.add(energySource);
+            energySource.setType(pv);
+            energySource.setDistance(0.d);
+            energySource.setMaxPower(0.d);
+            electrolyzer.getSources().add(energySource);
         }
         return energySource;
     }
 
     private EnergySource findEnergySource(Electrolyzer electrolyzer, EnergySourceType x) {
-        return electrolyzer.sources.stream()
-                .filter(energy -> energy.type.equals(x))
+        return electrolyzer.getSources().stream()
+                .filter(energy -> energy.getType().equals(x))
                 .findFirst()
                 .orElse(null);
     }
