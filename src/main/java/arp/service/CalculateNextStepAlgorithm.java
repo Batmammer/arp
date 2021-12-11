@@ -1,6 +1,5 @@
 package arp.service;
 
-import arp.dto.Electrolyzer;
 import arp.exception.BusinessException;
 import arp.exception.FailureReason;
 

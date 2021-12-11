@@ -1,19 +1,20 @@
-package arp.dto;
+package arp.dto.grid;
 
 import arp.enums.EnergySourceType;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-@AllArgsConstructor
 @Data
+@AllArgsConstructor
 @NoArgsConstructor
 public class EnergySource implements Cloneable {
-    public EnergySourceType type;
-    public Double maxPower;
-    public Double distance;
+    private Long id;
+    private EnergySourceType type;
+    private Double maxPower;
+    private Double distance;
 
     public EnergySource clone() {
-        return new EnergySource(type, maxPower, distance);
+        return new EnergySource(id, type, maxPower, distance);
     }
 }

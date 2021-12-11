@@ -1,7 +1,5 @@
 package arp.service;
 
-import arp.dto.Electrolyzer;
-
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;

@@ -8,15 +8,9 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class GridConstants {
-    public double hydrogenTransportLoss;
-    public double storageLoss;
-    public double transmissionLoss;
-    public double pvCost;
-    public double[] pvDailyProduction;
-    public double windCost;
-    public double[] windDailyProduction;
-    public double storagePowerCost;
-    public double electrolizerCost;
-    public double storageHydrogenCost;
-
+    private double hydrogenTransportLoss;
+    private double storageLoss;
+    private double transmissionLoss;
+    private double[] pvDailyProduction;
+    private double[] windDailyProduction;
 }

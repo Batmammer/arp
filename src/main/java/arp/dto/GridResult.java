@@ -1,12 +1,13 @@
-package arp.dto.output;
+package arp.dto;
 
+import arp.dto.grid.Grid;
 import lombok.Data;
 
 import java.util.List;
 
 @Data
 public class GridResult {
-    private GridOutput grid;
+    private Grid grid;
     private List<Double> electricityProduction;
     private List<Double> hydrogenProduction;
     private List<Double> hydrogenLevel;

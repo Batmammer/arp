@@ -1,14 +1,15 @@
 package arp.dto;
 
+import arp.dto.grid.Grid;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.util.List;
-
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class HydrogenSide {
-    public List<Vehicle> vehicles;
+public class GridInput {
+    private Grid grid;
+    private GridConstants constants;
+    private GridCosts costs;
 }

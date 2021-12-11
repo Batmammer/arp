@@ -1,13 +1,15 @@
-package arp.dto;
+package arp.dto.grid;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.List;
+
 @Data
-@NoArgsConstructor
 @AllArgsConstructor
+@NoArgsConstructor
 public class Grid {
-    public WatSide watSide;
-    public HydrogenSide hydrogenSide;
+    private List<Vehicle> vehicles;
+    private List<Storage> storages;
 }

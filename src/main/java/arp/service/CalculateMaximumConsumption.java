@@ -1,7 +1,5 @@
 package arp.service;
 
-import arp.dto.Electrolyzer;
-
 import static arp.service.Utils.createTableOfValue;
 
 public class CalculateMaximumConsumption {

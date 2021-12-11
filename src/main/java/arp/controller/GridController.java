@@ -1,7 +1,7 @@
 package arp.controller;
 
-import arp.dto.InputGrid;
-import arp.dto.output.GridResult;
+import arp.dto.GridInput;
+import arp.dto.GridResult;
 import arp.service.GridService;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -15,8 +15,8 @@ public class GridController {
     }
 
     @GetMapping("/calculate")
-    public GridResult calculateGrid(InputGrid inputGrid) {
-        gridService.runSimulation(inputGrid);
+    public GridResult calculateGrid(GridInput gridInput) {
+        gridService.runSimulation(gridInput);
         return new GridResult();
     }
 }

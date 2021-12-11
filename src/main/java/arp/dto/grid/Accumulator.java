@@ -1,4 +1,4 @@
-package arp.dto;
+package arp.dto.grid;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -7,6 +7,6 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class WatSide {
-    public Storage storage;
+public class Accumulator {
+    private double accumulatorMaxSize;
 }

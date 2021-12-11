@@ -4,7 +4,6 @@ import arp.dto.*;
 import arp.enums.EnergySourceType;
 import org.assertj.core.util.Lists;
 import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.Arrays;
 import java.util.Collections;
@@ -18,17 +17,17 @@ class GridServiceTest {
     @Test
     void runSimpleSimulation() {
         //given
-        InputGrid inputGrid = getInputGrid();
+        GridInput gridInput = getInputGrid();
 
         //when
-        YearResult result = gridService.runSimulation(inputGrid);
+        YearResult result = gridService.runSimulation(gridInput);
 
         //then
         assertEquals(result.isGood(), true);
     }
 
-    private InputGrid getInputGrid() {
-        return new InputGrid(getGrid(), getConstants());
+    private GridInput getInputGrid() {
+        return new GridInput(getGrid(), getConstants());
     }
 
     private Grid getGrid() {

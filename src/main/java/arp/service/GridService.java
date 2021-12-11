@@ -12,14 +12,14 @@ public class GridService {
 
     private CalculateYearAlgorithm calculateYearAlgorithm;
 
-    public YearResult runSimulation(InputGrid inputGrid) {
-        calculateYearAlgorithm = new CalculateYearAlgorithm(new Data(inputGrid.getConstants(),
-                new Storage(inputGrid.getGrid().getWatSide().getStorage().getMaxCapacity(),
+    public YearResult runSimulation(GridInput gridInput) {
+        calculateYearAlgorithm = new CalculateYearAlgorithm(new Data(gridInput.getConstants(),
+                new Storage(gridInput.getGrid().getWatSide().getStorage().getMaxCapacity(),
                         calculateElectrolyzers(
-                                inputGrid.getGrid().getWatSide().getStorage().getElectrolyzers(),
-                                inputGrid.getConstants().getTransmissionLoss())),
-                calculateYearlyConsumption(inputGrid.getGrid().getHydrogenSide(),
-                        inputGrid.getConstants().getHydrogenTransportLoss())));
+                                gridInput.getGrid().getWatSide().getStorage().getElectrolyzers(),
+                                gridInput.getConstants().getTransmissionLoss())),
+                calculateYearlyConsumption(gridInput.getGrid().getHydrogenSide(),
+                        gridInput.getConstants().getHydrogenTransportLoss())));
         return calculateYearAlgorithm.calculate();
     }
 

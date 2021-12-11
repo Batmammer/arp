@@ -1,4 +1,4 @@
-package arp.dto;
+package arp.dto.grid;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -11,14 +11,14 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 public class Storage implements Cloneable {
-    public Double maxCapacity;
-    public List<Electrolyzer> electrolyzers;
+    private Long id;
+    private Double maxCapacity;
+    private List<Electrolyzer> electrolyzers;
 
     public Storage clone() {
         List<Electrolyzer> newElectrolyzers = new ArrayList<>();
         for (Electrolyzer electrolyzer: electrolyzers)
             newElectrolyzers.add(electrolyzer.clone());
-        return new Storage(maxCapacity, newElectrolyzers);
+        return new Storage(id, maxCapacity, newElectrolyzers);
     }
-
 }

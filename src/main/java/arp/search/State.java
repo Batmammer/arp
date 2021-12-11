@@ -1,6 +1,5 @@
 package arp.search;
 
-import arp.dto.Storage;
 import arp.service.Utils;
 
 import java.util.ArrayList;
