@@ -540,7 +540,7 @@ class CalculateNextStepAlgorithmTest extends AbstractAlgorithmTest {
         step.hour = 0;
         step.electorizersStates.put(e1, buildInitialState(0));
         step.electorizersStates.put(e2, buildInitialState(0));
-        step.storageState = new StorageState(5);
+        step.storageStates = new StorageState(5);
 
         // when
         CalculateNextStepAlgorithm algorithm = new CalculateNextStepAlgorithm(data);
@@ -551,7 +551,7 @@ class CalculateNextStepAlgorithmTest extends AbstractAlgorithmTest {
         expectedStep.hour = 1;
         expectedStep.electorizersStates.put(e1, buildInitialState(0));
         expectedStep.electorizersStates.put(e2, buildInitialState(0));
-        expectedStep.storageState = new StorageState(2);
+        expectedStep.storageStates = new StorageState(2);
         expectedStep.overflowPowerProduction = 25;
         expectedStep.overflowHydrogenProduction = 0;
         assertEquals(expectedStep.toString(), resultStep.toString());

@@ -6,8 +6,8 @@ import java.util.stream.Collectors;
 
 public class Step {
     public int hour;
-    public Map<Electrolyzer, ElectrolyzerState> electorizersStates = new HashMap<>();
-    public StorageState storageState;
+    public Map<Long, ElectrolyzerState> electorizersStates = new HashMap<>();
+    public Map<Long, StorageState> storageStates;
     public double overflowHydrogenProduction;
     public double overflowPowerProduction;
 
@@ -16,9 +16,9 @@ public class Step {
         StringBuilder b = new StringBuilder();
         b.append("[hour=" + hour + ", electorizersStates=");
         b.append(electorizersStates.entrySet().stream()
-                .map(e -> e.getKey().no + " => " + e.getValue().accumulatorCurrentLevel)
+                .map(e -> e.getKey() + " => " + e.getValue().accumulatorCurrentLevel)
                 .collect(Collectors.joining(", ", "{", "},")));
-        b.append("storageState = " + toString(storageState.currentLevel) + ",");
+        b.append("storageStates = " + storageStates.entrySet().stream().map(e -> e.getKey() + " => " + toString(e.getValue().currentLevel) + ","));
         b.append("overflowHydrogenProduction = " + toString(overflowHydrogenProduction) + ",");
         b.append("overflowPowerProduction = " + toString(overflowPowerProduction) + "]");
         return b.toString();

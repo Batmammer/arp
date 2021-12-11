@@ -8,7 +8,7 @@ public class AbstractAlgorithmTest {
         Step step = new Step();
         step.hour = hour;
         step.electorizersStates.put(electrolyzer, buildInitialState(accumulatorState));
-        step.storageState = new StorageState(storageState);
+        step.storageStates = new StorageState(storageState);
         return step;
     }
 
