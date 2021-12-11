@@ -76,7 +76,7 @@ class CalculateMaximumConsumptionTest extends AbstractAlgorithmTest {
         electrolyzer.setMaxPower(0d);
         electrolyzer.setEfficiency(3.0d);
         electrolyzer.setAccumulatorMaxSize(0.d);
-        electrolyzer.setSummaryEnergyProduction(createTableOfValue(1.0);
+        electrolyzer.setSummaryEnergyProduction(createTableOfValue(1.0));
         Data data = buildData(electrolyzer, storageMaxCapacity, null);
 
         // when

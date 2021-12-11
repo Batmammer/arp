@@ -1,6 +1,8 @@
 package arp.service;
 
 import arp.dto.GridConstants;
+import arp.dto.GridCosts;
+import arp.dto.grid.Storage;
 import arp.search.BroadFirstSearchAlgorithm;
 import arp.search.State;
 import org.assertj.core.util.Lists;
@@ -73,21 +75,23 @@ public class BroadFirstSearchAlgorithmTest {
         // given
         double consumption = 1.0;
 
+        GridCosts gridCosts = new GridCosts();
+        gridCosts.setPvCost(4.0d);
+        gridCosts.setWindCost(3.0d);
+        gridCosts.setStoragePowerCost(10.0d);
+        gridCosts.setElectrolyzerCost(5.0d);
+        gridCosts.setStorageHydrogenCost(10.0d);
+
         GridConstants gridConstants = createGridConstants();
-        gridConstants.setPvCost(4.0d);
-        gridConstants.setWindCost(3.0d);
         gridConstants.getWindDailyProduction()[0] = 0;
-        gridConstants.setStoragePowerCost(10.0d);
-        gridConstants.setElectrolizerCost(5.0d);
-        gridConstants.setStorageHydrogenCost(10.0d);
 
         Storage storage = new Storage();
-        storage.maxCapacity = 0.0;
+        storage.setMaxCapacity(0.0);
 
         Data data = new Data();
-        data.gridConstants = gridConstants;
-        data.summaryStorage = storage;
-        data.vehiclesConsumption = createTableOfValue(consumption);
+        data.setGridConstants(gridConstants);
+        data.setSummaryStorage(storage);
+        data.setVehiclesConsumption(createTableOfValue(consumption));
 
         // when
         double cost = calculate(data);
@@ -100,21 +104,22 @@ public class BroadFirstSearchAlgorithmTest {
     @Test
     public void shouldPreferAccumulatorBeforePower() {
         // given
-        GridConstants gridConstants = createGridConstants();
-        gridConstants.setWindCost(1000d;
-        gridConstants.setPvCost(4.0d;
-        gridConstants.setStoragePowerCost(2.0d;
-        gridConstants.setElectrolizerCost(5.0d;
-        gridConstants.setStorageHydrogenCost(10.0d;
+        GridCosts gridCosts = new GridCosts();
+        gridCosts.setWindCost(1000d);
+        gridCosts.setPvCost(4.0d);
+        gridCosts.setStoragePowerCost(2.0d);
+        gridCosts.setElectrolyzerCost(5.0d);
+        gridCosts.setStorageHydrogenCost(10.0d);
 
         Storage storage = new Storage();
-        storage.maxCapacity = 0.0;
+        storage.setMaxCapacity(0.0);
 
         Data data = new Data();
-        data.gridConstants = gridConstants;
-        data.summaryStorage = storage;
+        data.setGridCosts(gridCosts);
+        data.setGridConstants(gridCosts);
+        data.setSummaryStorage(storage);
 
-        gridConstants.setPvDailyProduction(createOneHalfTable();
+        gridCosts.setPvDailyProduction(createOneHalfTable());
         data.vehiclesConsumption = createOneTwoTable();
 
         // when

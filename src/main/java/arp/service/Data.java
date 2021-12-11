@@ -9,6 +9,7 @@ import lombok.NoArgsConstructor;
 import java.util.List;
 import java.util.Map;
 
+@lombok.Data
 @AllArgsConstructor
 @NoArgsConstructor
 public class Data {
@@ -22,4 +23,6 @@ public class Data {
      * z uwzględnieniem charakterystyki rocznej produkcji i straty przesyłowej
      */
     public Map<Long, double[]> summaryEnergyProduction; // godzina w roku
+
+
 }
