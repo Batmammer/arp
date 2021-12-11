@@ -37,10 +37,7 @@ public class GridService {
                         gridInput.getCosts(),
                         gridInput.getGrid().getStorages(),
                 calculateYearlyConsumption(gridInput.getGrid().getVehicles(),
-                        gridInput.getConstants().getHydrogenTransportLoss()),
-                calculateElectrolyzers(gridInput.getGrid().getStorages().stream()
-                        .map(s -> s.getElectrolyzers()).collect(Collectors.toList()).stream().flatMap(List::stream).collect(Collectors.toList()),
-                        gridInput.getConstants())
+                        gridInput.getConstants().getHydrogenTransportLoss())
                 ));
         return calculateYearAlgorithm.calculate();
     }
@@ -52,11 +49,8 @@ public class GridService {
                         gridInput.getCosts(),
                         gridInput.getGrid().getStorages(),
                         calculateYearlyConsumption(gridInput.getGrid().getVehicles(),
-                                gridInput.getConstants().getHydrogenTransportLoss()),
-                        calculateElectrolyzers(gridInput.getGrid().getStorages().stream()
-                                        .map(s -> s.getElectrolyzers()).collect(Collectors.toList()).stream().flatMap(List::stream).collect(Collectors.toList()),
-                                gridInput.getConstants())
-                ));
+                                gridInput.getConstants().getHydrogenTransportLoss()))
+                );
         return broadFirstSearchAlgorithm.calculate();
     }
 
@@ -67,10 +61,7 @@ public class GridService {
                         gridInput.getCosts(),
                         gridInput.getGrid().getStorages(),
                         calculateYearlyConsumption(gridInput.getGrid().getVehicles(),
-                                gridInput.getConstants().getHydrogenTransportLoss()),
-                        calculateElectrolyzers(gridInput.getGrid().getStorages().stream()
-                                        .map(s -> s.getElectrolyzers()).collect(Collectors.toList()).stream().flatMap(List::stream).collect(Collectors.toList()),
-                                gridInput.getConstants())
+                                gridInput.getConstants().getHydrogenTransportLoss())
                 ));
         return calculateMaximumConsumption.calculate();
     }

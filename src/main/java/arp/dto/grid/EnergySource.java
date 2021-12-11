@@ -1,7 +1,6 @@
 package arp.dto.grid;
 
 import arp.enums.EnergySourceType;
-import arp.service.Utils;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -24,15 +23,20 @@ public class EnergySource implements Cloneable {
     @Schema(description = "Energy source distance from electrolyzer", example = "10", required = true)
     private Double distance;
 
-    public void setMaxPower(Double maxPower) {
-        this.maxPower = Utils.standardRound(maxPower);
-    }
 
-    public void setDistance(Double distance) {
-        this.distance = Utils.standardRound(distance);
+    public double[] getDailyProduction(arp.service.Data data) {
+        if (EnergySourceType.WIND.equals(getType())) {
+            return data.getGridConstants().getWindDailyProduction();
+        } else {
+            return data.getGridConstants().getPvDailyProduction();
+        }
     }
 
     public EnergySource clone() {
-        return new EnergySource(id, type, maxPower, distance);
+        try {
+            return (EnergySource)super.clone();
+        } catch (Exception ex) {
+            throw new RuntimeException(ex);
+        }
     }
 }

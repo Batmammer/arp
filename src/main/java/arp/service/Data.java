@@ -21,12 +21,6 @@ public class Data implements Cloneable {
     private List<Storage> storages = new ArrayList<>();
     private double[] vehiclesConsumption; // godzina w roku
 
-    /**
-     * rzeczywista moc dostarczona przez wszyskie źródła energii
-     * z uwzględnieniem charakterystyki rocznej produkcji i straty przesyłowej
-     */
-    private Map<Long, double[]> summaryEnergyProduction = new HashMap<>(); // godzina w roku
-
     @Override
     public Data clone()  {
         return clone(true);
@@ -38,6 +32,7 @@ public class Data implements Cloneable {
             if (withStorages) {
                 data.storages = storages.stream().map(s -> s.clone()).collect(Collectors.toList());
             }
+//            if (withStorages)
             return data;
         } catch (Exception ex) {
             throw new RuntimeException(ex);
