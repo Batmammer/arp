@@ -1,5 +1,6 @@
 package arp.search;
 
+import arp.dto.grid.Storage;
 import arp.service.Utils;
 
 import java.util.ArrayList;
@@ -8,7 +9,7 @@ import java.util.List;
 
 public class State implements Comparable<State> {
 
-    public Storage storage;
+    public List<Storage> storages;
     public boolean good;
     public double minHourHydrogenLevel;
     public State previousState;
@@ -17,8 +18,8 @@ public class State implements Comparable<State> {
     public double totalCost;
     private String toString;
 
-    public State(Storage storage, boolean good, double minHourHydrogenLevel, State previousState, ActionType actionType, double actionCost, double totalCost) {
-        this.storage = storage;
+    public State(List<Storage> storages, boolean good, double minHourHydrogenLevel, State previousState, ActionType actionType, double actionCost, double totalCost) {
+        this.storages = storages;
         this.good = good;
         this.minHourHydrogenLevel = minHourHydrogenLevel;
         this.previousState = previousState;
