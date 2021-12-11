@@ -26,9 +26,17 @@ public class EnergySource implements Cloneable {
 
     public double[] getDailyProduction(arp.service.Data data) {
         if (EnergySourceType.WIND.equals(getType())) {
-            return data.getGridConstants().getWindDailyProduction();
+            if (data.getGridConstants().getWindDailyProduction() != null) {
+                return data.getGridConstants().getWindDailyProduction();
+            } else {
+                return data.getWindMultiplier();
+            }
         } else {
-            return data.getGridConstants().getPvDailyProduction();
+            if (data.getGridConstants().getPvDailyProduction() != null) {
+                return data.getGridConstants().getPvDailyProduction();
+            } else {
+                return data.getPvMultiplier();
+            }
         }
     }
 
