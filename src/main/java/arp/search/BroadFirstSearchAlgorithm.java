@@ -64,7 +64,7 @@ public class BroadFirstSearchAlgorithm {
         double totalCost = state.totalCost;
         double actionCost = 0;
         Map<Long, double[]> newSummaryEnergyProduction = new HashMap<>();
-        for (Map.Entry<Long, double[]> entry : data.summaryEnergyProduction.entrySet()) {
+        for (Map.Entry<Long, double[]> entry : data.getSummaryEnergyProduction().entrySet()) {
             newSummaryEnergyProduction.put(entry.getKey(), Arrays.copyOf(entry.getValue(), entry.getValue().length));
         }
 
