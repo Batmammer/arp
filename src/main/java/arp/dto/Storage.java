@@ -12,7 +12,7 @@ import java.util.List;
 @NoArgsConstructor
 public class Storage implements Cloneable {
     public Double maxCapacity;
-    public List<Electrolyzer> electrolyzers;
+    public List<Electrolyzer> electrolyzers = new ArrayList<>();
 
     public Storage clone() {
         List<Electrolyzer> newElectrolyzers = new ArrayList<>();

@@ -13,6 +13,7 @@ import arp.service.YearResult;
 import java.util.*;
 
 import static arp.exception.FailureReason.SOLUTION_NOT_FOUND;
+import static arp.service.Utils.createTableOfValue;
 
 public class BroadFirstSearchAlgorithm {
     public Data data;
@@ -62,34 +63,47 @@ public class BroadFirstSearchAlgorithm {
         double totalCost = state.totalCost;
         double actionCost = 0;
 
-        Electrolyzer electrolyzer = nextStorage.electrolyzers.get(0);
-        switch (actionType) {
-            case WIND:
-                actionCost = addWind(electrolyzer);
-                break;
-            case PV:
-                actionCost = addPv(electrolyzer);
-                break;
-            case ELECTROLIZER:
-                actionCost = data.gridConstants.electrolizerCost;
-                electrolyzer.maxPower += 1.0;
-                break;
-            case STORAGE_POWER:
-                actionCost = data.gridConstants.storagePowerCost;
-                electrolyzer.accumulatorMaxSize += 1.0;
-                break;
-            case STORAGE_HYDROGEN:
-                actionCost = data.gridConstants.storageHydrogenCost;
-                nextStorage.maxCapacity += 1.0;
-                break;
+        if (nextStorage.electrolyzers.isEmpty()) {
+            createNewElectorlyzer();
+            actionCost = data.gridConstants.electrolizerCost;
+        } else {
+            Electrolyzer electrolyzer = nextStorage.electrolyzers.get(0);
+            switch (actionType) {
+                case WIND:
+                    actionCost = addWind(electrolyzer);
+                    break;
+                case PV:
+                    actionCost = addPv(electrolyzer);
+                    break;
+                case ELECTROLIZER:
+                    actionCost = data.gridConstants.electrolizerCost;
+                    electrolyzer.maxPower += 1.0;
+                    break;
+                case STORAGE_POWER:
+                    actionCost = data.gridConstants.storagePowerCost;
+                    electrolyzer.accumulatorMaxSize += 1.0;
+                    break;
+                case STORAGE_HYDROGEN:
+                    actionCost = data.gridConstants.storageHydrogenCost;
+                    nextStorage.maxCapacity += 1.0;
+                    break;
+            }
         }
+
         totalCost += actionCost;
         Data newData = new Data(data.gridConstants, nextStorage, data.vehiclesConsumption);
         CalculateYearAlgorithm calculateYearAlgorithm = new CalculateYearAlgorithm(newData);
         YearResult yearResult = calculateYearAlgorithm.calculate();
         State newState = new State(nextStorage, yearResult.isGood(), yearResult.minHourHydrogenLevel, state, actionType, actionCost, totalCost);
-//        System.out.println("\tADDING NEW STATE: " + yearResult.isGood() + ": " + yearResult + ": " + newState.toString());
+        System.out.println("\tADDING NEW STATE: " + yearResult.isGood() + ": " + yearResult + ": " + newState.toString());
         return newState;
+    }
+
+    private void createNewElectorlyzer() {
+        Electrolyzer electrolyzer = new Electrolyzer();
+        electrolyzer.efficiency = 1.0; // TODO
+        electrolyzer.summaryEnergyProduction = createTableOfValue(0.0);
+        electrolyzer.maxPower = 1.0;
     }
 
     private double addPv(Electrolyzer electrolyzer) {
