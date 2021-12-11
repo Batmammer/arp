@@ -7,6 +7,7 @@ import org.assertj.core.util.Lists;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 class CalculateNextStepAlgorithmTest {
     @Test
@@ -376,6 +377,59 @@ class CalculateNextStepAlgorithmTest {
         assertEquals(expectedStep.toString(), resultStep.toString());
     }
 
+    @Test
+    public void useStorageLoss() {
+        // given
+        double storageMaxCapacity = 0.0d;
+        double[] consumption = {2.0};
+
+        Electrolyzer electrolyzer = new Electrolyzer();
+        electrolyzer.maxPower = 100d;
+        electrolyzer.efficiency = 1.0d;
+        electrolyzer.accumulatorMaxSize = 0.0d;
+        electrolyzer.summaryEnergyProduction = new double[]{1.0};
+        Data data = buildData(electrolyzer, storageMaxCapacity, consumption);
+        data.gridConstants.storageLoss = 0.2 * 24;
+
+        Step step = initStep(electrolyzer, 0, 1d, 0d);
+
+        // when
+        CalculateNextStepAlgorithm algorithm = new CalculateNextStepAlgorithm(data);
+        Step resultStep = algorithm.calculate(step);
+
+        // then
+        Step expectedStep = initStep(electrolyzer, 1, -0.2d, 0d);
+        assertEquals(expectedStep.toString(), resultStep.toString());
+    }
+
+    @Test
+    public void shoudThrowExceptionWhenRichMinPower() {
+        // given
+        double storageMaxCapacity = 0.0d;
+        double[] consumption = {0.0};
+
+        Electrolyzer electrolyzer = new Electrolyzer();
+        electrolyzer.maxPower = 100d;
+        electrolyzer.minPower = 1d;
+        electrolyzer.efficiency = 1.0d;
+        electrolyzer.accumulatorMaxSize = 0.0d;
+        electrolyzer.summaryEnergyProduction = new double[]{0.0};
+        Data data = buildData(electrolyzer, storageMaxCapacity, consumption);
+
+        Step step = initStep(electrolyzer, 0, 0d, 0d);
+
+        // when
+        boolean wasException = false;
+        CalculateNextStepAlgorithm algorithm = new CalculateNextStepAlgorithm(data);
+        try {
+            algorithm.calculate(step);
+        } catch (Exception ex) {
+            wasException = true;
+        }
+
+        // then
+        assertTrue(wasException);
+    }
     @Test
     public void comboProductions() {
         // given
