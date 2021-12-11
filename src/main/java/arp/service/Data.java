@@ -7,9 +7,7 @@ import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.stream.Collectors;
 
 @lombok.Data
@@ -20,6 +18,8 @@ public class Data implements Cloneable {
     private GridCosts gridCosts;
     private List<Storage> storages = new ArrayList<>();
     private double[] vehiclesConsumption; // godzina w roku
+    private double pvMultiplier[] = null;
+    private double windMultiplier[] = null;
 
     @Override
     public Data clone()  {

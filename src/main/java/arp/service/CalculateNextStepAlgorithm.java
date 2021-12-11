@@ -34,6 +34,7 @@ public class CalculateNextStepAlgorithm {
             hydrogenLevel -= hydrogenStorageLoss;
             for (Electrolyzer electrolyzer : storage.getElectrolyzers()) {
                 double newAccumulatorCurrentLevel = step.getAccumulatorsStates().get(electrolyzer.getAccumulator()).getAccumulatorCurrentLevel() +
+                        electrolyzer.getSummaryEnergyProduction(data, step.getHour());
                         electrolyzer.getSummaryEnergyProduction(step.getHour());
                 totalElectricityProduction += electrolyzer.getSummaryEnergyProduction(step.getHour());
                 if (newAccumulatorCurrentLevel < electrolyzer.getMinPower()) {
