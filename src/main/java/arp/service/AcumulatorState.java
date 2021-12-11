@@ -1,5 +1,8 @@
 package arp.service;
 
+import lombok.Data;
+
+@Data
 public class AcumulatorState {
     public double accumulatorCurrentLevel;
 
