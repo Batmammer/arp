@@ -30,6 +30,7 @@ public class BroadFirstSearchAlgorithmTest {
         storage.setMaxCapacity(0.0);
 
         Data data = new Data();
+        data.setGridCosts(gridCosts);
         data.setGridConstants(gridConstants);
         data.getStorages().add(storage);
         data.setVehiclesConsumption(createTableOfValue(consumption));
@@ -60,6 +61,7 @@ public class BroadFirstSearchAlgorithmTest {
         storage.setMaxCapacity(0.0);
 
         Data data = new Data();
+        data.setGridCosts(gridCosts);
         data.setGridConstants(gridConstants);
         data.getStorages().add(storage);
         data.setVehiclesConsumption(createTableOfValue(consumption));
@@ -91,6 +93,7 @@ public class BroadFirstSearchAlgorithmTest {
         storage.setMaxCapacity(0.0);
 
         Data data = new Data();
+        data.setGridCosts(gridCosts);
         data.setGridConstants(gridConstants);
         data.getStorages().add(storage);
         data.setVehiclesConsumption(createTableOfValue(consumption));
