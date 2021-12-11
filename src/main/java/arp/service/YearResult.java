@@ -15,7 +15,7 @@ public class YearResult {
         this.sumPowerOverflow = sumPowerOverflow;
     }
 
-    boolean isGood() {
+    public boolean isGood() {
         return minHourHydrogenLevel >= 0;
     }
 
