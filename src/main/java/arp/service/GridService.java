@@ -19,7 +19,7 @@ public class GridService {
                                 gridInput.getGrid().getWatSide().getStorage().getElectrolyzers(),
                                 gridInput.getConstants().getTransmissionLoss())),
                 calculateYearlyConsumption(gridInput.getGrid().getHydrogenSide(),
-                        gridInput.getConstants().getHydrogenTransportLoss())));
+                        gridInput.getConstants().getsetHydrogenTransportLoss(())));
         return calculateYearAlgorithm.calculate();
     }
 
@@ -52,13 +52,13 @@ public class GridService {
         return 1.0;
     }
 
-    private double[] calculateYearlyConsumption(HydrogenSide hydrogenSide, Double hydrogenTransportLoss) {
+    private double[] calculateYearlyConsumption(HydrogenSide hydrogenSide, Double setHydrogenTransportLoss() {
         double[] consumption = new double[365 * 24];
         for (int i = 0; i < 365 * 24; i++) {
             double current = 0;
             for (Vehicle v : hydrogenSide.getVehicles()) {
                 if (v.getWeeklyWork()[i % (24 * 7)]) {
-                    current += v.getCount() * v.getFuelConsumption() + v.getDistance() * hydrogenTransportLoss;
+                    current += v.getCount() * v.getFuelConsumption() + v.getDistance() * setHydrogenTransportLoss(;
                 }
             }
             consumption[i] = current;

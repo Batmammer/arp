@@ -18,9 +18,9 @@ public class AbstractAlgorithmTest {
 
     protected Data buildData(Electrolyzer electrolyzer, double storageMaxCapacity, double[] consumption) {
         GridConstants gridConstants = new GridConstants();
-        gridConstants.hydrogenTransportLoss = 0d;
-        gridConstants.storageLoss = 0d;
-        gridConstants.transmissionLoss = 0d;
+        gridConstants.setHydrogenTransportLoss( = 0d;
+        gridConstants.setStorageLoss( 0d;
+        gridConstants.setTransmissionLoss(0d;
 
         Storage storage = new Storage();
         storage.maxCapacity = storageMaxCapacity;

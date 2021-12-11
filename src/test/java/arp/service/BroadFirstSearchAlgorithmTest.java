@@ -114,7 +114,7 @@ public class BroadFirstSearchAlgorithmTest {
         data.gridConstants = gridConstants;
         data.summaryStorage = storage;
 
-        gridConstants.pvDailyProduction = createOneHalfTable();
+        gridConstants.setPvDailyProduction(createOneHalfTable();
         data.vehiclesConsumption = createOneTwoTable();
 
         // when
@@ -154,12 +154,12 @@ public class BroadFirstSearchAlgorithmTest {
 
     private GridConstants createGridConstants() {
         GridConstants gridConstants = new GridConstants();
-        gridConstants.hydrogenTransportLoss = 0.d;
-        gridConstants.storageLoss = 0.d;
-        gridConstants.transmissionLoss = 0.d;
-        gridConstants.pvDailyProduction = createTableOfValue(1.0);
-        gridConstants.windDailyProduction = createTableOfValue(1.0);
-        gridConstants.electrolizerEfficiency = 1.0;
+        gridConstants.setHydrogenTransportLoss(0.d);
+        gridConstants.setStorageLoss(0.d);
+        gridConstants.setTransmissionLoss(0.d);
+        gridConstants.setPvDailyProduction(createTableOfValue(1.0));
+        gridConstants.setWindDailyProduction(createTableOfValue(1.0));
+        gridConstants.setElectrolizerEfficiency(1.0);
         return gridConstants;
     }
 }

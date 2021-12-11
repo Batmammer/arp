@@ -63,17 +63,17 @@ class GridServiceTest {
         Electrolyzer e = new Electrolyzer();
         e.maxPower = 10d;
         e.minPower = 1d;
-        e.efficiency = 10;
-        e.accumulatorMaxSize = 100d;
+        e.setEfficiency(10;
+        e.setAccumulatorMaxSize(100d;
         e.sources = Lists.newArrayList(energySource);
         return e;
     }
 
     private GridConstants getConstants() {
         GridConstants gridConstants = new GridConstants();
-        gridConstants.hydrogenTransportLoss = 0.d;
-        gridConstants.storageLoss = 0.d;
-        gridConstants.transmissionLoss = 0.d;
+        gridConstants.setHydrogenTransportLoss( = 0.d;
+        gridConstants.setStorageLoss( 0.d;
+        gridConstants.setTransmissionLoss(0.d;
         return gridConstants;
     }
 }
