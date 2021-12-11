@@ -9,10 +9,20 @@ import arp.service.MaxConsumptionYearResult;
 import arp.service.Step;
 import arp.service.YearResult;
 import io.swagger.v3.oas.annotations.Operation;
+import org.jfree.chart.ChartFactory;
+import org.jfree.chart.ChartUtilities;
+import org.jfree.chart.JFreeChart;
+import org.jfree.chart.plot.PlotOrientation;
+import org.jfree.chart.plot.XYPlot;
+import org.jfree.chart.renderer.xy.XYLineAndShapeRenderer;
+import org.jfree.data.xy.DefaultXYDataset;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.awt.geom.Ellipse2D;
+import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -54,6 +64,8 @@ public class GridController {
         validationResult.setErrors(yearResult.getErrors());
         validationResult.setWarnings(yearResult.getWarnings());
         validationResult.setHydrogenLevel(hydrogenLevel);
+        if (validationResult.getIsValid())
+            generateCharts(electricityProduction, hydrogenProduction);
         return validationResult;
     }
 
@@ -86,6 +98,8 @@ public class GridController {
         validationResult.setErrors(yearResult.getErrors());
         validationResult.setWarnings(yearResult.getWarnings());
         validationResult.setHydrogenLevel(hydrogenLevel);
+        if (validationResult.getIsValid())
+            generateCharts(electricityProduction, hydrogenProduction);
         return validationResult;
     }
 
@@ -95,6 +109,51 @@ public class GridController {
         State state = gridService.calculateCapex(gridInput);
         GridResult gridResult = new GridResult();
         gridResult.setGrid(gridInput.getGrid());
+//        if (validationResult.getIsValid())
+//            generateCharts(electricityProduction, hydrogenProduction);
         return gridResult;
+    }
+
+    private void generateCharts(List<Double> electricityProduction, List<Double> hydrogenProduction) {
+        var electricityDataset = new DefaultXYDataset();
+        var hydrogenDataset = new DefaultXYDataset();
+        int compressedChartSize = electricityProduction.size() / 4;
+
+        double[] electricityArray = new double[compressedChartSize];
+        double[] hydrogenArray = new double[compressedChartSize];
+
+        for (int i = 0; i < compressedChartSize; i++) {
+            var elecricityPoint = electricityProduction.get(i) + electricityProduction.get(i + 1) + electricityProduction.get(i + 2) + electricityProduction.get(i + 3);
+            var hydrogenPoint = hydrogenProduction.get(i) + hydrogenProduction.get(i + 1) + hydrogenProduction.get(i + 2) + hydrogenProduction.get(i + 3);
+            electricityArray[i] = elecricityPoint / 4;
+            hydrogenArray[i] = hydrogenPoint / 4;
+        }
+
+        double[][] electroOutArray = new double[2][];
+        double[][] hydroOutArray = new double[2][];
+        electroOutArray[0] = new double[compressedChartSize];
+        electroOutArray[1] = electricityArray;
+        hydroOutArray[0] = new double[compressedChartSize];
+        hydroOutArray[1] = hydrogenArray;
+
+        for (int i = 0; i < compressedChartSize; i++) {
+            electroOutArray[0][i] = i;
+        }
+
+        electricityDataset.addSeries("key", electroOutArray);
+        hydrogenDataset.addSeries("key", hydroOutArray);
+
+        JFreeChart electricityChart = ChartFactory.createScatterPlot("electricity", "x", "y", electricityDataset, PlotOrientation.VERTICAL, false, false, false);
+        JFreeChart hydrogenChart = ChartFactory.createScatterPlot("hydrogen", "x", "y", hydrogenDataset, PlotOrientation.VERTICAL, false, false, false);
+        XYLineAndShapeRenderer rndr = (XYLineAndShapeRenderer) ((XYPlot) electricityChart.getPlot()).getRenderer();
+        rndr.setSeriesShape(0, new Ellipse2D.Double(0, 0, 0.5, 0.5));
+        rndr.setBaseLinesVisible(true);
+        ((XYPlot) hydrogenChart.getPlot()).setRenderer(rndr);
+        try {
+            ChartUtilities.saveChartAsPNG(new File("electricityChart.png"), electricityChart, 1500, 1000);
+            ChartUtilities.saveChartAsPNG(new File("hydrogenChart.png"), hydrogenChart, 1500, 1000);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 }
