@@ -12,7 +12,7 @@ import java.util.List;
 public class Electrolyzer {
     public List<EnergySource> sources; // w algorytmie korzystamy tylko z summary
 
-    public int lp;
+    public int no;
     public double accumulatorMaxSize;
     public double efficiency;
     public double maxPower;

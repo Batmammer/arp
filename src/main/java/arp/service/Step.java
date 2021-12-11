@@ -1,7 +1,6 @@
 package arp.service;
 
 import arp.dto.Electrolyzer;
-import arp.dto.Storage;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -19,7 +18,7 @@ public class Step {
         StringBuilder b = new StringBuilder();
         b.append("[hour=" + hour + ", electorizersStates=");
         b.append(electorizersStates.entrySet().stream()
-                .map(e -> e.getKey().lp + " => " + e.getValue().accumulatorCurrentLevel)
+                .map(e -> e.getKey().no + " => " + e.getValue().accumulatorCurrentLevel)
                 .collect(Collectors.joining(", ", "{", "},")));
         b.append("storageState = " + toString(storageState.currentLevel) + ",");
         b.append("overflowHydrogenProduction = " + toString(overflowHydrogenProduction) + ",");
