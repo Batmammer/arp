@@ -15,6 +15,8 @@ public class Step {
     private Map<Storage, StorageState> storageStates = new HashMap<>();
     private double overflowHydrogenProduction;
     private double overflowPowerProduction;
+    private double hydrogenProduction;
+    private double electricityProduction;
 
     @Override
     public String toString() {
