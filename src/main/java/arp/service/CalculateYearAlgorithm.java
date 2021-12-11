@@ -59,19 +59,19 @@ public class CalculateYearAlgorithm {
 
     private void finalValidation(double minHourHydrogenLevel, double sumHydrogenOverflow, double sumPowerOverflow, double totalHydrogenWasted) {
         if (minHourHydrogenLevel < 0) {
-            warnings.add(new Warning("There biggest luck of hydrogen was: " + Utils.standardRound(-minHourHydrogenLevel)));
+            warnings.add(new Warning("During the year lowest hydrogen level during was: " + Utils.standardRound(-minHourHydrogenLevel)));
         }
         if (minHourHydrogenLevel > 10) {
-            warnings.add(new Warning("For whole year there was at least: " + Utils.standardRound(minHourHydrogenLevel) + " kg of hydroxen in storage"));
+            warnings.add(new Warning("During the year there was at least: " + Utils.standardRound(minHourHydrogenLevel) + " kg of hydrogen in storage"));
         }
         if (sumHydrogenOverflow > 0) {
-            warnings.add(new Warning("In whole year your grid lost: " + Utils.standardRound(sumHydrogenOverflow) + " kg of hydroxen because luck of storage"));
+            warnings.add(new Warning("During the year grid lost: " + Utils.standardRound(sumHydrogenOverflow) + " kg of hydrogen because of low storage capacity"));
         }
         if (sumPowerOverflow > 0) {
-            warnings.add(new Warning("In whole year your grid lost: " + Utils.standardRound(sumPowerOverflow) + " MWh because luck on accumulator size"));
+            warnings.add(new Warning("During the year grid lost: " + Utils.standardRound(sumPowerOverflow) + " MWh because low accumulator capacity"));
         }
         if (totalHydrogenWasted > 0) {
-            warnings.add(new Warning("In whole year your grid lost: " +  Utils.standardRound(totalHydrogenWasted) + " kg of hydrogen in evaporation process"));
+            warnings.add(new Warning("During the year grid lost: " +  Utils.standardRound(totalHydrogenWasted) + " kg of hydrogen in evaporation process"));
         }
     }
 
