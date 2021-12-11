@@ -24,6 +24,7 @@ public class GridController {
         YearResult yearResult = gridService.runSimulation(gridInput);
         GridResult gridResult = new GridResult();
         gridResult.setGrid(gridInput.getGrid());
+        gridResult.setIsValid(yearResult.isGood());
         return gridResult;
     }
 
