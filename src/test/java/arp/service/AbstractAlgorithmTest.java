@@ -38,6 +38,7 @@ public class AbstractAlgorithmTest {
 
     protected Electrolyzer buildElectrolyzerWithAccumulator() {
         Electrolyzer electrolyzer = new Electrolyzer();
+        electrolyzer.setId(1l);
         electrolyzer.setAccumulator(new Accumulator());
         return electrolyzer;
     }

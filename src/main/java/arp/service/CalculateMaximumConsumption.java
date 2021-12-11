@@ -56,7 +56,7 @@ public class CalculateMaximumConsumption {
         Data newData = new Data();
         newData.gridConstants = data.gridConstants;
         newData.storages = data.storages;
-        newData.setVehiclesConsumption(createTableOfValue(consumption);
+        newData.setVehiclesConsumption(createTableOfValue(consumption));
         return newData;
     }
 

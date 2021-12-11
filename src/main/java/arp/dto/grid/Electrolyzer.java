@@ -15,16 +15,13 @@ public class Electrolyzer implements Cloneable {
     private List<EnergySource> sources;
     private Accumulator accumulator;
     private double efficiency;
+    private double minPower;
     private double maxPower;
-
-    public double getMinPower() {
-        return 0.1 * maxPower;
-    }
 
     public Electrolyzer clone() {
         List<EnergySource> newSources = new ArrayList<>();
         for (EnergySource energySource: sources)
             newSources.add(energySource.clone());
-        return new Electrolyzer(id, newSources, new Accumulator(accumulator.getAccumulatorMaxSize()), efficiency, maxPower);
+        return new Electrolyzer(id, newSources, new Accumulator(accumulator.getAccumulatorMaxSize()), efficiency, minPower, maxPower);
     }
 }
