@@ -7,6 +7,7 @@ import java.util.Map;
 
 public class CalculateNextStepAlgorithm {
     private final Data data;
+    private Electrolyzer electrolyzer;
 
     CalculateNextStepAlgorithm(Data data) {
         this.data = data;
@@ -16,7 +17,7 @@ public class CalculateNextStepAlgorithm {
         int hour = step.hour;
         Step newStep = new Step();
         newStep.hour = hour + 1;
-        double hydrogenLevel = step.storageState.currentLevel;
+        double hydrogenLevel = Math.max(step.storageState.currentLevel, 0);
         hydrogenLevel = calculateStorageLoss(hydrogenLevel, data.gridConstants.storageLoss);
         Map<Electrolyzer, ElectrolyzerState> newElectrolyzerStates = new HashMap<>();
         for (Map.Entry<Electrolyzer, ElectrolyzerState> entry : step.electorizersStates.entrySet()) {
@@ -37,13 +38,16 @@ public class CalculateNextStepAlgorithm {
         }
         newStep.electorizersStates = newElectrolyzerStates;
         hydrogenLevel -= data.vehiclesConsumption[hour];
+
         double overFlowProduction = 0;
         if (hydrogenLevel > data.summaryStorage.maxCapacity) {
             overFlowProduction = hydrogenLevel - data.summaryStorage.maxCapacity;
             hydrogenLevel = data.summaryStorage.maxCapacity;
         }
-        newStep.storageState = new StorageState(hydrogenLevel);
         newStep.overflowHydrogenProduction = overFlowProduction;
+
+        newStep.storageState = new StorageState(hydrogenLevel);
+
         return newStep;
     }
 
