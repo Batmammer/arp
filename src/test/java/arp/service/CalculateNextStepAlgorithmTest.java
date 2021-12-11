@@ -3,6 +3,7 @@ package arp.service;
 import arp.dto.Electrolyzer;
 import arp.dto.GridConstants;
 import arp.dto.Storage;
+import arp.exception.BusinessException;
 import org.assertj.core.util.Lists;
 import org.junit.jupiter.api.Test;
 
@@ -447,7 +448,7 @@ class CalculateNextStepAlgorithmTest {
         CalculateNextStepAlgorithm algorithm = new CalculateNextStepAlgorithm(data);
         try {
             algorithm.calculate(step);
-        } catch (Exception ex) {
+        } catch (BusinessException ex) {
             wasException = true;
         }
 
