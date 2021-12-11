@@ -1,6 +1,8 @@
 package arp.service;
 
 import arp.dto.Electrolyzer;
+import arp.exception.BusinessException;
+import arp.exception.FailureReason;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -24,7 +26,7 @@ public class CalculateNextStepAlgorithm {
         for (Map.Entry<Electrolyzer, ElectrolyzerState> entry : step.electorizersStates.entrySet()) {
             double newAccumulatorCurrentLevel = entry.getValue().accumulatorCurrentLevel + entry.getKey().summaryEnergyProduction[step.hour];
             if (newAccumulatorCurrentLevel < entry.getKey().minPower) {
-                throw new IllegalStateException("Luck of power on Electrolyzer: " + hour + " power: " + newAccumulatorCurrentLevel);
+                throw new BusinessException("Luck of power on Electrolyzer: " + hour + " power: " + newAccumulatorCurrentLevel, FailureReason.LUCK_OF_POWER_ON_ELECTROLIZER);
             }
             double usedPower = Math.min(entry.getKey().maxPower, newAccumulatorCurrentLevel);
             newAccumulatorCurrentLevel -= usedPower;
