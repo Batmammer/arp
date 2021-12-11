@@ -14,8 +14,21 @@ public class GridController {
         this.gridService = gridService;
     }
 
-    @GetMapping("/calculate")
-    public GridResult calculateGrid(GridInput gridInput) {
+    @GetMapping("/validateGrid")
+    public GridResult validateGrid(GridInput gridInput) {
+        gridService.runSimulation(gridInput);
+        return new GridResult();
+    }
+
+    @GetMapping("/hydrogenProduction")
+    public GridResult hydrogenProduction(GridInput gridInput) {
+        gridService.runSimulation(gridInput);
+        return new GridResult();
+    }
+
+
+    @GetMapping("/minCapex")
+    public GridResult minCapex(GridInput gridInput) {
         gridService.runSimulation(gridInput);
         return new GridResult();
     }

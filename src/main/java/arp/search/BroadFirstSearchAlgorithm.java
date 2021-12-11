@@ -100,7 +100,7 @@ public class BroadFirstSearchAlgorithm {
         Electrolyzer electrolyzer = new Electrolyzer();
         electrolyzer.setEfficiency(data.gridConstants.electrolizerEfficiency;
         electrolyzer.summaryEnergyProduction = createTableOfValue(0.0);
-        electrolyzer.maxPower = 1.0;
+        electrolyzer.setMaxPower(1.0;
         return electrolyzer;
     }
 
@@ -134,7 +134,7 @@ public class BroadFirstSearchAlgorithm {
             energySource = new EnergySource();
             energySource.type = pv;
             energySource.distance = 0.d;
-            energySource.maxPower = 0.d;
+            energySource.setMaxPower(0.d;
             electrolyzer.sources.add(energySource);
         }
         return energySource;

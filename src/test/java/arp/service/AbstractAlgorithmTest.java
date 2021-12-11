@@ -1,13 +1,16 @@
 package arp.service;
 
 import arp.dto.GridConstants;
+import arp.dto.grid.Accumulator;
+import arp.dto.grid.Electrolyzer;
+import arp.dto.grid.Storage;
 import org.assertj.core.util.Lists;
 
 public class AbstractAlgorithmTest {
-    protected Step initStep(Electrolyzer electrolyzer, int hour, double storageState, double accumulatorState) {
+    protected Step initStep(Accumulator accumulator, int hour, double storageState, double accumulatorState) {
         Step step = new Step();
         step.hour = hour;
-        step.acumulatorsStates.put(electrolyzer, buildInitialState(accumulatorState));
+        step.acumulatorsStates.put(accumulator, buildInitialState(accumulatorState));
         step.storageStates = new StorageState(storageState);
         return step;
     }
@@ -18,18 +21,26 @@ public class AbstractAlgorithmTest {
 
     protected Data buildData(Electrolyzer electrolyzer, double storageMaxCapacity, double[] consumption) {
         GridConstants gridConstants = new GridConstants();
-        gridConstants.setHydrogenTransportLoss( = 0d;
-        gridConstants.setStorageLoss( 0d;
-        gridConstants.setTransmissionLoss(0d;
+        gridConstants.setHydrogenTransportLoss(0d);
+        gridConstants.setStorageLoss( 0d);
+        gridConstants.setTransmissionLoss(0d);
 
         Storage storage = new Storage();
-        storage.maxCapacity = storageMaxCapacity;
-        storage.electrolyzers = Lists.newArrayList(electrolyzer);
+        storage.setMaxCapacity(storageMaxCapacity);
+        storage.setElectrolyzers(Lists.newArrayList(electrolyzer));
 
         Data data = new Data();
-        data.gridConstants = gridConstants;
-        data.setSummaryStorage(storage;
-        data.setVehiclesConsumption(consumption;
+        data.setGridConstants(gridConstants);
+        data.setSummaryStorage(storage);
+        data.setVehiclesConsumption(consumption);
         return data;
     }
+
+    protected Electrolyzer buildElectrolyzerWithAccumulator() {
+        Electrolyzer electrolyzer = new Electrolyzer();
+        electrolyzer.setAccumulator(new Accumulator());
+        return electrolyzer;
+    }
+
+
 }

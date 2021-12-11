@@ -6,6 +6,7 @@ import arp.dto.grid.Storage;
 import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -22,7 +23,7 @@ public class Data {
      * rzeczywista moc dostarczona przez wszyskie źródła energii
      * z uwzględnieniem charakterystyki rocznej produkcji i straty przesyłowej
      */
-    public Map<Long, double[]> summaryEnergyProduction; // godzina w roku
+    public Map<Long, double[]> summaryEnergyProduction = new HashMap<>(); // godzina w roku
 
 
 }
