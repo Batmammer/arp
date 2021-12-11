@@ -16,4 +16,5 @@ public class GridResult {
     private Double minCapex;
     private Double resMaxPower;
     private Double resAnnualCapacity;
+    private Boolean isValid;
 }
