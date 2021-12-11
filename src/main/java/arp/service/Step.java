@@ -15,8 +15,8 @@ public class Step {
     private Map<Storage, StorageState> storageStates = new HashMap<>();
     private double overflowHydrogenProduction;
     private double overflowPowerProduction;
-    private double totalHydrogenProduction;
-    private double totalElectricityProduction;
+    private double hydrogenProduction;
+    private double electricityProduction;
     private double totalHydrogenWasted;
 
     @Override
@@ -42,12 +42,12 @@ public class Step {
         this.overflowPowerProduction = Utils.standardRound(overflowPowerProduction);
     }
 
-    public void setTotalHydrogenProduction(double totalHydrogenProduction) {
-        this.totalHydrogenProduction = Utils.standardRound(totalHydrogenProduction);
+    public void setHydrogenProduction(double hydrogenProduction) {
+        this.hydrogenProduction = Utils.standardRound(hydrogenProduction);
     }
 
-    public void setTotalElectricityProduction(double totalElectricityProduction) {
-        this.totalElectricityProduction = Utils.standardRound(totalElectricityProduction);
+    public void setElectricityProduction(double electricityProduction) {
+        this.electricityProduction = Utils.standardRound(electricityProduction);
     }
 
     public void setTotalHydrogenWasted(double totalHydrogenWasted) {

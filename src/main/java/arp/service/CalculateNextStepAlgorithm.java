@@ -25,8 +25,8 @@ public class CalculateNextStepAlgorithm {
         Map<Storage, StorageState> newStorageStates = new HashMap<>();
         double overflowPowerProduction = 0;
         double totalHydrogenStorageLoss = 0;
-        double totalElectricityProduction = step.getTotalElectricityProduction();
-        double totalHydrogenProduction = step.getTotalHydrogenProduction();
+        double electricityProduction = 0;
+        double hydrogenProduction = 0;
         for (Storage storage : data.getStorages()) {
             double hydrogenLevel = Math.max(step.getStorageStates().get(storage).getCurrentLevel(), 0);
             double hydrogenStorageLoss = calculateStorageLoss(hydrogenLevel, data.getGridConstants().getStorageLoss());
@@ -35,7 +35,7 @@ public class CalculateNextStepAlgorithm {
             for (Electrolyzer electrolyzer : storage.getElectrolyzers()) {
                 double newAccumulatorCurrentLevel = step.getAccumulatorsStates().get(electrolyzer.getAccumulator()).getAccumulatorCurrentLevel() +
                         electrolyzer.getSummaryEnergyProduction(data, step.getHour());
-                totalElectricityProduction += electrolyzer.getSummaryEnergyProduction(data, step.getHour());
+                electricityProduction += electrolyzer.getSummaryEnergyProduction(data, step.getHour());
                 if (newAccumulatorCurrentLevel < electrolyzer.getMinPower()) {
                     throw new BusinessException("Lack of power on Electrolyzer: " + hour + " power: " + newAccumulatorCurrentLevel, FailureReason.LUCK_OF_POWER_ON_ELECTROLIZER);
                 }
@@ -45,7 +45,7 @@ public class CalculateNextStepAlgorithm {
                     overflowPowerProduction += newAccumulatorCurrentLevel - electrolyzer.getAccumulator().getAccumulatorMaxSize();
                     newAccumulatorCurrentLevel = electrolyzer.getAccumulator().getAccumulatorMaxSize();
                 }
-                totalHydrogenProduction += usedPower * electrolyzer.getEfficiency();
+                hydrogenProduction += usedPower * electrolyzer.getEfficiency();
                 hydrogenLevel += usedPower * electrolyzer.getEfficiency();
                 newAcumulatorStates.put(electrolyzer.getAccumulator(), new AccumulatorState(newAccumulatorCurrentLevel));
             }
@@ -54,8 +54,8 @@ public class CalculateNextStepAlgorithm {
         newStep.setAccumulatorsStates(newAcumulatorStates);
         newStep.setStorageStates(newStorageStates);
         newStep.setOverflowPowerProduction(overflowPowerProduction);
-        newStep.setTotalElectricityProduction(totalElectricityProduction);
-        newStep.setTotalHydrogenProduction(totalHydrogenProduction);
+        newStep.setElectricityProduction(electricityProduction);
+        newStep.setHydrogenProduction(hydrogenProduction);
         double neededHydrogen = data.getVehiclesConsumption()[hour];
         double currentHydrogen = newStorageStates.values().stream().mapToDouble(StorageState::getCurrentLevel).sum();
         if (currentHydrogen > 0) {
