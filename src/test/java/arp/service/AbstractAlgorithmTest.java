@@ -9,9 +9,9 @@ import org.assertj.core.util.Lists;
 public class AbstractAlgorithmTest {
     protected Step initStep(Storage storage, Accumulator accumulator, int hour, double storageState, double accumulatorState) {
         Step step = new Step();
-        step.hour = hour;
-        step.acumulatorsStates.put(accumulator, buildInitialState(accumulatorState));
-        step.storageStates.put(storage, new StorageState(storageState));
+        step.setHour(hour);
+        step.getAcumulatorsStates().put(accumulator, buildInitialState(accumulatorState));
+        step.getStorageStates().put(storage, new StorageState(storageState));
         return step;
     }
 

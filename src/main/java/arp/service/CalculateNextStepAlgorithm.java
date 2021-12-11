@@ -18,17 +18,17 @@ public class CalculateNextStepAlgorithm {
     }
 
     public Step calculate(Step step) {
-        int hour = step.hour;
+        int hour = step.getHour();
         Step newStep = new Step();
-        newStep.hour = hour + 1;
+        newStep.setHour(hour + 1);
         Map<Accumulator, AcumulatorState> newAcumulatorStates = new HashMap<>();
         Map<Storage, StorageState> newStorageStates = new HashMap<>();
         double overflowPowerProduction = 0;
         for (Storage storage : data.getStorages()) {
-            double hydrogenLevel = Math.max(step.storageStates.get(storage).currentLevel, 0);
+            double hydrogenLevel = Math.max(step.getStorageStates().get(storage).currentLevel, 0);
             hydrogenLevel = calculateStorageLoss(hydrogenLevel, data.getGridConstants().getStorageLoss());
             for (Electrolyzer electrolyzer : storage.getElectrolyzers()) {
-                double newAccumulatorCurrentLevel = step.acumulatorsStates.get(electrolyzer.getAccumulator()).accumulatorCurrentLevel + data.getSummaryEnergyProduction().get(electrolyzer.getId())[step.hour];
+                double newAccumulatorCurrentLevel = step.getAcumulatorsStates().get(electrolyzer.getAccumulator()).accumulatorCurrentLevel + data.getSummaryEnergyProduction().get(electrolyzer.getId())[step.getHour()];
                 if (newAccumulatorCurrentLevel < electrolyzer.getMinPower()) {
                     throw new BusinessException("Luck of power on Electrolyzer: " + hour + " power: " + newAccumulatorCurrentLevel, FailureReason.LUCK_OF_POWER_ON_ELECTROLIZER);
                 }
@@ -43,9 +43,9 @@ public class CalculateNextStepAlgorithm {
             }
             newStorageStates.put(storage, new StorageState(hydrogenLevel));
         }
-        newStep.acumulatorsStates = newAcumulatorStates;
-        newStep.storageStates = newStorageStates;
-        newStep.overflowPowerProduction = overflowPowerProduction;
+        newStep.setAcumulatorsStates(newAcumulatorStates);
+        newStep.setStorageStates(newStorageStates);
+        newStep.setOverflowPowerProduction(overflowPowerProduction);
         double neededHydrogen = data.getVehiclesConsumption()[hour];
         double currentHydrogen = newStorageStates.values().stream().mapToDouble(storageState -> storageState.currentLevel).sum();
         double ratio = 1 - neededHydrogen / currentHydrogen;
@@ -59,8 +59,8 @@ public class CalculateNextStepAlgorithm {
                 newStorageState.setCurrentLevel(storage.getMaxCapacity());
             }
         }
-        newStep.overflowHydrogenProduction = overFlowHydrogenProduction;
-        newStep.storageStates = newStorageStates;
+        newStep.setOverflowHydrogenProduction(overFlowHydrogenProduction);
+        newStep.setStorageStates(newStorageStates);
 
         return newStep;
     }

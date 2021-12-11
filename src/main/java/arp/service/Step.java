@@ -2,17 +2,19 @@ package arp.service;
 
 import arp.dto.grid.Accumulator;
 import arp.dto.grid.Storage;
+import lombok.Data;
 
 import java.util.HashMap;
 import java.util.Map;
 import java.util.stream.Collectors;
 
+@Data
 public class Step {
-    public int hour;
-    public Map<Accumulator, AcumulatorState> acumulatorsStates = new HashMap<>();
-    public Map<Storage, StorageState> storageStates = new HashMap<>();
-    public double overflowHydrogenProduction;
-    public double overflowPowerProduction;
+    private int hour;
+    private Map<Accumulator, AcumulatorState> acumulatorsStates = new HashMap<>();
+    private Map<Storage, StorageState> storageStates = new HashMap<>();
+    private double overflowHydrogenProduction;
+    private double overflowPowerProduction;
 
     @Override
     public String toString() {
@@ -24,8 +26,8 @@ public class Step {
         b.append(storageStates.entrySet().stream()
                 .map(e -> e.getKey() + " => " + toString(e.getValue().getCurrentLevel()))
                 .collect(Collectors.joining(", ", "{", "},")));
-        b.append("overflowHydrogenProduction = " + toString(overflowHydrogenProduction) + ",");
-        b.append("overflowPowerProduction = " + toString(overflowPowerProduction) + "]");
+        b.append("setOverflowHydrogenProduction(" + toString(overflowHydrogenProduction) + ",");
+        b.append("setOverflowPowerProduction(" + toString(overflowPowerProduction) + "]");
         return b.toString();
     }
 

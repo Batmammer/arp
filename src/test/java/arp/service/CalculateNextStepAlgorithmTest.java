@@ -59,7 +59,7 @@ class CalculateNextStepAlgorithmTest extends AbstractAlgorithmTest {
 
         // then
         Step expectedStep = initStep(storage, electrolyzer.getAccumulator(), 1, 0d, 0d);
-        expectedStep.overflowPowerProduction = 1.0d;
+        expectedStep.setOverflowPowerProduction(1.0d);
         assertEquals(expectedStep.toString(), resultStep.toString());
     }
 
@@ -160,7 +160,7 @@ class CalculateNextStepAlgorithmTest extends AbstractAlgorithmTest {
 
         // then
         Step expectedStep = initStep(storage, electrolyzer.getAccumulator(), 1, -2d, 0d);
-        expectedStep.overflowPowerProduction = 96;
+        expectedStep.setOverflowPowerProduction(96);
         assertEquals(expectedStep.toString(), resultStep.toString());
     }
 
@@ -186,7 +186,7 @@ class CalculateNextStepAlgorithmTest extends AbstractAlgorithmTest {
 
         // then
         Step expectedStep = initStep(storage, electrolyzer.getAccumulator(), 1, 0d, 0d);
-        expectedStep.overflowPowerProduction = 1.0;
+        expectedStep.setOverflowPowerProduction(1.0);
         assertEquals(expectedStep.toString(), resultStep.toString());
     }
 
@@ -237,7 +237,7 @@ class CalculateNextStepAlgorithmTest extends AbstractAlgorithmTest {
 
         // then
         Step expectedStep = initStep(storage, electrolyzer.getAccumulator(), 1, 2d, 0d);
-        expectedStep.overflowHydrogenProduction = 2.0;
+        expectedStep.setOverflowHydrogenProduction(2.0);
         assertEquals(expectedStep.toString(), resultStep.toString());
     }
 
@@ -263,7 +263,7 @@ class CalculateNextStepAlgorithmTest extends AbstractAlgorithmTest {
 
         // then
         Step expectedStep = initStep(storage, electrolyzer.getAccumulator(), 1, 2d, 0d);
-        expectedStep.overflowHydrogenProduction = 1.0d;
+        expectedStep.setOverflowHydrogenProduction(1.0d);
         assertEquals(expectedStep.toString(), resultStep.toString());
     }
 
@@ -414,8 +414,8 @@ class CalculateNextStepAlgorithmTest extends AbstractAlgorithmTest {
 
         // then
         Step expectedStep = initStep(storage, electrolyzer.getAccumulator(), 1, 0d, 0d);
-        expectedStep.overflowPowerProduction = 1;
-        expectedStep.overflowHydrogenProduction = 1;
+        expectedStep.setOverflowPowerProduction(1);
+        expectedStep.setOverflowHydrogenProduction(1);
         assertEquals(expectedStep.toString(), resultStep.toString());
     }
 
@@ -560,10 +560,10 @@ class CalculateNextStepAlgorithmTest extends AbstractAlgorithmTest {
         data.getSummaryEnergyProduction().put(e2.getId(), new double[]{20.0});
 
         Step step = new Step();
-        step.hour = 0;
-        step.acumulatorsStates.put(e1.getAccumulator(), buildInitialState(0));
-        step.acumulatorsStates.put(e2.getAccumulator(), buildInitialState(0));
-        step.storageStates.put(storage, new StorageState(5));
+        step.setHour(0);
+        step.getAcumulatorsStates().put(e1.getAccumulator(), buildInitialState(0));
+        step.getAcumulatorsStates().put(e2.getAccumulator(), buildInitialState(0));
+        step.getStorageStates().put(storage, new StorageState(5));
 
         // when
         CalculateNextStepAlgorithm algorithm = new CalculateNextStepAlgorithm(data);
@@ -571,12 +571,12 @@ class CalculateNextStepAlgorithmTest extends AbstractAlgorithmTest {
 
         // then
         Step expectedStep = new Step();
-        expectedStep.hour = 1;
-        expectedStep.acumulatorsStates.put(e1.getAccumulator(), buildInitialState(0));
-        expectedStep.acumulatorsStates.put(e2.getAccumulator(), buildInitialState(0));
-        expectedStep.storageStates.put(storage, new StorageState(2));
-        expectedStep.overflowPowerProduction = 25;
-        expectedStep.overflowHydrogenProduction = 0;
+        expectedStep.setHour(1);
+        expectedStep.getAcumulatorsStates().put(e1.getAccumulator(), buildInitialState(0));
+        expectedStep.getAcumulatorsStates().put(e2.getAccumulator(), buildInitialState(0));
+        expectedStep.getStorageStates().put(storage, new StorageState(2));
+        expectedStep.setOverflowPowerProduction(25);
+        expectedStep.setOverflowHydrogenProduction(0);
         assertEquals(expectedStep.toString(), resultStep.toString());
     }
 
