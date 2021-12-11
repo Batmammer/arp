@@ -21,7 +21,6 @@ public class CalculateNextStepAlgorithm {
         hydrogenLevel = calculateStorageLoss(hydrogenLevel, data.gridConstants.storageLoss);
         Map<Electrolyzer, ElectrolyzerState> newElectrolyzerStates = new HashMap<>();
         for (Map.Entry<Electrolyzer, ElectrolyzerState> entry : step.electorizersStates.entrySet()) {
-            ElectrolyzerState newElectrolyzerState = new ElectrolyzerState();
             double newAccumulatorCurrentLevel = entry.getValue().accumulatorCurrentLevel + entry.getKey().summaryEnergyProduction[step.hour];
             if (newAccumulatorCurrentLevel < entry.getKey().minPower) {
                 throw new IllegalStateException("Luck of power on Electrolyzer: " + hour + " power: " + newAccumulatorCurrentLevel);
@@ -32,9 +31,8 @@ public class CalculateNextStepAlgorithm {
                 newStep.overflowPowerProduction = newAccumulatorCurrentLevel - entry.getKey().accumulatorMaxSize;
                 newAccumulatorCurrentLevel = entry.getKey().accumulatorMaxSize;
             }
-            newElectrolyzerState.accumulatorCurrentLevel = newAccumulatorCurrentLevel;
             hydrogenLevel += usedPower * entry.getKey().efficiency;
-            newElectrolyzerStates.put(entry.getKey(), newElectrolyzerState);
+            newElectrolyzerStates.put(entry.getKey(), new ElectrolyzerState(newAccumulatorCurrentLevel));
         }
         newStep.electorizersStates = newElectrolyzerStates;
         hydrogenLevel -= data.vehiclesConsumption[hour];

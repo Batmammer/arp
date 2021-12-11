@@ -387,9 +387,7 @@ class CalculateNextStepAlgorithmTest {
     }
 
     private ElectrolyzerState buildInitialState(double accumulatorState) {
-        ElectrolyzerState state = new ElectrolyzerState();
-        state.accumulatorCurrentLevel = accumulatorState;
-        return state;
+        return new ElectrolyzerState(accumulatorState);
     }
 
     private Data buildData(Electrolyzer electrolyzer, double storageMaxCapacity, double[] cosumption) {
