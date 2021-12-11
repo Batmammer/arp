@@ -1,5 +1,6 @@
 package arp.service;
 
+import arp.dto.GridConstants;
 import arp.dto.GridInput;
 import arp.dto.grid.Electrolyzer;
 import arp.dto.grid.EnergySource;
@@ -29,28 +30,36 @@ public class GridService {
                         gridInput.getConstants().getHydrogenTransportLoss()),
                 calculateElectrolyzers(gridInput.getGrid().getStorages().stream()
                         .map(s -> s.getElectrolyzers()).collect(Collectors.toList()).stream().flatMap(List::stream).collect(Collectors.toList()),
-                        gridInput.getConstants().getTransmissionLoss())
+                        gridInput.getConstants())
                 ));
         return calculateYearAlgorithm.calculate();
     }
 
-    private Map<Long, double[]> calculateElectrolyzers(List<Electrolyzer> input, double transmissionLoss) {
-        return input.stream().collect(Collectors.toMap(Electrolyzer::getId, e -> calculateSummaryEnergyProduction(e, transmissionLoss)));
+    private Map<Long, double[]> calculateElectrolyzers(List<Electrolyzer> input, GridConstants constants) {
+        return input.stream().collect(Collectors.toMap(Electrolyzer::getId, e ->
+                calculateSummaryEnergyProduction(e, constants)));
     }
 
-    private double[] calculateSummaryEnergyProduction(Electrolyzer electrolyzer, double transmissionLoss) {
+    private double[] calculateSummaryEnergyProduction(Electrolyzer electrolyzer, GridConstants constants) {
         double[] production = new double[365 * 24];
         for (int i = 0; i < 365 * 24; i++) {
             double current = 0;
             for (EnergySource es : electrolyzer.getSources()) {
-                current += es.getMaxPower() * getPowerMultiplier(i, es.getType()) * (1.0 - transmissionLoss);
+                current += es.getMaxPower() * getPowerMultiplier(i, es.getType(), constants)
+                        * (1.0 - constants.getTransmissionLoss());
             }
             production[i] = current;
         }
         return production;
     }
 
-    private double getPowerMultiplier(int hour, EnergySourceType type) {
+    private double getPowerMultiplier(int hour, EnergySourceType type, GridConstants constants) {
+        if (type == EnergySourceType.PV && constants.getPvDailyProduction() != null) {
+            return constants.getPvDailyProduction()[hour];
+        }
+        if (type == EnergySourceType.WIND && constants.getWindDailyProduction() != null) {
+            return constants.getWindDailyProduction()[hour];
+        }
         return 1.0;
     }
 
