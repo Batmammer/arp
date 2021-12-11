@@ -19,10 +19,10 @@ public class BroadFirstSearchAlgorithmTest {
 
         GridConstants gridConstants = createGridConstants();
         gridConstants.setPvCost(2.0d;
-        gridConstants.windCost = 3.0d;
-        gridConstants.storagePowerCost = 10.0d;
-        gridConstants.electrolizerCost = 5.0d;
-        gridConstants.storageHydrogenCost = 10.0d;
+        gridConstants.setWindCost(3.0d;
+        gridConstants.setStoragePowerCost(10.0d;
+        gridConstants.setElectrolizerCost(5.0d;
+        gridConstants.setStorageHydrogenCost(10.0d;
 
         Storage storage = new Storage();
         storage.maxCapacity = 0.0;
@@ -46,11 +46,11 @@ public class BroadFirstSearchAlgorithmTest {
         double consumption = 1.0;
 
         GridConstants gridConstants = createGridConstants();
-        gridConstants.pvCost = 4.0d;
-        gridConstants.windCost = 3.0d;
-        gridConstants.storagePowerCost = 10.0d;
-        gridConstants.electrolizerCost = 5.0d;
-        gridConstants.storageHydrogenCost = 10.0d;
+        gridConstants.setPvCost(4.0d;
+        gridConstants.setWindCost(3.0d;
+        gridConstants.setStoragePowerCost(10.0d;
+        gridConstants.setElectrolizerCost(5.0d;
+        gridConstants.setStorageHydrogenCost(10.0d;
 
         Storage storage = new Storage();
         storage.maxCapacity = 0.0;
@@ -74,12 +74,12 @@ public class BroadFirstSearchAlgorithmTest {
         double consumption = 1.0;
 
         GridConstants gridConstants = createGridConstants();
-        gridConstants.pvCost = 4.0d;
-        gridConstants.windCost = 3.0d;
-        gridConstants.windDailyProduction[0] = 0;
-        gridConstants.storagePowerCost = 10.0d;
-        gridConstants.electrolizerCost = 5.0d;
-        gridConstants.storageHydrogenCost = 10.0d;
+        gridConstants.setPvCost(4.0d);
+        gridConstants.setWindCost(3.0d);
+        gridConstants.getWindDailyProduction()[0] = 0;
+        gridConstants.setStoragePowerCost(10.0d);
+        gridConstants.setElectrolizerCost(5.0d);
+        gridConstants.setStorageHydrogenCost(10.0d);
 
         Storage storage = new Storage();
         storage.maxCapacity = 0.0;
@@ -101,11 +101,11 @@ public class BroadFirstSearchAlgorithmTest {
     public void shouldPreferAccumulatorBeforePower() {
         // given
         GridConstants gridConstants = createGridConstants();
-        gridConstants.windCost = 1000d;
-        gridConstants.pvCost = 4.0d;
-        gridConstants.storagePowerCost = 2.0d;
-        gridConstants.electrolizerCost = 5.0d;
-        gridConstants.storageHydrogenCost = 10.0d;
+        gridConstants.setWindCost(1000d;
+        gridConstants.setPvCost(4.0d;
+        gridConstants.setStoragePowerCost(2.0d;
+        gridConstants.setElectrolizerCost(5.0d;
+        gridConstants.setStorageHydrogenCost(10.0d;
 
         Storage storage = new Storage();
         storage.maxCapacity = 0.0;

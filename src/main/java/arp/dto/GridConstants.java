@@ -13,4 +13,5 @@ public class GridConstants {
     private double transmissionLoss;
     private double[] pvDailyProduction;
     private double[] windDailyProduction;
+    private double electrolizerEfficiency;
 }
