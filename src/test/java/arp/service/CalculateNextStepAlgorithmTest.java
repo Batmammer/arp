@@ -304,6 +304,30 @@ class CalculateNextStepAlgorithmTest {
     }
 
     @Test
+    public void shouldUseRightIndex() {
+        // given
+        double storageMaxCapacity = 0.0d;
+        double[] consumption = {2.0, 3.0};
+
+        Electrolyzer electrolyzer = new Electrolyzer();
+        electrolyzer.maxPower = 100d;
+        electrolyzer.efficiency = 1.0d;
+        electrolyzer.accumulatorMaxSize = 0.0d;
+        electrolyzer.summaryEnergyProduction = new double[]{5.0, 1.0};
+        Data data = buildData(electrolyzer, storageMaxCapacity, consumption);
+
+        Step step = initStep(electrolyzer, 1, 0d, 0d);
+
+        // when
+        CalculateNextStepAlgorithm algorithm = new CalculateNextStepAlgorithm(data);
+        Step resultStep = algorithm.calculate(step);
+
+        // then
+        Step expectedStep = initStep(electrolyzer, 2, -2d, 0d);
+        assertEquals(expectedStep.toString(), resultStep.toString());
+    }
+
+    @Test
     public void exceedAculumulator() {
         // given
         double storageMaxCapacity = 0.0d;
