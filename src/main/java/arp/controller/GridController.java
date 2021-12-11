@@ -64,8 +64,11 @@ public class GridController {
         validationResult.setErrors(yearResult.getErrors());
         validationResult.setWarnings(yearResult.getWarnings());
         validationResult.setHydrogenLevel(hydrogenLevel);
-        if (validationResult.getIsValid())
-            generateCharts(electricityProduction, hydrogenProduction, hydrogenLevel);
+        if (validationResult.getIsValid()) {
+            generateCharts(electricityProduction, "electricityChart");
+            generateCharts(hydrogenProduction, "hydrogenChart");
+            generateCharts(hydrogenLevel, "hydrogenLevelChart");
+        }
         return validationResult;
     }
 
@@ -98,8 +101,11 @@ public class GridController {
         validationResult.setErrors(yearResult.getErrors());
         validationResult.setWarnings(yearResult.getWarnings());
         validationResult.setHydrogenLevel(hydrogenLevel);
-        if (validationResult.getIsValid())
-            generateCharts(electricityProduction, hydrogenProduction, hydrogenLevel);
+        if (validationResult.getIsValid()) {
+            generateCharts(electricityProduction, "electricityChart");
+            generateCharts(hydrogenProduction, "hydrogenChart");
+            generateCharts(hydrogenLevel, "hydrogenLevelChart");
+        }
         return validationResult;
     }
 
@@ -109,66 +115,41 @@ public class GridController {
         State state = gridService.calculateCapex(gridInput);
         GridResult gridResult = new GridResult();
         gridResult.setGrid(gridInput.getGrid());
-//        if (validationResult.getIsValid())
-//            generateCharts(electricityProduction, hydrogenProduction, hydrogenLevel);
+//        if (validationResult.getIsValid()) {
+//            generateCharts(electricityProduction, "electricityChart");
+//            generateCharts(hydrogenProduction ,"hydrogenChart");
+//            generateCharts(hydrogenLevel, "hydrogenLevelChart");
+//        }
         return gridResult;
     }
 
-    private void generateCharts(List<Double> electricityProduction, List<Double> hydrogenProduction, List<Double> hydrogenLevel) {
-        var electricityDataset = new DefaultXYDataset();
-        var hydrogenDataset = new DefaultXYDataset();
-        var hydrogenLevelDataset = new DefaultXYDataset();
-        int compressedChartSize = electricityProduction.size() / 4;
+    private void generateCharts(List<Double> dataList, String name) {
+        var dataset = new DefaultXYDataset();
+        int compressedChartSize = dataList.size() / 4;
 
-        double[] electricityArray = new double[compressedChartSize];
-        double[] hydrogenArray = new double[compressedChartSize];
-        double[] hydrogenLevelArray = new double[compressedChartSize];
+        double[] array = new double[compressedChartSize];
 
         for (int i = 0; i < compressedChartSize; i++) {
-            var electricityPoint = electricityProduction.get(i) + electricityProduction.get(i + 1) + electricityProduction.get(i + 2) + electricityProduction.get(i + 3);
-            var hydrogenPoint = hydrogenProduction.get(i) + hydrogenProduction.get(i + 1) + hydrogenProduction.get(i + 2) + hydrogenProduction.get(i + 3);
-            var hydrogenLevelPoint = hydrogenLevel.get(i) + hydrogenLevel.get(i + 1) + hydrogenLevel.get(i + 2) + hydrogenLevel.get(i + 3);
-            electricityArray[i] = electricityPoint / 4;
-            hydrogenArray[i] = hydrogenPoint / 4;
-            hydrogenLevelArray[i] = hydrogenLevelPoint / 4;
+            var point = dataList.get(i) + dataList.get(i + 1) + dataList.get(i + 2) + dataList.get(i + 3);
+            array[i] = point / 4;
         }
 
-        double[][] electroOutArray = new double[2][];
-        double[][] hydroOutArray = new double[2][];
-        double[][] hydroLvlOutArray = new double[2][];
-        electroOutArray[0] = new double[compressedChartSize];
-        electroOutArray[1] = electricityArray;
-        hydroOutArray[0] = new double[compressedChartSize];
-        hydroOutArray[1] = hydrogenArray;
-        hydroLvlOutArray[0] = new double[compressedChartSize];
-        hydroLvlOutArray[1] = hydrogenLevelArray;
+        double[][] outArray = new double[2][];
+        outArray[0] = new double[compressedChartSize];
+        outArray[1] = array;
 
         for (int i = 0; i < compressedChartSize; i++) {
-            electroOutArray[0][i] = i;
-            hydroOutArray[0][i] = i;
-            hydroLvlOutArray[0][i] = i;
+            outArray[0][i] = i;
         }
 
-        electricityDataset.addSeries("key", electroOutArray);
-        hydrogenDataset.addSeries("key", hydroOutArray);
-        hydrogenLevelDataset.addSeries("key", hydroLvlOutArray);
+        dataset.addSeries("key", outArray);
 
-        JFreeChart electricityChart = ChartFactory.createScatterPlot("electricity", "x", "y", electricityDataset, PlotOrientation.VERTICAL, false, false, false);
-        JFreeChart hydrogenChart = ChartFactory.createScatterPlot("hydrogen production", "x", "y", hydrogenDataset, PlotOrientation.VERTICAL, false, false, false);
-        JFreeChart hydrogenLevelChart = ChartFactory.createScatterPlot("hydrogen level", "x", "y", hydrogenDataset, PlotOrientation.VERTICAL, false, false, false);
-        XYLineAndShapeRenderer rendererElectricity = (XYLineAndShapeRenderer) ((XYPlot) electricityChart.getPlot()).getRenderer();
-        XYLineAndShapeRenderer rendererHydrogen = (XYLineAndShapeRenderer) ((XYPlot) hydrogenChart.getPlot()).getRenderer();
-        XYLineAndShapeRenderer rendererHydrogenLevel = (XYLineAndShapeRenderer) ((XYPlot) hydrogenLevelChart.getPlot()).getRenderer();
-        rendererElectricity.setSeriesShape(0, new Ellipse2D.Double(0, 0, 0.5, 0.5));
-        rendererHydrogen.setSeriesShape(0, new Ellipse2D.Double(0, 0, 0.5, 0.5));
-        rendererHydrogenLevel.setSeriesShape(0, new Ellipse2D.Double(0, 0, 0.5, 0.5));
-        rendererElectricity.setBaseLinesVisible(true);
-        rendererHydrogen.setBaseLinesVisible(true);
-        rendererHydrogenLevel.setBaseLinesVisible(true);
+        JFreeChart chart = ChartFactory.createScatterPlot(name, "x", "y", dataset, PlotOrientation.VERTICAL, false, false, false);
+        XYLineAndShapeRenderer renderer = (XYLineAndShapeRenderer) ((XYPlot) chart.getPlot()).getRenderer();
+        renderer.setSeriesShape(0, new Ellipse2D.Double(0, 0, 0.5, 0.5));
+        renderer.setBaseLinesVisible(true);
         try {
-            ChartUtilities.saveChartAsPNG(new File("electricityChart.png"), electricityChart, 1500, 1000);
-            ChartUtilities.saveChartAsPNG(new File("hydrogenChart.png"), hydrogenChart, 1500, 1000);
-            ChartUtilities.saveChartAsPNG(new File("hydrogenLevelChart.png"), hydrogenLevelChart, 1500, 1000);
+            ChartUtilities.saveChartAsPNG(new File(name + ".png"), chart, 1500, 1000);
         } catch (IOException e) {
             e.printStackTrace();
         }
