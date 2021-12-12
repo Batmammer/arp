@@ -113,6 +113,7 @@ public class GridController {
     @PostMapping("/minCapex")
     public GridResult minCapex(@RequestBody GridInput gridInput) {
         State state = gridService.calculateCapex(gridInput);
+
         GridResult gridResult = new GridResult();
         gridResult.setGrid(gridInput.getGrid());
 //        if (validationResult.getIsValid()) {
