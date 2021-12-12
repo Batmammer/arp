@@ -78,13 +78,14 @@ public class State implements Comparable<State>, Cloneable {
         metrics.setGood(yearResult.isGood());
         metrics.setMinHourHydrogenLevel(yearResult.getMinHourHydrogenLevel());
         metrics.setTotalCost(getPreviousTotalCosts() + (action != null ? action.getActionCost(): 0));
+        metrics.setTotalHydrogenWasted(yearResult.getTotalHydrogenWasted());
+        metrics.setYearResult(yearResult);
         return metrics;
     }
 
     private double getPreviousTotalCosts() {
         return previousState != null ? previousState.getMetrics().getTotalCost() : 0.0;
     }
-
 
     @Override
     protected State clone() {

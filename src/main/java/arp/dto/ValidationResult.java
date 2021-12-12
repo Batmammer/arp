@@ -17,6 +17,7 @@ public class ValidationResult {
     private Double minHydrogenProduction;
     private Double resMaxPower;
     private Double resAnnualCapacity;
+    private Double totalGridCost;
     private Boolean isValid;
     private List<Warning> warnings;
     private List<BusinessError> errors;
