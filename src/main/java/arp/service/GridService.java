@@ -24,6 +24,8 @@ import java.util.Map;
 @Service
 public class GridService {
 
+    private static boolean TEST = true;
+
     private CalculateYearAlgorithm calculateYearAlgorithm;
     private BroadFirstSearchAlgorithm broadFirstSearchAlgorithm;
     private CalculateMaximumConsumption calculateMaximumConsumption;
@@ -33,12 +35,21 @@ public class GridService {
     public GridService() {
         if (pvMultiplier == null) {
             try {
-                Resource resource = new ClassPathResource("irradiance.txt");
-                String pvString = new String(Files.readAllBytes(resource.getFile().toPath()));
-                pvMultiplier = Arrays.stream(pvString.split(",")).mapToDouble(s -> Double.valueOf(s)).toArray();
-                resource = new ClassPathResource("wind.txt");
-                String windString = new String(Files.readAllBytes(resource.getFile().toPath()));
-                windMultiplier = Arrays.stream(windString.split(",")).mapToDouble(s -> Double.valueOf(s)).toArray();
+                if (TEST) {
+                    Resource resource = new ClassPathResource("irradiance.txt");
+                    String pvString = new String(Files.readAllBytes(resource.getFile().toPath()));
+                    pvMultiplier = Arrays.stream(pvString.split(",")).mapToDouble(s -> 1.0).toArray();
+                    resource = new ClassPathResource("wind.txt");
+                    String windString = new String(Files.readAllBytes(resource.getFile().toPath()));
+                    windMultiplier = Arrays.stream(windString.split(",")).mapToDouble(s -> 1.0).toArray();
+                } else {
+                    Resource resource = new ClassPathResource("irradiance.txt");
+                    String pvString = new String(Files.readAllBytes(resource.getFile().toPath()));
+                    pvMultiplier = Arrays.stream(pvString.split(",")).mapToDouble(s -> Double.valueOf(s)).toArray();
+                    resource = new ClassPathResource("wind.txt");
+                    String windString = new String(Files.readAllBytes(resource.getFile().toPath()));
+                    windMultiplier = Arrays.stream(windString.split(",")).mapToDouble(s -> Double.valueOf(s)).toArray();
+                }
             } catch (IOException e) {
                 e.printStackTrace();
             }
