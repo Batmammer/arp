@@ -130,6 +130,7 @@ public class GridController {
                     ss.getCurrentLevel()).collect(Collectors.summingDouble(Double::doubleValue)));
         }
         validationResult.setTotalGridCost(state.getMetrics().getTotalCost());
+        validationResult.setMinHydrogenProduction(state.getMetrics().getHydrogenProduction());
         validationResult.setResMaxPower(electricityProduction.stream().max(Double::compareTo).get());
         validationResult.setResAnnualCapacity(electricityProduction.stream()
                 .collect(Collectors.summingDouble(Double::doubleValue)));
