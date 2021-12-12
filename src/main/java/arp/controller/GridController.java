@@ -111,17 +111,39 @@ public class GridController {
 
     @Operation(summary = "Calculate minimal CAPEX (grid investment cost)")
     @PostMapping("/minCapex")
-    public GridResult minCapex(@RequestBody GridInput gridInput) {
+    public ValidationResult minCapex(@RequestBody GridInput gridInput) {
         State state = gridService.calculateCapex(gridInput);
-
-        GridResult gridResult = new GridResult();
-        gridResult.setGrid(gridInput.getGrid());
-//        if (validationResult.getIsValid()) {
-//            generateCharts(electricityProduction, "electricityChart");
-//            generateCharts(hydrogenProduction ,"hydrogenChart");
-//            generateCharts(hydrogenLevel, "hydrogenLevelChart");
-//        }
-        return gridResult;
+        YearResult yearResult = state.getMetrics().getYearResult();
+        ValidationResult validationResult = new ValidationResult();
+        validationResult.setGrid(gridInput.getGrid());
+        validationResult.setIsValid(yearResult.isGood());
+        double[] vehicleConsumption = gridService.calculateYearlyConsumption(gridInput.getGrid().getVehicles(),
+                gridInput.getConstants().getHydrogenTransportLoss());
+        validationResult.setMaxVehicleConsumption(Arrays.stream(vehicleConsumption).max().getAsDouble());
+        List<Double> electricityProduction = new ArrayList<>();
+        List<Double> hydrogenProduction = new ArrayList<>();
+        List<Double> hydrogenLevel = new ArrayList<>();
+        for (Step s : yearResult.getSteps()) {
+            hydrogenProduction.add(s.getHydrogenProduction());
+            electricityProduction.add(s.getElectricityProduction());
+            hydrogenLevel.add(s.getStorageStates().values().stream().map(ss ->
+                    ss.getCurrentLevel()).collect(Collectors.summingDouble(Double::doubleValue)));
+        }
+        validationResult.setTotalGridCost(state.getMetrics().getTotalCost());
+        validationResult.setResMaxPower(electricityProduction.stream().max(Double::compareTo).get());
+        validationResult.setResAnnualCapacity(electricityProduction.stream()
+                .collect(Collectors.summingDouble(Double::doubleValue)));
+        validationResult.setHydrogenProduction(hydrogenProduction);
+        validationResult.setElectricityProduction(electricityProduction);
+        validationResult.setErrors(yearResult.getErrors());
+        validationResult.setWarnings(yearResult.getWarnings());
+        validationResult.setHydrogenLevel(hydrogenLevel);
+        if (validationResult.getIsValid()) {
+            generateCharts(electricityProduction, "electricityChart");
+            generateCharts(hydrogenProduction, "hydrogenChart");
+            generateCharts(hydrogenLevel, "hydrogenLevelChart");
+        }
+        return validationResult;
     }
 
     private void generateCharts(List<Double> dataList, String name) {
