@@ -33,4 +33,6 @@ public class Storage implements Cloneable {
     public void setMaxCapacity(double maxCapacity) {
         this.maxCapacity = Utils.standardRound(maxCapacity);
     }
+
+
 }

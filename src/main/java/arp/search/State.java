@@ -45,34 +45,8 @@ public class State implements Comparable<State>, Cloneable {
     }
 
     public String updateKey() {
-        List<String> actions = getActionPath();
-
-        key = new StringBuilder()
-                .append(Utils.roundDouble(metrics.getTotalCost()))
-                .append(": ")
-                .append(actionsToString(actions))
-                .toString();
+        key = StateKeyFactory.getKey(this);
         return key;
-    }
-
-    private List<String> getActionPath() {
-        List<String> actions = new ArrayList<>();
-
-        State state = this;
-        while (state != null) {
-            if (state.getAction() != null) {
-                actions.add(state.getAction().toString());
-            }
-            state = state.previousState;
-        }
-        return actions;
-    }
-
-    private String actionsToString(List<String> actions) {
-        return actions.stream()
-                .filter(a -> a != null)
-                .sorted()
-                .collect(Collectors.joining(", "));
     }
 
     public State buildNextState(Action action) {
@@ -85,7 +59,7 @@ public class State implements Comparable<State>, Cloneable {
         metrics.setTotalCost(this.metrics.getTotalCost() + (action != null ? action.getActionCost(): 0));
 
         state.metrics = metrics;
-        state.key = state.updateKey();
+        state.key = null;
 
         return state;
     }

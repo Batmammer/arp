@@ -41,14 +41,12 @@ public class BroadFirstSearchAlgorithm {
 
     private List<State> processState(State state) {
         List<State> result = new ArrayList<>();
-        System.out.println("@@@: PROCESSING STATE: " + state);
 
         List<State> nextStates = getNextStates(state);
         for (State nextState : nextStates) {
             if (!visitedStates.contains(nextState.toString())) {
                 visitedStates.add(nextState.toString());
 
-                System.out.println("\tADDING NEW STATE: " + nextState.getMetrics().isGood() + ": " + nextState.getMetrics().getTotalCost() + ": " + nextState.toString());
                 result.add(nextState);
             }
         }

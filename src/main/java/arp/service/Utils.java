@@ -1,6 +1,8 @@
 package arp.service;
 
 import java.util.Arrays;
+import java.util.HashMap;
+import java.util.Map;
 
 public class Utils {
     public static final int HOURS_OF_YEAR = 24 * 365;
@@ -16,7 +18,7 @@ public class Utils {
     }
 
     public static String roundDouble(double d) {
-        return "" + Math.round(1000 * d) / 1000.0;
+       return toString(d);
     }
 
     public static int getHoursOfSimulation(Data data) {
