@@ -113,31 +113,4 @@ class CalculateMaximumConsumptionTest extends AbstractAlgorithmTest {
         double expectedValue = 2.0;
         assertEquals(expectedValue, value);
     }
-
-    @Disabled("Jeszcze nie gotowa implementacja")
-    @Test
-    public void shouldUseAccumulatorButWithEnoughCapacity() {
-        // given
-        double storageMaxCapacity = 0.0d;
-
-        Electrolyzer electrolyzer = buildElectrolyzerWithAccumulator();
-        electrolyzer.setMaxPower(2.0d);
-        electrolyzer.setEfficiency(1.0d);
-        electrolyzer.getAccumulator().setAccumulatorMaxSize(3.0d);
-        double[] tableOfValue = createTableOfValue(0.0);
-        for (int i = 0; i < tableOfValue.length; i++) {
-            if (i % 3 == 0) {
-                tableOfValue[i] = 6;
-            }
-        }
-        electrolyzer.setSummaryEnergyProduction(tableOfValue);
-        Data data = buildData(electrolyzer, storageMaxCapacity, null);
-
-        // when
-        double value = new CalculateMaximumConsumption(data).calculate().getMaxConsumption();
-
-        // then
-        double expectedValue = 1.5;
-        assertEquals(expectedValue, value);
-    }
 }

@@ -24,15 +24,6 @@ class GridControllerTest {
     @Autowired
     private MockMvc mvc;
 
-    @Test
-    public void validateGridTest()  {
-        String baseFileName = "validate_grid";
-        String jsonInput = readJsonFromFiles(baseFileName + "_in.json", GridInput.class);
-        String jsonOutput = readJsonFromFiles(baseFileName + "_expected.json", GridResult.class);
-
-        postEndpoint("/validateGrid", jsonInput, jsonOutput);
-    }
-
     private void postEndpoint(String urlTemplate, String jsonInput, String jsonExpected) {
         try {
             this.mvc.perform(post(urlTemplate)

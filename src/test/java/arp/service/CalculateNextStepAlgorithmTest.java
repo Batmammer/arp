@@ -475,60 +475,6 @@ class CalculateNextStepAlgorithmTest extends AbstractAlgorithmTest {
         assertTrue(wasException);
     }
 
-    @Disabled("Jeszcze nie gotowa implementacja")
-    @Test
-    public void shouldNotUseAccumulatorWhenThereisNoConsumption() {
-        // given
-        double storageMaxCapacity = 0.0d;
-        double[] consumption = {0.0};
-
-        Electrolyzer electrolyzer = buildElectrolyzerWithAccumulator();
-        electrolyzer.setMaxPower(1d);
-        electrolyzer.setMinPower(0d);
-        electrolyzer.setEfficiency(1.0d);
-        electrolyzer.getAccumulator().setAccumulatorMaxSize(1.0d);
-        electrolyzer.setSummaryEnergyProduction(new double[]{0.0});
-        Data data = buildData(electrolyzer, storageMaxCapacity, consumption);
-
-        Storage storage = data.getStorages().get(0);
-        Step step = initStep(storage, electrolyzer.getAccumulator(), 0, 0d, 1d);
-
-        // when
-        CalculateNextStepAlgorithm algorithm = new CalculateNextStepAlgorithm(data);
-        Step resultStep = algorithm.calculate(step);
-
-        // then
-        Step expectedStep = initStep(storage, electrolyzer.getAccumulator(), 1, 0d, 1d);
-        assertEquals(expectedStep.toString(), resultStep.toString());
-    }
-
-    @Disabled("Jeszcze nie gotowa implementacja")
-    @Test
-    public void shouldUseAccumulatorWhenThereisNoConsumptionButIsMinimumPower() {
-        // given
-        double storageMaxCapacity = 0.0d;
-        double[] consumption = {0.0};
-
-        Electrolyzer electrolyzer = buildElectrolyzerWithAccumulator();
-        electrolyzer.setMaxPower(1d);
-        electrolyzer.setMinPower(0.2d);
-        electrolyzer.setEfficiency(1.0d);
-        electrolyzer.getAccumulator().setAccumulatorMaxSize(1.0d);
-        electrolyzer.setSummaryEnergyProduction(new double[]{0.0});
-        Data data = buildData(electrolyzer, storageMaxCapacity, consumption);
-
-        Storage storage = data.getStorages().get(0);
-        Step step = initStep(storage, electrolyzer.getAccumulator(), 0, 0d, 1d);
-
-        // when
-        CalculateNextStepAlgorithm algorithm = new CalculateNextStepAlgorithm(data);
-        Step resultStep = algorithm.calculate(step);
-
-        // then
-        Step expectedStep = initStep(storage, electrolyzer.getAccumulator(), 1, 0d, 0.8d);
-        assertEquals(expectedStep.toString(), resultStep.toString());
-    }
-
     @Test
     public void comboProductions() {
         // given
